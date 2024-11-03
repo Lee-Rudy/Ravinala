@@ -38,6 +38,23 @@ namespace package_cars
         [ForeignKey("type_cars_id")]
         public virtual Type_cars? Type_cars { get; set; }
 
+        [Column("est_actif")]
+        public bool est_actif { get; set; }
+
+        [Column("litre_consommation")]
+        public decimal? litre_consommation { get; set; }
+
+        [Column("km_consommation")]
+        public decimal? km_consommation { get; set; }
+
+        [Column("prix_consommation")]
+        public decimal? prix_consommation { get; set; }
+
+        [Column("type_carburant")]
+        public string? type_carburant { get; set; }
+
+        
+
     }
 
 }

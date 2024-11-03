@@ -11,7 +11,7 @@ namespace package_type_cars
 
         public int id {get;set;}
 
-        [Column("type_car")]
+        [Column("type_cars")]
         public string? type_cars {get; set;}
 
     }

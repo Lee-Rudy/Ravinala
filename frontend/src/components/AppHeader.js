@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   CContainer,
   CDropdown,
@@ -12,9 +13,10 @@ import {
   CHeaderToggler,
   CNavLink,
   CNavItem,
-  useColorModes,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CBadge,
+  useColorModes
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
 import {
   cilBell,
   cilContrast,
@@ -23,24 +25,40 @@ import {
   cilMenu,
   cilMoon,
   cilSun,
-} from '@coreui/icons'
+} from '@coreui/icons';
 
-import { AppBreadcrumb } from './index'
-import { AppHeaderDropdown } from './header/index'
+import { AppBreadcrumb } from './index';
+import { AppHeaderDropdown } from './header/index';
 
 const AppHeader = () => {
-  const headerRef = useRef()
-  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+  const [incompleteAxes, setIncompleteAxes] = useState([]);
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector((state) => state.sidebarShow);
+  const headerRef = useRef();
+  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme');
 
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  // Fetch notifications
+  useEffect(() => {
+    const fetchIncompleteAxes = async () => {
+      try {
+        const baseURL = import.meta.env.VITE_API_BASE_URL;
+        const response = await axios.get(`${baseURL}/api/axe/notifications`);
+        setIncompleteAxes(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des notifications :", error);
+      }
+    };
+
+    fetchIncompleteAxes();
+  }, []);
 
   useEffect(() => {
     document.addEventListener('scroll', () => {
-      headerRef.current &&
-        headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
-    })
-  }, [])
+      if (headerRef.current) {
+        headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+      }
+    });
+  }, []);
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -51,28 +69,18 @@ const AppHeader = () => {
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
-        <CHeaderNav className="d-none d-md-flex">
-          <CNavItem>
-            <CNavLink to="/" as={NavLink}>
-            {/* <CNavLink to="/dashboard" as={NavLink}> */}
-              Dashboard
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#"></CNavLink> 
-            {/* Users  */}
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#"></CNavLink>
-            {/* Seetings */}
-
-          </CNavItem>
-        </CHeaderNav>
         <CHeaderNav className="ms-auto">
+          {/* Notifications */}
           <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilBell} size="lg" />
-            </CNavLink>
+            <Link to="/notifications" style={{ textDecoration: 'none' }}>
+              <div className="position-relative">
+                <CIcon icon={cilBell} size="lg" style={{ marginTop: '8px' }} />
+                {incompleteAxes.length > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle" style={{ marginTop: '9px' }}>
+                  </span>
+                )}
+              </div>
+            </Link>
           </CNavItem>
           <CNavItem>
             <CNavLink href="#">
@@ -107,7 +115,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('light')}
               >
-                <CIcon className="me-2" icon={cilSun} size="lg" /> Light
+                <CIcon className="me-2" icon={cilSun} size="lg" /> Clair
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'dark'}
@@ -116,7 +124,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('dark')}
               >
-                <CIcon className="me-2" icon={cilMoon} size="lg" /> Dark
+                <CIcon className="me-2" icon={cilMoon} size="lg" /> Sombre
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'auto'}
@@ -139,7 +147,7 @@ const AppHeader = () => {
         <AppBreadcrumb />
       </CContainer>
     </CHeader>
-  )
-}
+  );
+};
 
-export default AppHeader
+export default AppHeader;

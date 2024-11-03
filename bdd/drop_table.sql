@@ -18,4 +18,23 @@ drop table departement;
 drop table login;
 
 
+truncate table save_push;
+truncate table push_week;
+truncate table pointage_usagers_depot;
+truncate table pointage_usagers_ramassage;
+truncate table axe_usagers_depot;
+truncate table axe_usagers_ramassage;
+truncate table axe_conducteurs;
+truncate table conducteurs;
+truncate table axe;
+truncate table cars;
+truncate table prestataire_archive;
+truncate table prestataire;
+truncate table type_cars;
+truncate table usagers;
+truncate table genre;
+truncate table poste;
+truncate table departement;
+
+
 ALTER DATABASE ravinala SET OFFLINE WITH ROLLBACK IMMEDIATE;

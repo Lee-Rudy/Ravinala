@@ -42,20 +42,29 @@ namespace package_axe_controller
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateAxe(int id, Axe request)
         {
+            
             var axe = await _context.Axe_instance.FindAsync(id);
 
-            if(axe == null)
+            // check if axe existes
+            if (axe == null)
             {
-                return NotFound("echec de modification de l'axe.");
+                return NotFound("Échec de modification de l'axe.");
             }
 
+            // updatre axe
             axe.axe = request.axe;
+            axe.duree_trajet = request.duree_trajet;
+            axe.distance_km = request.distance_km;
 
+            
             _context.Axe_instance.Update(axe);
+
             await _context.SaveChangesAsync();
 
-            return Ok(axe);
+            // Retourne une réponse de succès
+            return Ok($"Modification réussie pour l'axe : {axe.axe}");
         }
+
 
         //delete
         [HttpDelete("delete/{id}")]
@@ -72,6 +81,31 @@ namespace package_axe_controller
             await _context.SaveChangesAsync();
 
             return Ok($"la supressrion de l'axe {axe.axe} a été supprimé");
+        }
+
+        //notifications 
+        //check if duree_trajet or distance_km contain a zero in server database
+        [HttpGet("notifications")]
+        public async Task<ActionResult<IEnumerable<Axe>>> GetIncompleteAxes()
+        {
+            var incompleteAxes = await _context.Axe_instance
+                .Where(a => a.duree_trajet == 0 || a.distance_km == 0)
+                .ToListAsync();
+
+            return Ok(incompleteAxes);
+        }
+
+        [HttpGet("liste/{id}")]
+        public async Task<ActionResult<Axe>> GetAxeById(int id)
+        {
+            var axe = await _context.Axe_instance.FindAsync(id);
+
+            if (axe == null)
+            {
+                return NotFound($"Axe avec l'identifiant {id} introuvable.");
+            }
+
+            return Ok(axe);
         }
 
        

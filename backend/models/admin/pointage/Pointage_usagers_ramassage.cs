@@ -37,5 +37,12 @@ namespace package_pointage_usagers_ramassage
         public virtual  Axe_usagers_ramassage? Axe_usagers_ramassage{get; set;}
 
 
+        [Column("kilometrage_debut")]
+        public int kilometrage_debut {get; set;}
+
+         [Column("kilometrage_fin")]
+        public int kilometrage_fin {get; set;}
+
+
     }
 }

@@ -20,7 +20,7 @@ namespace package_axe_usagers_ramassage
         public string? lieu {get; set;}
 
         [Column("heure_ramassage")]
-        public TimeSpan heure_ramassage {get; set;}
+        public TimeSpan? heure_ramassage {get; set;}
 
         [Column("est_actif")]
         public bool est_actif { get; set; }
@@ -30,6 +30,12 @@ namespace package_axe_usagers_ramassage
 
         [Column("axe_id")]
         public int? axe_id {get; set;}
+
+        [Column("district")]
+        public string? district{get;set;}
+
+        [Column("fokontany")]
+        public string? fokontany{get;set;}
 
         //=======================================
 

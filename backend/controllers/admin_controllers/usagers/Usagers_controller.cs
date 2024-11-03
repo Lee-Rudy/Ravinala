@@ -10,6 +10,9 @@ using package_my_db_context;
 using package_axe_usagers_ramassage;
 using package_axe_usagers_depot;
 using Microsoft.AspNetCore.Identity;
+using package_poste;
+using package_departement;
+using package_genre;
 
 using package_usager_request;
 
@@ -43,53 +46,101 @@ namespace package_usagers_controller
         }
 
 
-        //usagers par id
-        [HttpGet("{id}")]
-        // exemple : http://localhost:5218/api/usagers/3
-        public async Task<ActionResult<Usagers>> GetUsager(int id)
+        [HttpGet("liste_usagers_ramassage_depot")]
+        public async Task<ActionResult> GetAxeUsagersRamassageDepot()
         {
-            var usager = await _context.Usagers_instance
-                .Include(u => u.Genre)
-                .Include(u => u.Poste)
-                .Include(u => u.Departement)
-                .FirstOrDefaultAsync(u => u.id == id);
+            var ramassageDepotList = await _context.Axe_usagers_ramassage_instance
+                .Join(
+                    _context.Axe_usagers_depot_instance, // Table de dépôt
+                    ramassage => ramassage.usagers_id, // Clé pour la table de ramassage
+                    depot => depot.usagers_id, // Clé pour la table de dépôt
+                    (ramassage, depot) => new { 
+                        UsagerId = ramassage.Usagers.id,
+                        Matricule = ramassage.Usagers.matricule,
+                        Nom = ramassage.Usagers.nom,
+                        Prenom = ramassage.Usagers.prenom,
+                        mail_ravinala = ramassage.Usagers.mail_ravinala,
+                        adresse = ramassage.Usagers.adresse,
+                        contact = ramassage.Usagers.contact,
+                        poste = ramassage.Usagers.Poste.poste,
+                        genre = ramassage.Usagers.Genre.genre,
+                        departement = ramassage.Usagers.Departement.departement,
+                        
+                        // Informations de ramassage
+                        LieuRamassage = ramassage.lieu,
+                        HeureRamassage = ramassage.heure_ramassage,
+                        AxeIdRamassage = ramassage.Axe.id,
+                        AxeRamassage = ramassage.Axe.axe,
+                        DistrictRamassage = ramassage.district, 
+                        FokontanyRamassage = ramassage.fokontany, 
+                        EstActifRamassage = ramassage.est_actif ,
 
-            if (usager == null)
+                        // Informations de dépôt
+                        LieuDepot = depot.lieu,
+                        HeureDepot = depot.heure_depot,
+                        AxeIdDepot = depot.Axe.id,
+                        AxeDepot = depot.Axe.axe,
+                        DistrictDepot = depot.district, 
+                        FokontanyDepot = depot.fokontany, 
+                        EstActifDepot = depot.est_actif 
+                        
+                    }
+                )
+                .Distinct()
+                .ToListAsync();
+
+            return Ok(ramassageDepotList);
+        }
+
+        [HttpGet("liste_usagers_ramassage_depot/{id}")]
+        public async Task<ActionResult> GetAxeUsagersRamassageDepot_id(int id)
+        {
+            var ramassageDepot = await _context.Axe_usagers_ramassage_instance
+                .Where(ramassage => ramassage.Usagers.id == id)
+                .Join(
+                    _context.Axe_usagers_depot_instance, // Table de dépôt
+                    ramassage => ramassage.usagers_id, // Clé pour la table de ramassage
+                    depot => depot.usagers_id, // Clé pour la table de dépôt
+                    //!!! tsy azo hatao Majiscule ny début ana variable fa sensible à la casse b ny backend sy frontend
+                    (ramassage, depot) => new { 
+                        usagerId = ramassage.Usagers.id,
+                        matricule = ramassage.Usagers.matricule,
+                        nom = ramassage.Usagers.nom,
+                        prenom = ramassage.Usagers.prenom,
+                        mail_ravinala = ramassage.Usagers.mail_ravinala,
+                        adresse = ramassage.Usagers.adresse,
+                        contact = ramassage.Usagers.contact,
+
+
+                        // Informations de ramassage
+                        lieuRamassage = ramassage.lieu,
+                        heureRamassage = ramassage.heure_ramassage,
+                        axeIdRamassage = ramassage.Axe.id,
+                        axeRamassage = ramassage.Axe.axe,
+                        districtRamassage = ramassage.district, 
+                        fokontanyRamassage = ramassage.fokontany, 
+                        estActifRamassage = ramassage.est_actif,
+
+                        // Informations de dépôt
+                        lieuDepot = depot.lieu,
+                        heureDepot = depot.heure_depot,
+                        axeIdDepot = depot.Axe.id,
+                        axeDepot = depot.Axe.axe,
+                        districtDepot = depot.district, 
+                        fokontanyDepot = depot.fokontany, 
+                        estActifDepot = depot.est_actif
+                    }
+                )
+                .FirstOrDefaultAsync();
+
+            if (ramassageDepot == null)
             {
                 return NotFound();
             }
 
-            return usager;
+            return Ok(ramassageDepot);
         }
 
-
-        //ajout usagers avec axe de ramassage et depot 
-        // exemple de donnée de test
-            //         {
-            //   "UsagerDto": {
-            //     "matricule": "12345",
-            //     "nom": "Dupont",
-            //     "date_naissance": "1990-01-01",
-            //     "contact": "0123456789",
-            //     "adresse": "123 Rue Exemple",
-            //     "mail_ravinala": "dupont@example.com",
-            //     "genre_id": 1,
-            //     "poste_id": 2,
-            //     "departement_id": 3
-            //   },
-            //   "Ramassage": {
-            //     "lieu": "Place de la République",
-            //     "heure_ramassage": "08:00:00",
-            //     "axe_id": 1,
-            //     "est_actif": true
-            //   },
-            //   "Depot": {
-            //     "lieu": "Gare Centrale",
-            //     "heure_depot": "17:00:00",
-            //     "axe_id": 2,
-            //     "est_actif": false
-            //   }
-            // }
 
         [HttpPost("ajout")]
         public async Task<IActionResult> AddUsager([FromBody] UsagerRequest request)
@@ -107,7 +158,8 @@ namespace package_usagers_controller
                 {
                     matricule = request.UsagerDto.matricule,
                     nom = request.UsagerDto.nom,
-                    date_naissance = request.UsagerDto.date_naissance?.ToUniversalTime(),
+                    prenom = request.UsagerDto.prenom,
+                    // date_naissance = request.UsagerDto.date_naissance?.ToUniversalTime(),
                     contact = request.UsagerDto.contact,
                     adresse = request.UsagerDto.adresse,
                     mail_ravinala = request.UsagerDto.mail_ravinala,
@@ -129,7 +181,9 @@ namespace package_usagers_controller
                         heure_ramassage = request.Ramassage.heure_ramassage,
                         axe_id = request.Ramassage.axe_id,
                         usagers_id = usager.id,
-                        est_actif = request.Ramassage.est_actif
+                        est_actif = request.Ramassage.est_actif,
+                        district = request.Ramassage.district,
+                        fokontany = request.Ramassage.fokontany
                     };
 
                     _context.Axe_usagers_ramassage_instance.Add(ramassage);
@@ -144,7 +198,9 @@ namespace package_usagers_controller
                         heure_depot = request.Depot.heure_depot,
                         axe_id = request.Depot.axe_id,
                         usagers_id = usager.id,
-                        est_actif = request.Depot.est_actif
+                        est_actif = request.Depot.est_actif,
+                        district = request.Depot.district,
+                        fokontany = request.Depot.fokontany
                     };
 
                     _context.Axe_usagers_depot_instance.Add(depot);
@@ -160,130 +216,65 @@ namespace package_usagers_controller
             }
         }
 
-
-
-        //ajout usager , only usagers
-        //  [HttpPost("ajout")]
-        // // exemple : http://localhost:5218/api/usagers/ajout
-        // public async Task<ActionResult<Usagers>> CreateUsager(Usagers usager)
-        // {
-        //     if (usager.date_naissance.HasValue)
-        //     {
-        //         // Convertir la date à UTC avant de l'enregistrer
-        //         usager.date_naissance = usager.date_naissance.Value.ToUniversalTime();
-        //     }
-
-        //     // Vérifier si le matricule existe déjà, en ignorant la casse
-        //     bool matriculeExists = await _context.Usagers_instance
-        //         .AnyAsync(u => u.matricule.ToLower() == usager.matricule.ToLower());
-
-        //     if (matriculeExists)
-        //     {
-        //         // Retourner une erreur si le matricule existe déjà
-        //         return BadRequest("Le matricule saisi existe déjà.");
-        //     }
-
-        //     _context.Usagers_instance.Add(usager);
-        //     await _context.SaveChangesAsync();
-
-        //     return CreatedAtAction("GetUsagers", new { id = usager.id }, usager);
-        // }
+        //modifié l'information basique
 
 
         //modifié usager
-        [HttpPut("{id}")]
-        // exemple : http://localhost:5218/api/usagers/3
-    //      {
-    //     "id":3,
-    //     "matricule": "MAT005",
-    //     "nom": "Bellock",
-    //     "date_naissance": "1995-03-17",
-    //     "contact": "034 02 345 68 / 032 45 567 88",
-    //     "mail_ravinala": "bellock@ravinala.com",
-    //     "genre_id": 1,
-    //     "poste_id": 1,
-    //     "departement_id":2
-    //      }
-        public async Task<IActionResult> UpdateUsager(int id, Usagers usager)
+        [HttpPut("update_usager_ramassage_depot/{id}")]
+        public async Task<ActionResult> UpdateUsagerRamassageDepot(int id, [FromBody] UsagerRequest updateModel)
         {
-            if (id != usager.id)
+            // Chercher l'usager avec l'ID spécifié
+            var usager = await _context.Usagers_instance.FirstOrDefaultAsync(u => u.id == id);
+            
+            if (usager == null)
             {
-                return BadRequest("L'ID dans l'URL ne correspond pas à l'ID de l'objet.");
+                return NotFound("Aucun usager trouvé pour cet ID");
             }
 
-            // Vérifiez si l'usager existe
-            var existingUsager = await _context.Usagers_instance.FindAsync(id);
-            if (existingUsager == null)
+            // Mise à jour des informations de l'usager
+            usager.matricule = updateModel.UsagerDto.matricule ?? usager.matricule;
+            usager.nom = updateModel.UsagerDto.nom ?? usager.nom;
+            usager.prenom = updateModel.UsagerDto.prenom ?? usager.prenom;
+            usager.contact = updateModel.UsagerDto.contact ?? usager.contact;
+            usager.adresse = updateModel.UsagerDto.adresse ?? usager.adresse;
+            usager.mail_ravinala = updateModel.UsagerDto.mail_ravinala ?? usager.mail_ravinala;
+            usager.genre_id = updateModel.UsagerDto.genre_id != 0 ? updateModel.UsagerDto.genre_id : usager.genre_id;
+            usager.poste_id = updateModel.UsagerDto.poste_id != 0 ? updateModel.UsagerDto.poste_id : usager.poste_id;
+            usager.departement_id = updateModel.UsagerDto.departement_id != 0 ? updateModel.UsagerDto.departement_id : usager.departement_id;
+
+            // Mise à jour des informations de ramassage
+            var ramassage = await _context.Axe_usagers_ramassage_instance.FirstOrDefaultAsync(r => r.usagers_id == id);
+            if (ramassage != null && updateModel.Ramassage != null)
             {
-                return NotFound("Usager non trouvé.");
+                ramassage.lieu = updateModel.Ramassage.lieu ?? ramassage.lieu;
+                ramassage.heure_ramassage = updateModel.Ramassage.heure_ramassage ?? ramassage.heure_ramassage;
+                ramassage.district = updateModel.Ramassage.district ?? ramassage.district;
+                ramassage.fokontany = updateModel.Ramassage.fokontany ?? ramassage.fokontany;
+                ramassage.est_actif = updateModel.Ramassage.est_actif;
             }
 
-            // Mettez à jour les propriétés de l'usager existant
-            existingUsager.matricule = usager.matricule;
-            existingUsager.nom = usager.nom;
-
-            // Assurez-vous de convertir la date à UTC si nécessaire
-            if (usager.date_naissance.HasValue)
+            // Mise à jour des informations de dépôt
+            var depot = await _context.Axe_usagers_depot_instance.FirstOrDefaultAsync(d => d.usagers_id == id);
+            if (depot != null && updateModel.Depot != null)
             {
-                existingUsager.date_naissance = usager.date_naissance.Value.ToUniversalTime();
-            }
-            else
-            {
-                // Si la date est nulle, vous pouvez gérer cela ici si nécessaire
-                existingUsager.date_naissance = null; // ou la valeur que vous souhaitez
+                depot.lieu = updateModel.Depot.lieu ?? depot.lieu;
+                depot.heure_depot = updateModel.Depot.heure_depot ?? depot.heure_depot;
+                depot.district = updateModel.Depot.district ?? depot.district;
+                depot.fokontany = updateModel.Depot.fokontany ?? depot.fokontany;
+                depot.est_actif = updateModel.Depot.est_actif;
             }
 
-            existingUsager.contact = usager.contact;
-            existingUsager.mail_ravinala = usager.mail_ravinala;
-            existingUsager.genre_id = usager.genre_id;
-            existingUsager.poste_id = usager.poste_id;
-            existingUsager.departement_id = usager.departement_id;
+            await _context.SaveChangesAsync();
 
-
-            // Mettez l'état de l'entité à modifié
-            _context.Entry(existingUsager).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsagerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok("Usager mis à jour avec succès !");
         }
+
+
+        
 
 
         //supprimer un usager
-        [HttpDelete("{id}")]
-        // exemple : http://localhost:5218/api/usagers/4
-        public async Task<IActionResult> DeleteUsager(int id)
-        {
-            var usager = await _context.Usagers_instance.FindAsync(id);
-            if (usager == null)
-            {
-                return NotFound();
-            }
-
-            _context.Usagers_instance.Remove(usager);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UsagerExists(int id)
-        {
-            return _context.Usagers_instance.Any(e => e.id == id);
-        }
+        
 
 }
 

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-color": "^2.19.3",
+    "react-select": "^5.8.1"
+  }
+}

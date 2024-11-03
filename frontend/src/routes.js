@@ -56,16 +56,66 @@ const Admin = React.lazy(() => import('src/admin/Admin'))
 
 //usagers=========================================================
 const Usagers = React.lazy(() => import('src/admin/usagers/Usagers'))
+const Usagers_list = React.lazy(() => import('src/admin/usagers/Usagers_list'))
+
 //usagers ramassage
 const Usagers_ramassage = React.lazy(() => import('src/admin/usagers/Usagers_ramassage'))
 //usagers depot
 const Usagers_depot = React.lazy(() => import('src/admin/usagers/Usagers_depot'))
 
+//usagers affectation 
+const Usagers_affecter_ramassage = React.lazy(() => import('src/admin/usagers/Usagers_affecter_ramassage'))
+const Usagers_affecter_depot = React.lazy(() => import('src/admin/usagers/Usagers_affecter_depot'))
+
+
+
 //conducteurs==========================================================
 //chauffeurs
 const Conducteurs = React.lazy(()=> import('src/admin/conducteurs/Conducteurs'))
+const Conducteurs_assignation = React.lazy(()=> import('src/admin/conducteurs/Conducteurs_assignation'))
 
 
+//cars=====================================================================
+//cars Crud
+const Cars = React.lazy(()=> import('src/admin/cars/Cars'))
+const Cars_list = React.lazy(()=> import('src/admin/cars/Cars_list'))
+
+
+//prestataire================================================
+const Prestataire = React.lazy(()=> import('src/admin/prestataire/Prestataire'))
+
+
+//Map======================================================================
+//ramassage map
+const Map_ramassage = React.lazy(()=> import('src/admin/map/Map_ramassage'))
+//ramassage depot
+const Map_depot = React.lazy(()=> import('src/admin/map/Map_depot'))
+
+//plannification itinéraire
+const Axe_confondu = React.lazy(()=> import('src/admin/map/Axe_confondu'))
+
+//correction map
+const Correction_map = React.lazy(()=> import('src/admin/map/Correction'))
+
+//axe 
+const Axe_list = React.lazy(()=> import('src/admin/axe/Axe_list'))
+const Axe = React.lazy(()=> import('src/admin/axe/Axe'))
+const Axe_conducteurs_cars_list = React.lazy(()=> import('src/admin/axe/Axe_conducteurs_cars_list'))
+
+//assignation des chauffeurs et cars et axe , axe_conducteurs
+
+
+
+//Notifications
+const Notifications = React.lazy(()=> import('src/admin/notifications/Notifications'))
+
+//planning
+const Planning = React.lazy(()=> import('src/admin/planning/Planning'))
+
+
+//axe notifications
+// const NotificationsSlice = React.lazy(()=> import('src/admin/axe/notifications/NotificationsSlice'))
+// const NotificationsPage = React.lazy(()=> import('src/admin/axe/notifications/NotificationsPage'))
 
 const routes = [
 
@@ -73,14 +123,66 @@ const routes = [
   { path: '/admin', name: 'Admin', element: Admin },
 
   //usagers==========================
-  { path: '/usagers', name: 'Usagers', element: Usagers },
+  { path: '/usagers', name: '', element: Usagers_list },
+  { path: '/usagers/add', name: 'Usagers', element: Usagers },
+
   //usagers_ramassage
   { path: '/usagers/ramassage', name: 'ramassage de l\'usager ', element: Usagers_ramassage },
     //usagers_depot
     { path: '/usagers/depot', name: 'depot de l\'usager', element: Usagers_depot },
 
+    //affecter usagers
+    { path: '/usagers/affecter_ramassage/:usagerId', name: 'affecter usagers', element: Usagers_affecter_ramassage },
+    { path: '/usagers/affecter_depot/:usagerId', name: 'affecter usagers', element: Usagers_affecter_depot },
+
+
+
   //conducteurs / chauffeurs==================================================
   { path: '/conducteurs', name: 'chauffeurs', element: Conducteurs },
+  { path: '/conducteurs/assignation', name: 'chauffeurs à assigner', element: Conducteurs_assignation },
+
+
+  //cars =========================================================
+  { path: '/cars', name: 'cars', element: Cars },
+  { path: '/cars_liste', name: 'cars', element: Cars_list },
+
+  //prestataire=============================================
+  { path: '/prestataire', name: 'cars', element: Prestataire },
+
+  //Map
+  { path: '/map/ramassage', name: 'map de ramassage', element: Map_ramassage },
+  { path: '/map/depot', name: 'map de depot', element: Map_depot },
+  //planning itinéraire
+  {path:'map/confondu', name: 'tout axe', element:Axe_confondu},
+  //map correction 
+  {path:'map/correction', name: 'correcteur de parcours', element:Correction_map},
+  //axe 
+  {path:'axe', name: 'liste des axes', element:Axe_list},
+  {path:'axe/add', name: 'ajouter un axe', element:Axe},
+  { path: 'axe/update/:axeId', name: 'Mis à jour', element: Axe },
+  { path: 'axe_conducteurs', name: 'Attributions des cars', element: Axe_conducteurs_cars_list },
+  { path: '/conducteurs/assignation/:assignationId', name: 'modifications assignation', element: Conducteurs_assignation },
+
+
+  //notifications
+  {path:'notifications', name: 'notificactions', element:Notifications},
+
+  //planning
+  {path:'planning', name: 'planning', element:Planning},
+
+  
+
+
+  //axe notifications
+  // {path:'axe', name: 'notifications', element:NotificationsSlice},
+  // {path:'axe', name: 'notifications page', element:NotificationsPage},
+
+
+  
+
+
+
+
 
 
     

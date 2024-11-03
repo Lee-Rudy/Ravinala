@@ -226,3 +226,65 @@ solution --> projet ngeza = angular (ex :  e-commerce , réseaux sociaux)
 
 - installation 
 - mvn no tsara noho ny node satria raha miinstalle node version bobaka dia mandeha foana par rapport @ node car @ node tsy maintsy node farany ihany no mety
+
+- nmap : scan base de donnée 
+
+----------------
+postgres ============================
+
+-- est un serveur satria manana (host sy port)
+-- archivage : soit par statuts, ou par delete puis insert
+
+
+-- postgres : bdd puissant sy mazaka donnée millions de tera
+
+-- manana transaction misy commit matanjaka : 
+ > ohatra : raha manana liste za , user (nom) misy lignes 1 millions dia hatao update daholoo ilay lignes , t@ bdd hafa ohatra mysql raha hatao ny update ka raha misy error (ex: syntaxe, user not found) ny ligne 5000 dia mijanona ilay requete dia ilay lignes teo aloha vo update fa ny ambiny tsy update  par contre raha t@ postgres dia annulé daholo ilay requete na ny teo aloha sy eo ariana satria mila perfesct ny requete izany hoe tokony tsy misy diso izany hoe vita hatramin'ny farany lignes ny update dia misy commit zay vao tapitra ny commit anakiray 
+
+--trigger : requete lancéna ao ambadika mifanaraka @ condition , ohatra (lancéna rehefa misy insertion, upadate , ets...)
+ - objectif : higardéna ny safety , sécurité ana donnée sy durabilité 
+
+- docker hub misy ny image rehetra 
+
+fampiasana docker , 2 façon 
+par ligne de commade -> signature : docker
+
+- exemple container : circleCi/node : entreprise @ déploiement automatique juste git push sisa no hatao 
+fichier docker .yml -> manamboatra fichier
+                        docker compose up (mamorona an'ilay fichier)
+                        docker compose down (mamono an'ilay fichier izany hoe fafana , utilisaton rehefa tapitra ilay projet fin)
+
+port http: port 80
+port https: port 443
+port 22 @ ssh tsy azo ampiasaina intsony
+
+nextJS hatao ho @ fichier ngeza
+
+editor de code web storm
+-------------------------------------------------------------------------
+-- methode agile 
+ > méthode traditionnelle
+ - besoin, delais, equipe, validation
+ - conception , devlpt, (livraison, testn correction[en boucle])
+ > méthode agile
+ - avantages : 
+   - souples = solution @ (besoin, delais) 
+   - individus important noho @ contrat
+   - client est roi 
+   - changement plutôt que plan , il permet le changement flexible et à la norme
+
+   ilay humain 
+    - besoin du client : product owner (homme d'experience pour les changements, tsy voatery developpeur, mila experience , mahalala cas sy aléa @ zavatra maromaro)
+    - fomba hiconstructéna an'ilay equipe : 
+     - maka dev senior anakiray mamaly an'ilay choix technique : langage hicodéna an'ilay projet (ex : symfony + 6 mois + dev nombre devellopeur)
+     - !! tsy azo hatao ny mampiditra dev any anelanelany satria tsy maharaka lasa very fotoana (solution todé fixéna ny nombre ana dev)
+     - prioriséna ny manome impresiion wow :  personnelle no important izy no miasa hahzohana vola 
+
+     - hatao ny fonctionnalité primaire ilay objectif finale fa tsy hoe login no présenténa : manao ny conception , developpement, livraison , test, correction , relivraison 
+     - raha mangataka fonctionnalité ny client , izany hoe tokony hampitombona ilay salaire : ou soit manala fonctionnalité ilay client ou soit manampy salaire (client est roi fa mirespécté changement (na manala fonctionnalité na manampy budget satria ilay délais micompte))
+
+- inona no mahamotivé an'ilay individu : 
+ - homena reponsabilité , hatao intégré ao @ ilay projet
+ - hatao impliqué ny equipe fa tsy executant fotsiny
+ - ny motivation salariale 
+ - communication importanat : @ equipe rehetra mitovy daholo ny statut même le designer 

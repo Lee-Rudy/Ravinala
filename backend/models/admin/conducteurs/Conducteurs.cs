@@ -29,6 +29,9 @@ namespace package_conducteurs
         [Column("mail")]
         public string? mail { get; set; }
 
+        [Column("est_actif")]
+        public bool est_actif { get; set; }
+
     }
 
 }

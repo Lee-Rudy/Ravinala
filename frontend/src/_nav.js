@@ -14,6 +14,8 @@ import {
   cilSpeedometer,
   cilStar,
   cilAddressBook,
+  cilMap,
+  cilPaperPlane
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -62,7 +64,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'cars',
-        to: '/register',
+        to: '/cars_liste',
       },
       {
         component: CNavItem,
@@ -71,10 +73,46 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Heure / Lieu',
+        name: 'Axe',
+        to: '/axe',
+      },
+      {
+        component: CNavItem,
+        name: 'Prestataire',
+        to: '/prestataire',
+      },
+      {
+        component: CNavItem,
+        name: 'page 500',
         to: '/500',
       },
     ],
+  },
+
+  {
+    component: CNavGroup,
+    name: 'Itinéraire - Axe',
+    icon: <CIcon icon={cilMap} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Axe de ramassage',
+        to: '/map/ramassage',
+      },
+      {
+        component: CNavItem,
+        name: 'Axe de dépôt',
+        to: '/map/depot',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'PLanning',
+    icon: <CIcon icon={cilPaperPlane} customClassName="nav-icon" />,
+    component: CNavItem,
+        name: 'Planning',
+        to: '/planning',
   },
   // {
   //   component: CNavItem,

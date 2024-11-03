@@ -6,6 +6,7 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CForm,
   CFormInput,
   CFormLabel,
   CFormSelect,
@@ -13,9 +14,103 @@ import {
   CFormSwitch
 } from '@coreui/react';
 
+import Select from 'react-select';
+
+
 
 
 const Usagers = () => {
+
+  //district, fokontany ramassage
+  const [districts, setDistricts] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [fokontany, setFokontany] = useState([]);
+  const [selectedFokontany, setSelectedFokontany] = useState(null);
+
+  //district, fokontany depot
+  const [selectedDistrictDepot, setSelectedDistrictDepot] = useState(null);
+  const [fokontanyDepot, setFokontanyDepot] = useState([]);
+  const [selectedFokontanyDepot, setSelectedFokontanyDepot] = useState(null);
+
+  const [regionData, setRegionData] = useState(null);
+
+
+  //Function Fetch district and fokontany data
+  const fetchRegionData = async () => {
+    try {
+      const response = await fetch('./src/admin/usagers/region.json');
+      const jsonData = await response.json();
+  
+      // Stocker jsonData dans l'état
+      setRegionData(jsonData);
+  
+      const districtList = [];
+  
+      Object.values(jsonData).forEach(region => {
+        Object.keys(region).forEach(district => {
+          if (!districtList.some(d => d.value === district)) {
+            districtList.push({ value: district, label: district });
+          }
+        });
+      });
+  
+      setDistricts(districtList);
+    } catch (error) {
+      console.error('Erreur lors du chargement du fichier JSON', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRegionData();
+  }, []);
+
+  // Handle district selection and fetch corresponding fokontany
+  const handleDistrictChange = (selectedOption) => {
+  setSelectedDistrict(selectedOption);
+
+  
+  // Vérifier si regionData est défini
+  if (!regionData) return;
+
+  const fokontanyList = [];
+  Object.values(regionData).forEach(region => {
+    if (region[selectedOption.value]) {
+      Object.values(region[selectedOption.value]).forEach(commune => {
+        commune.forEach(item => {
+          fokontanyList.push({ value: item.fokontany, label: item.fokontany });
+        });
+      });
+    }
+  });
+  setFokontany(fokontanyList);
+
+};
+
+
+
+const handleDistrictChangeDepot = (selectedOption) => {
+  setSelectedDistrictDepot(selectedOption);
+
+  
+  // Vérifier si regionData est défini
+  if (!regionData) return;
+
+  const fokontanyList = [];
+  Object.values(regionData).forEach(region => {
+    if (region[selectedOption.value]) {
+      Object.values(region[selectedOption.value]).forEach(commune => {
+        commune.forEach(item => {
+          fokontanyList.push({ value: item.fokontany, label: item.fokontany });
+        });
+      });
+    }
+  });
+  setFokontanyDepot(fokontanyList);
+
+};
+
+  //======================================================
+
 
   //variables
   const [genres, setGenres] = useState([]);
@@ -34,7 +129,7 @@ const Usagers = () => {
   const [usagerData, setUsagerData] = useState({
     matricule: '',
     nom: '',
-    date_naissance: '',
+    prenom:'',
     contact: '',
     adresse: '',
     mail_ravinala: '',
@@ -49,7 +144,9 @@ const Usagers = () => {
     heure_ramassage: '',
     axe_ramassage_id: '',
     //toogle swich default (false) , that is to say , disabled (désactivé) 
-    est_actif: false
+    est_actif: false,
+    district:'',
+    fokontany:''
   });
 
   //keep state usagers
@@ -58,7 +155,9 @@ const Usagers = () => {
     heure_depot: '',
     axe_depot_id: '',
     //toogle swich default (false) , that is to say , disabled (désactivé) 
-    est_actif: false
+    est_actif: false,
+    district:'',
+    fokontany:''
   });
 
   //function using to skip a step form
@@ -100,7 +199,7 @@ const Usagers = () => {
     fetchData();
   }, []);
 
-  //dropDown for postes, genres, departements 
+  //saisi for postes, genres, departements 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
     setUsagerData({
@@ -166,10 +265,10 @@ const Usagers = () => {
     };
 
   //function validate form:
-    const validateForm = async (step) => {
+  const validateForm = async (step) => {
     const errors = {};
-
-    // validate usagers
+  
+    // Validation de l'usager
     if (step === 1) {
       if (!usagerData.matricule) {
         errors.matricule = 'Le matricule est obligatoire.*';
@@ -180,31 +279,31 @@ const Usagers = () => {
         }
       }
       if (!usagerData.nom) errors.nom = 'Le nom est obligatoire.*';
-      if (!usagerData.date_naissance) errors.date_naissance = 'La date de naissance est obligatoire.*';
+      if (!usagerData.prenom) errors.prenom = 'Le prénom est obligatoire.*';
       if (!usagerData.contact) errors.contact = 'Le contact est obligatoire.*';
       if (!usagerData.adresse) errors.adresse = 'L\'adresse est obligatoire.*';
-      if (!usagerData.mail_ravinala) errors.mail_ravinala = 'Le mail est obligatoire.*';
       if (!usagerData.genre_id) errors.genre_id = 'Le genre est obligatoire.*';
       if (!usagerData.poste_id) errors.poste_id = 'Le poste est obligatoire.*';
       if (!usagerData.departement_id) errors.departement_id = 'Le département est obligatoire.*';
     }
-
-    // validate ramassage
+  
+    // Validation du ramassage
     if (step === 2) {
       if (!axeRamassageData.lieu_ramassage) errors.lieu_ramassage = 'Le lieu de ramassage est obligatoire.*';
       if (!axeRamassageData.heure_ramassage) errors.heure_ramassage = 'L\'heure de ramassage est obligatoire.*';
       if (!axeRamassageData.axe_ramassage_id) errors.axe_ramassage_id = 'L\'axe de ramassage est obligatoire.*';
     }
-
-    // validate dépôt
+  
+    // Validation du dépôt
     if (step === 3) {
       if (!axeDepotData.lieu_depot) errors.lieu_depot = 'Le lieu de dépôt est obligatoire.*';
       if (!axeDepotData.heure_depot) errors.heure_depot = 'L\'heure de dépôt est obligatoire.*';
       if (!axeDepotData.axe_depot_id) errors.axe_depot_id = 'L\'axe de dépôt est obligatoire.*';
     }
-
+  
     return errors;
   };
+  
 
   
 
@@ -223,13 +322,17 @@ const Usagers = () => {
             lieu: axeRamassageData.lieu_ramassage,
             heure_ramassage: axeRamassageData.heure_ramassage,
             axe_id: axeRamassageData.axe_ramassage_id,
-            est_actif: axeRamassageData.est_actif
+            est_actif: axeRamassageData.est_actif,
+            district:selectedDistrict ? selectedDistrict.value : null,
+            fokontany:selectedFokontany ? selectedFokontany.value : null
         },
         Depot: {
             lieu: axeDepotData.lieu_depot,
             heure_depot: axeDepotData.heure_depot,
             axe_id: axeDepotData.axe_depot_id,
-            est_actif: axeDepotData.est_actif
+            est_actif: axeDepotData.est_actif,
+            district:selectedDistrictDepot ? selectedDistrictDepot.value : null,
+            fokontany:selectedFokontanyDepot ? selectedFokontanyDepot.value : null
         }
     };
 
@@ -247,106 +350,125 @@ const Usagers = () => {
 
 //Reset form
 const resetForm = () => {
-    setUsagerData({
-        matricule: '',
-        nom: '',
-        date_naissance: '',
-        contact: '',
-        adresse: '',
-        mail_ravinala: '',
-        genre_id: '',
-        poste_id: '',
-        departement_id: ''
-    });
-    setAxeRamassageData({
-        lieu_ramassage: '',
-        heure_ramassage: '',
-        axe_ramassage_id: '',
-        est_actif: false
-    });
-    setAxeDepotData({
-        lieu_depot: '',
-        heure_depot: '',
-        axe_depot_id: '',
-        est_actif: false
-    });
-    setError('');
+  setUsagerData({
+    matricule: '',
+    nom: '',
+    prenom:'',
+    contact: '',
+    adresse: '',
+    mail_ravinala: '',
+    genre_id: '',
+    poste_id: '',
+    departement_id: ''
+  });
+  setAxeRamassageData({
+    lieu_ramassage: '',
+    heure_ramassage: '',
+    axe_ramassage_id: '',
+    est_actif: false,
+    selectedDistrict: '',
+    selectedFokontany: ''
+  });
+  setAxeDepotData({
+    lieu_depot: '',
+    heure_depot: '',
+    axe_depot_id: '',
+    est_actif: false,
+    selectedDistrictDepot: '',
+    selectedFokontanyDepot: ''
+  });
+  setSelectedDistrict(null);
+  setSelectedFokontany(null);
+  setSelectedDistrictDepot(null);
+  setSelectedFokontanyDepot(null);
+  setError('');
 };
 
 
+
 const handleError = (err) => {
-    if (err.response) {
-        console.error('Erreur de réponse:', err.response.data);
-        setError(err.response.data.errors);
-    } else if (err.request) {
-        console.error('Erreur de requête:', err.request);
-        setError('Erreur lors de l\'envoi de la requête.');
-    } else {
-        console.error('Erreur:', err.message);
-        setError('Erreur du serveur !');
-    }
+  if (err.response) {
+    console.error('Erreur de réponse:', err.response.data);
+    setError(err.response.data.message || 'Erreur lors de la requête.');
+  } else if (err.request) {
+    console.error('Erreur de requête:', err.request);
+    setError('Aucune réponse du serveur. Vérifiez votre connexion réseau.');
+  } else {
+    console.error('Erreur:', err.message);
+    setError('Erreur du serveur !');
+  }
 };
 
 
   switch(step) {
     case 1:
       return (
-        <CRow>
-          <CCol xs={{ span: 0, offset: 0 }}>
+        <CRow className="justify-content-center">
+          <CCol xs={12} md={12}>
             <CCard>
               <CCardHeader>
                 <strong>Ajout d'un Usager</strong>
               </CCardHeader>
               <CCardBody>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="matricule">Matricule</CFormLabel>
-                    <CFormInput
-                      type="text"
-                      id="matricule"
-                      value={usagerData.matricule}
-                      onChange={handleInputChange}
-                      placeholder="Entrer le matricule"
-                      invalid={formErrors.matricule ? true : false}
-                    />
-                     {formErrors.matricule && <div className="invalid-feedback">{formErrors.matricule}</div>}
-                  </div>
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="nom">Nom</CFormLabel>
-                    <CFormInput
-                      type="text"
-                      id="nom"
-                      value={usagerData.nom}
-                      onChange={handleInputChange}
-                      placeholder="Entrer le nom"
-                      invalid={formErrors.nom ? true : false}
-                    />
-                    {formErrors.nom && <div className="invalid-feedback">{formErrors.nom}</div>}
-                  </div>
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="date_naissance">Date de naissance</CFormLabel>
-                    <CFormInput
-                      type="date"
-                      id="date_naissance"
-                      value={usagerData.date_naissance}
-                      onChange={handleInputChange}
-                      invalid={formErrors.date_naissance ? true : false}
-                    />
-                    {formErrors.date_naissance && <div className="invalid-feedback">{formErrors.date_naissance}</div>}
-
-                  </div>
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="contact">Contact</CFormLabel>
-                    <CFormInput
-                      type="text"
-                      id="contact"
-                      value={usagerData.contact}
-                      onChange={handleInputChange}
-                      placeholder="ajouter un '/' si plusieurs contacts"
-                      invalid={formErrors.contact ? true : false}
-                    />
-                    {formErrors.contact && <div className="invalid-feedback">{formErrors.contact}</div>}
-                  </div>
+                <CForm onSubmit={handleSubmit}>
+                  {/* Row 1: Matricule and Nom */}
+                  <CRow className="mb-3">
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="matricule">Matricule</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="matricule"
+                        value={usagerData.matricule}
+                        onChange={handleInputChange}
+                        placeholder="Entrer le matricule"
+                        invalid={!!formErrors.matricule}
+                        style={{ textTransform: 'uppercase' }} 
+                      />
+                      {formErrors.matricule && <div className="invalid-feedback">{formErrors.matricule}</div>}
+                    </CCol>
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="nom">Nom</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="nom"
+                        value={usagerData.nom}
+                        onChange={handleInputChange}
+                        placeholder="Entrer le nom"
+                        invalid={!!formErrors.nom}
+                      />
+                      {formErrors.nom && <div className="invalid-feedback">{formErrors.nom}</div>}
+                    </CCol>
+                  </CRow>
+    
+                  {/* Row 2: Prénom and Contact */}
+                  <CRow className="mb-3">
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="prenom">Prénom</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="prenom"
+                        value={usagerData.prenom}
+                        onChange={handleInputChange}
+                        placeholder="Entrer le prénom"
+                        invalid={!!formErrors.prenom}
+                      />
+                      {formErrors.prenom && <div className="invalid-feedback">{formErrors.prenom}</div>}
+                    </CCol>
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="contact">Contact</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        id="contact"
+                        value={usagerData.contact}
+                        onChange={handleInputChange}
+                        placeholder="Ajouter un '/' si plusieurs contacts"
+                        invalid={!!formErrors.contact}
+                      />
+                      {formErrors.contact && <div className="invalid-feedback">{formErrors.contact}</div>}
+                    </CCol>
+                  </CRow>
+    
+                  {/* Adresse */}
                   <div className="mb-3">
                     <CFormLabel htmlFor="adresse">Adresse</CFormLabel>
                     <CFormInput
@@ -354,11 +476,13 @@ const handleError = (err) => {
                       id="adresse"
                       value={usagerData.adresse}
                       onChange={handleInputChange}
-                      placeholder="mettre l'adresse"
-                      invalid={formErrors.adresse ? true : false}
+                      placeholder="Entrer l'adresse"
+                      invalid={!!formErrors.adresse}
                     />
                     {formErrors.adresse && <div className="invalid-feedback">{formErrors.adresse}</div>}
                   </div>
+    
+                  {/* Mail Ravinala */}
                   <div className="mb-3">
                     <CFormLabel htmlFor="mail_ravinala">Mail Ravinala</CFormLabel>
                     <CFormInput
@@ -366,71 +490,70 @@ const handleError = (err) => {
                       id="mail_ravinala"
                       value={usagerData.mail_ravinala}
                       onChange={handleInputChange}
-                      placeholder="Entrer l'email"
-                      invalid={formErrors.mail_ravinala ? true : false}
+                      placeholder="Entrer l'email (facultatif)"
                     />
-                    {formErrors.mail_ravinala && <div className="invalid-feedback">{formErrors.mail_ravinala}</div>}
                   </div>
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="genre_id">Genre</CFormLabel>
-                    <CFormSelect
-                      id="genre_id"
-                      value={usagerData.genre_id}
-                      onChange={handleInputChange}
-                      invalid={formErrors.genre_id ? true : false}
-                    >
-                    {formErrors.genre_id && <div className="invalid-feedback">{formErrors.genre_id}</div>}
-
-                      <option value="">Sélectionner le genre</option>
-                      {genres.map((g) => (
-                        <option key={g.id} value={g.id}>
-                          {g.genre}
-                        </option>
-                      ))}
-                    </CFormSelect>
-                  </div>
-
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="poste_id">Poste</CFormLabel>
-                    <CFormSelect
-                      id="poste_id"
-                      value={usagerData.poste_id}
-                      onChange={handleInputChange}
-                      invalid={formErrors.poste_id ? true : false}
-                    >
-                    {formErrors.poste_id && <div className="invalid-feedback">{formErrors.poste_id}</div>}
-
-                      <option value="">Sélectionner le poste</option>
-                      {postes.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.poste}
-                        </option>
-                      ))}
-                    </CFormSelect>
-                  </div>
-
-                  <div className="mb-3">
-                    <CFormLabel htmlFor="departement_id">Département</CFormLabel>
-                    <CFormSelect
-                      id="departement_id"
-                      value={usagerData.departement_id}
-                      onChange={handleInputChange}
-                      invalid={formErrors.departement_id ? true : false}
-                    >
-                    {formErrors.departement_id && <div className="invalid-feedback">{formErrors.departement_id}</div>}
-
-                      <option value="">Sélectionner le département</option>
-                      {departements.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.departement}
-                        </option>
-                      ))}
-                    </CFormSelect>
-                  </div>
-                  
-                  <CButton type="button" onClick={nextStep} color="info">Suivant</CButton>
-                  <span className="mb-3" style={{ marginLeft: '10px' }}>1/3</span>
-                </form>
+    
+                  {/* Row 3: Genre, Poste, Département */}
+                  <CRow className="mb-3">
+                    <CCol md={4}>
+                      <CFormLabel htmlFor="genre_id">Genre</CFormLabel>
+                      <CFormSelect
+                        id="genre_id"
+                        value={usagerData.genre_id}
+                        onChange={handleInputChange}
+                        invalid={!!formErrors.genre_id}
+                      >
+                        <option value="">Sélectionner le genre</option>
+                        {genres.map((g) => (
+                          <option key={g.id} value={g.id}>
+                            {g.genre}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      {formErrors.genre_id && <div className="invalid-feedback">{formErrors.genre_id}</div>}
+                    </CCol>
+                    <CCol md={4}>
+                      <CFormLabel htmlFor="poste_id">Poste</CFormLabel>
+                      <CFormSelect
+                        id="poste_id"
+                        value={usagerData.poste_id}
+                        onChange={handleInputChange}
+                        invalid={!!formErrors.poste_id}
+                      >
+                        <option value="">Sélectionner le poste</option>
+                        {postes.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.poste}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      {formErrors.poste_id && <div className="invalid-feedback">{formErrors.poste_id}</div>}
+                    </CCol>
+                    <CCol md={4}>
+                      <CFormLabel htmlFor="departement_id">Direction</CFormLabel>
+                      <CFormSelect
+                        id="departement_id"
+                        value={usagerData.departement_id}
+                        onChange={handleInputChange}
+                        invalid={!!formErrors.departement_id}
+                      >
+                        <option value="">Sélectionner la direction</option>
+                        {departements.map((d) => (
+                          <option key={d.id} value={d.id}>
+                            {d.departement}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                      {formErrors.departement_id && <div className="invalid-feedback">{formErrors.departement_id}</div>}
+                    </CCol>
+                  </CRow>
+    
+                  <CButton type="button" onClick={nextStep} color="info">
+                    Suivant
+                  </CButton>
+                  <span className="ms-3">1/3</span>
+                </CForm>
               </CCardBody>
             </CCard>
           </CCol>
@@ -447,8 +570,32 @@ const handleError = (err) => {
                 </CCardHeader>
                 <CCardBody>
                   <form onSubmit={handleSubmit}>
+                  <div>
+                    {/* District Selection ramassage*/}
+                    <CFormLabel>District</CFormLabel>
+                    <Select 
+                      value={selectedDistrict} 
+                      onChange={handleDistrictChange} 
+                      options={districts} 
+                      placeholder="Sélectionnez un District"
+                    />
+
+                    {/* Fokontany Selection ramassage*/}
+                    {fokontany.length > 0 && (
+                      <>
+                        <CFormLabel>Fokontany</CFormLabel>
+                        <Select
+                        value={selectedFokontany} 
+                        onChange={(option) => setSelectedFokontany(option)} 
+                        options={fokontany}
+                        placeholder="Sélectionnez un Fokontany"
+                      />
+                      </>
+                    )}
+                  </div>
+                  <br></br>
                     <div className="mb-3">
-                      <CFormLabel htmlFor="lieu_ramassage">Lieu de Ramassage</CFormLabel>
+                      <CFormLabel htmlFor="lieu_ramassage">Point de Ramassage</CFormLabel>
                       <CFormInput
                         type="text"
                         id="lieu_ramassage"
@@ -488,7 +635,8 @@ const handleError = (err) => {
                           </option>
                         ))}
                       </CFormSelect>
-                    </div>
+                    </div> 
+
                     <div className="mb-3">
                       <CFormSwitch
                         id="est_actif"
@@ -518,8 +666,32 @@ const handleError = (err) => {
                 </CCardHeader>
                 <CCardBody>
                   <form onSubmit={handleSubmit}>
+                  <div>
+                    {/* District Selection depot*/}
+                    <CFormLabel>District</CFormLabel>
+                    <Select 
+                      value={selectedDistrictDepot} 
+                      onChange={handleDistrictChangeDepot} 
+                      options={districts} 
+                      placeholder="Sélectionnez un District"
+                    />
+
+                    {/* Fokontany Selection depot*/}
+                    {fokontany.length > 0 && (
+                      <>
+                        <CFormLabel>Fokontany</CFormLabel>
+                        <Select
+                        value={selectedFokontanyDepot} 
+                        onChange={(option) => setSelectedFokontanyDepot(option)} 
+                        options={fokontany}
+                        placeholder="Sélectionnez un Fokontany"
+                      />
+                      </>
+                    )}
+                  </div>
+                  <br></br>
                     <div className="mb-3">
-                      <CFormLabel htmlFor="lieu_depot">Lieu de Dépôt</CFormLabel>
+                      <CFormLabel htmlFor="lieu_depot">Point de Dépôt</CFormLabel>
                       <CFormInput
                         type="text"
                         id="lieu_depot"
@@ -559,6 +731,9 @@ const handleError = (err) => {
                         ))}
                       </CFormSelect>
                     </div>
+
+                    
+
                     <div className="mb-3">
                       <CFormSwitch
                         id="est_actif"

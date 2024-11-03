@@ -14,6 +14,13 @@ namespace package_axe
         [Column("axe")]
         public string? axe {get; set;}
 
+        [Column("duree_trajet")]
+        //en minutes ex : 180 minutes
+        public int duree_trajet {get; set;}
+
+        [Column("distance_km")]
+        public decimal distance_km {get; set;}
+
     }
 }
 

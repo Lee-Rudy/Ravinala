@@ -33,5 +33,11 @@ namespace package_pointage_usagers_depot
 
         [ForeignKey("axe_usagers_depot_id")]
         public virtual Axe_usagers_depot? Axe_usagers_depot { get; set; }
+
+        [Column("kilometrage_debut")]
+        public int kilometrage_debut {get; set;}
+
+         [Column("kilometrage_fin")]
+        public int kilometrage_fin {get; set;}
     }
 }
