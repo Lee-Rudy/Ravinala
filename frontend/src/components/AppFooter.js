@@ -5,7 +5,7 @@ const AppFooter = () => {
   return (
     <CFooter className="px-4">
       <div>
-        <span>Bruner Lee Rudy - Gestion de Transport</span>
+        <span>Ravinala Airports - Gestion de Transport</span>
         <span className="ms-1">&copy; 2024</span>
       </div>
     </CFooter>

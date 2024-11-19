@@ -33,9 +33,7 @@ using package_pointage_usagers_ramassage;
 using package_pointage_usagers_depot;
 
 //push 
-using package_push_week;
-using package_save_push;
-
+using package_push_data;
 
 namespace package_my_db_context
 {
@@ -79,9 +77,14 @@ namespace package_my_db_context
         public DbSet<Pointage_usagers_ramassage> Pointage_usagers_ramassage_instance { get; set; }
         public DbSet<Pointage_usagers_depot> Pointage_usagers_depot_instance { get; set; }
 
-        // Push
-        public DbSet<Push_week> Push_week_instance { get; set; }
-        public DbSet<Save_push> Save_push_instance { get; set; }
+        // Push des données from mobile into web
+        public DbSet<Pointage_ramassage_push> PointageRamassagePushes_instance { get; set; }
+        public DbSet<Pointage_depot_push> PointageDepotPushes_instance { get; set; }
+        public DbSet<Btn_push> BtnPushes_instance { get; set; }
+        public DbSet<Pointage_usagers_imprevu_push> PointageUsagersImprevuPushes_instance { get; set; }
+
+        public DbSet<km_matin_push> Km_matin_push_instance { get; set; }
+        public DbSet<km_soir_push> Km_soir_push_instance { get; set; }
 
 
 

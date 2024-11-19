@@ -198,13 +198,13 @@ const Map_ramassage = () => {
                 </Link>
 
                 </CNavItem>
-                <CNavItem>
+                {/* <CNavItem>
                 <Link to="/map/correction" style={{ textDecoration: 'none' }}>
                     <CNavLink>
                    correcteur de parcours
                     </CNavLink>
                 </Link>
-                </CNavItem>
+                </CNavItem> */}
                 <CNavItem>
                     <CNavLink href="#" disabled>
                         Navigation

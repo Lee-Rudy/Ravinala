@@ -14,6 +14,10 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
 // import NotificationsPage from './admin/axe/NotificationsPage';
  // Assurez-vous du chemin correct
 
+ //user_tablette
+const Push = React.lazy(() => import('src/user_tablette/push/Push'));
+
+
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme');
   const storedTheme = useSelector((state) => state.theme);
@@ -46,6 +50,8 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/404" element={<Page404 />} />
           <Route path="/500" element={<Page500 />} />
+          <Route path="/push" element={<Push />} />
+
           {/* <Route path="/notifications" element={<NotificationsPage />} /> */}
           <Route path="*" element={<DefaultLayout />} /> {/* Cette route doit être la dernière */}
         </Routes>

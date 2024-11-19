@@ -120,6 +120,9 @@ const Planning = () => {
   return (
     <CCard>
       <CCardHeader>
+              <strong>Liste des usagers actifs</strong>
+            </CCardHeader>
+      <CCardHeader>
         <CNav variant="tabs" role="tablist">
           <CNavItem>
             <CNavLink active={activeTab === 'ramassage'} onClick={() => setActiveTab('ramassage')}>
@@ -169,7 +172,7 @@ const Planning = () => {
               </CFormSelect>
             </CInputGroup>
 
-            <CTable bordered borderColor="primary">
+            <CTable  striped>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Matricule</CTableHeaderCell>
@@ -178,7 +181,7 @@ const Planning = () => {
                   <CTableHeaderCell>Voiture</CTableHeaderCell>
                   <CTableHeaderCell>Fokontany</CTableHeaderCell>
                   <CTableHeaderCell>Lieu</CTableHeaderCell>
-                  <CTableHeaderCell>Heure</CTableHeaderCell>
+                  <CTableHeaderCell>Heure prévue</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -255,7 +258,7 @@ const Planning = () => {
               </CFormSelect>
             </CInputGroup>
 
-            <CTable bordered borderColor="primary">
+            <CTable  striped>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Matricule</CTableHeaderCell>
@@ -264,7 +267,7 @@ const Planning = () => {
                   <CTableHeaderCell>Voiture</CTableHeaderCell>
                   <CTableHeaderCell>Fokontany</CTableHeaderCell>
                   <CTableHeaderCell>Lieu</CTableHeaderCell>
-                  <CTableHeaderCell>Heure</CTableHeaderCell>
+                  <CTableHeaderCell>Heure prévue</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

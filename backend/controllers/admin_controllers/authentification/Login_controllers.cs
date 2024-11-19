@@ -28,7 +28,6 @@ namespace package_login_controller
                 return BadRequest(new { message = "Email et mot de passe sont requis." });
             }
 
-            // Récupère l'utilisateur depuis la base de données
             var user = await _context.Login_instance
                 .Where(u => u.mail == loginRequest.mail)
                 .FirstOrDefaultAsync();
@@ -38,7 +37,6 @@ namespace package_login_controller
                 return Unauthorized(new { message = "Utilisateur non trouvé." });
             }
 
-            // Vérification du mot de passe avec BCrypt
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginRequest.mot_de_passe, user.mot_de_passe);
 
             if (!isPasswordValid)
@@ -46,34 +44,17 @@ namespace package_login_controller
                 return Unauthorized(new { message = "Mot de passe incorrect." });
             }
 
-            // Debug : Affiche le hash du mot de passe dans la base de données
-            Console.WriteLine("Mot de passe hashé en base: " + user.mot_de_passe);
-
-            // Vérification du mot de passe avec BCrypt
-            try
-            {
-                // Vérification du mot de passe
-                if (!BCrypt.Net.BCrypt.Verify(loginRequest.mot_de_passe, user.mot_de_passe))
-                {
-                    return Unauthorized(new { message = "Mot de passe incorrect." });
-                }
-            }
-            catch (BCrypt.Net.SaltParseException ex)
-            {
-                // Debug : Affiche plus d'informations sur l'erreur
-                Console.WriteLine("Erreur lors de la vérification du mot de passe : " + ex.Message);
-                return BadRequest(new { message = "Erreur lors de la vérification du mot de passe.", error = ex.Message });
-            }
-
-            // Si tout est correct, retourner les informations de l'utilisateur
+            // Si tout est correct, retourner les informations de l'utilisateur avec l'URL de redirection
             return Ok(new
             {
                 id = user.id,
                 nom = user.nom,
                 mail = user.mail,
-                est_admin = user.est_admin
+                est_admin = user.est_admin,
+                redirectUrl = user.est_admin == true ? "/dashboard_admin" : "/push" // URL selon le type d'utilisateur
             });
         }
+
     }
 }
 

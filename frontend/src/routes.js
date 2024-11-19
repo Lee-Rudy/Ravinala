@@ -50,7 +50,18 @@ const Modals = React.lazy(() => import('./views/notifications/modals/Modals'))
 const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
+
+
+
+
+
+
+
 //=========================================================
+
+//dashboard admin
+const Dashboard_admin = React.lazy(()=> import('src/admin/dashboard_admin/Dashboard_admin'))
+
 //admin path routes
 const Admin = React.lazy(() => import('src/admin/Admin'))
 
@@ -113,6 +124,12 @@ const Notifications = React.lazy(()=> import('src/admin/notifications/Notificati
 const Planning = React.lazy(()=> import('src/admin/planning/Planning'))
 
 
+
+///////////////////////////////////////////////////////////////////////////////:
+//user tablette
+// const Push = React.lazy(()=> import('src/user_tablette/push/Push'))
+
+
 //axe notifications
 // const NotificationsSlice = React.lazy(()=> import('src/admin/axe/notifications/NotificationsSlice'))
 // const NotificationsPage = React.lazy(()=> import('src/admin/axe/notifications/NotificationsPage'))
@@ -121,6 +138,11 @@ const routes = [
 
   //admin path
   { path: '/admin', name: 'Admin', element: Admin },
+
+  //dashboard
+  { path: '/dashboard_admin', name: 'Admin', element: Dashboard_admin },
+
+
 
   //usagers==========================
   { path: '/usagers', name: '', element: Usagers_list },
@@ -168,7 +190,12 @@ const routes = [
   {path:'notifications', name: 'notificactions', element:Notifications},
 
   //planning
-  {path:'planning', name: 'planning', element:Planning},
+  {path:'planning', name: 'usagers actif', element:Planning},
+
+  ///////////////////////////////////////////////////////////////////////
+  //user tablette
+  // {path:'/push', name: 'push', element:Push},
+
 
   
 

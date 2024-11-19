@@ -19,7 +19,7 @@ import { sygnet } from 'src/assets/brand/sygnet'
 // sidebar nav config
 import navigation from '../_nav'
 
-import logo_img from 'src/assets/logo_img/logo.jpeg';
+import logo_img from 'src/assets/logo_img/ravicheck.svg';
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -41,7 +41,7 @@ const AppSidebar = () => {
         <CSidebarBrand to="/">
           {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}
           {/* logo ravinala */}
-          <img src={logo_img} alt="Logo" className="sidebar-brand-full" height={32} />
+          <img src={logo_img} alt="Logo" className="sidebar-brand-full" height={100} />
 
           <CIcon customClassName="sidebar-brand-narrow" />
 

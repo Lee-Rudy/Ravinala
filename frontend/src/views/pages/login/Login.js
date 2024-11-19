@@ -28,42 +28,37 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Fonction de gestion de l'envoi du formulaire
-  const Envoi_data = async (event) => {
-    event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
+  // Fonction de gestion de l'envoi du formulaire
+    const Envoi_data = async (event) => {
+      event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
 
-    try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-      console.log("Base URL:", baseURL);
-      
-      const response = await axios.post(`${baseURL}/api/login/identification`, {
-        mail: email,
-        mot_de_passe: password
-      }, {
-        withCredentials: true
-      });
+      try {
+          const baseURL = import.meta.env.VITE_API_BASE_URL;
+          
+          const response = await axios.post(`${baseURL}/api/login/identification`, {
+              mail: email,
+              mot_de_passe: password
+          }, {
+              withCredentials: true
+          });
 
-      // si la vérification / réponse sont correcte
-      if (response.status === 200) {
-        // Stockez les données utilisateur dans le stockage local
-        localStorage.setItem('user', JSON.stringify(response.data));
-
-        // Redirigez ou actualisez l'interface utilisateur en conséquence
-        alert("Connexion réussie !");
-
-        // Redirection de la page
-        navigate("/admin");
+          // si la vérification / réponse sont correcte
+          if (response.status === 200) {
+              localStorage.setItem('user', JSON.stringify(response.data));
+              // alert("Connexion réussie !");
+              navigate(response.data.redirectUrl); // Redirection en fonction de l'URL reçue du serveur
+          }
+      } catch (error) {
+          if (error.response) {
+              console.error("Erreur de réponse : ", error.response.data);
+              setError(error.response.data.message || 'Erreur de connexion');
+          } else {
+              console.error("Erreur : ", error);
+              setError('Une erreur est survenue. Veuillez réessayer.');
+          }
       }
-    } catch (error) {
-      // Vérifiez si une réponse est renvoyée et si elle contient un message d'erreur
-      if (error.response) {
-        console.error("Erreur de réponse : ", error.response.data); // Ajoutez ce log
-        setError(error.response.data.message || 'Erreur de connexion');
-      } else {
-        console.error("Erreur : ", error); // Ajoutez ce log pour voir toute erreur non liée à la réponse
-        setError('Une erreur est survenue. Veuillez réessayer.');
-      }
-    }
-  };
+    };
+
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -74,7 +69,9 @@ const Login = () => {
               <CCard className="text-white py-5" style={{ width: '44%', backgroundColor: '#2fab53' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Gestion des transports - Ravinala Airports</h2>
+                    <h2>RaviCheck</h2>
+                    <h5>by Ravinala Airports</h5><br />
+
                     <p>
                       Bienveillance,<br />
                       Ambition,<br />

@@ -15,17 +15,85 @@ import {
   cilStar,
   cilAddressBook,
   cilMap,
-  cilPaperPlane
+  cilPaperPlane,
+  cilChartLine
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
+//cilBarChart peut aussi être icone dashboard
+
 const _nav = [
+
+
+  {
+    component: CNavTitle,
+    name: 'Dashboard',
+  },
+
+  // {
+  //   component: CNavGroup,
+  //   name: 'Dashboard',
+  //   icon: <CIcon icon={cilChartLine} customClassName="nav-icon" />,
+  //   component: CNavItem,
+  //       name: 'Dashboard',
+  //       to: '/dashboard_admin',
+  // },
+
+  {
+    component: CNavGroup,
+    name: 'Dashboard',
+    icon: <CIcon icon={cilChartLine} customClassName="nav-icon" />,
+    
+    items: [
+      {
+        component: CNavItem,
+        name: 'statistiques générales',
+        to: '/dashboard_admin',
+      },
+      {
+        component: CNavItem,
+        name: 'Poctualité et retard',
+        to: '/ponctualite',
+      },
+      {
+        component: CNavItem,
+        name: 'Fréquence et utilisation',
+        to: '/frequence',
+      },
+      {
+        component: CNavItem,
+        name: 'Absence et présence',
+        to: '/absence',
+      },
+      {
+        component: CNavItem,
+        name: 'consommation de carburant t coûts',
+        to: '/absence',
+      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 404',
+      //   to: '/404',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 500',
+      //   to: '/500',
+      // },
+    ],
+  },
+
+  {
+    component: CNavTitle,
+    name: 'Administrations',
+  },
 
   //authentification
   {
     component: CNavGroup,
     name: 'Authentification',
     icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" />,
+    
     items: [
       {
         component: CNavItem,
@@ -37,16 +105,16 @@ const _nav = [
         name: 'Register',
         to: '/register',
       },
-      {
-        component: CNavItem,
-        name: 'Error 404',
-        to: '/404',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 500',
-        to: '/500',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 404',
+      //   to: '/404',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 500',
+      //   to: '/500',
+      // },
     ],
   },
 
@@ -81,12 +149,17 @@ const _nav = [
         name: 'Prestataire',
         to: '/prestataire',
       },
-      {
-        component: CNavItem,
-        name: 'page 500',
-        to: '/500',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'page 500',
+      //   to: '/500',
+      // },
     ],
+  },
+
+  {
+    component: CNavTitle,
+    name: 'Plannification',
   },
 
   {

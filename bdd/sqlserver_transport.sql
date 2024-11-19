@@ -66,6 +66,14 @@ CREATE TABLE usagers
     departement_id INT FOREIGN KEY REFERENCES departement(id)
 );
 
+--en service / hors service
+
+-- ALTER TABLE usagers
+-- ADD en_service BIT NOT NULL DEFAULT 1;
+
+-- UPDATE usagers
+-- SET en_service = 1;
+
 
 -- select lieu,fokontany,district from axe_usagers_ramassage where axe_id = 2;
 --------------------------------------------------------------
@@ -365,6 +373,30 @@ ORDER BY
     c.nom_car ASC, 
     aur.heure_ramassage ASC;
 
+--table mobile liste ramassage 
+--planning ramassage
+SELECT 
+    u.matricule,
+    u.nom AS nom_usager,
+    a.axe AS nom_axe,
+    c.nom_car AS nom_voiture,
+    aur.fokontany,
+    aur.lieu,
+    aur.heure_ramassage AS heure
+FROM 
+    usagers u
+JOIN axe_usagers_ramassage aur ON u.id = aur.usagers_id
+JOIN axe a ON aur.axe_id = a.id
+JOIN axe_conducteurs ac ON a.id = ac.axe_id
+JOIN cars c ON ac.cars_id = c.id
+WHERE 
+    aur.est_actif = 1
+-- WHERE 
+-- aur.est_actif = 1 and ac.cars_id =1
+ORDER BY 
+    c.nom_car ASC, 
+    aur.heure_ramassage ASC;
+
 
 --planning depot
     SELECT 
@@ -411,5 +443,25 @@ ORDER BY
 --     a.axe ASC, 
 --     c.nom_car ASC, 
 --     COALESCE(aur.heure_ramassage, aud.heure_depot) ASC;
+
+--table for tablette mobile en attente
+create table push_pointage
+(
+    id int IDENTITY(1,1) primary key not null,
+    cars_id int FOREIGN key REFERENCES cars(id),
+    usagers_id int FOREIGN key REFERENCES usagers(id), --liste_id
+    heure_pointage time,
+    date_pointage date
+);
+
+create table push_duree_trajet_cars
+(
+    id int IDENTITY(1,1) primary key not null,
+    cars_id int FOREIGN key REFERENCES cars(id),
+    date_duree_pointage date,
+    heure_debut time, --btn debut
+    heure_fin time --btn fin
+);
+
 
 

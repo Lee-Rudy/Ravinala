@@ -185,6 +185,22 @@ copyright 2024 creativeLabs Łukasz Holeczek.
 Code released under [the MIT license](https://github.com/coreui/coreui-free-react-admin-template/blob/main/LICENSE).
 
 -------------------===================================================
+
+mis à jour push sur git :
+
+# Étape 1 : Ajouter tous les changements
+git add .
+
+# Étape 2 : Enregistrer les modifications avec un message de commit
+git commit -m "Description de la mise à jour"
+
+# Étape 3 : Récupérer les mises à jour récentes (facultatif mais recommandé pour éviter les conflits)
+git pull origin main  # ou remplacez `main` par le nom de votre branche si différent
+
+# Étape 4 : Envoyer les modifications vers GitHub
+git push origin main  # encore une fois, remplacez `main` si vous êtes sur une autre branche
+
+---------------------------------------------------------------------
 ANGULAR
 
 Différence Angular avec autres langages

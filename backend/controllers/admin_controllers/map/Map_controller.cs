@@ -32,7 +32,7 @@ namespace package_map_controller
             var query = from a in _context.Axe_usagers_ramassage_instance
                         join u in _context.Usagers_instance on a.usagers_id equals u.id
                         join ax in _context.Axe_instance on a.axe_id equals ax.id
-                        where a.axe_id == id
+                        where a.axe_id == id && a.est_actif == true 
                         orderby a.heure_ramassage ascending
                         select new
                         {
@@ -78,12 +78,14 @@ namespace package_map_controller
             var query = from a in _context.Axe_usagers_depot_instance
                         join u in _context.Usagers_instance on a.usagers_id equals u.id
                         join ax in _context.Axe_instance on a.axe_id equals ax.id
-                        where a.axe_id == id
+                        where a.axe_id == id && a.est_actif == true 
+                        orderby a.heure_depot ascending
                         select new
                         {
                             a.lieu,
                             a.district,
                             a.fokontany,
+                            a.heure_depot,
                             u.nom,
                             u.matricule,
                             ax.axe,
