@@ -123,6 +123,15 @@ const Notifications = React.lazy(()=> import('src/admin/notifications/Notificati
 //planning
 const Planning = React.lazy(()=> import('src/admin/planning/Planning'))
 
+//historique
+const Historique = React.lazy(()=> import('src/admin/historique/Historique'))
+
+  //statistiques
+  //statistiques usagers
+const Stat_usagers = React.lazy(()=> import('src/admin/stat/usagers/Stat_usagers'))
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////:
@@ -191,6 +200,16 @@ const routes = [
 
   //planning
   {path:'planning', name: 'usagers actif', element:Planning},
+
+  //historique
+  {path:'historique', name: 'historique', element:Historique},
+
+
+  //statistiques
+  //statistiques usagers
+  {path:'stat_usagers', name: '', element:Stat_usagers},
+
+
 
   ///////////////////////////////////////////////////////////////////////
   //user tablette

@@ -304,3 +304,8 @@ editor de code web storm
  - hatao impliqué ny equipe fa tsy executant fotsiny
  - ny motivation salariale 
  - communication importanat : @ equipe rehetra mitovy daholo ny statut même le designer 
+
+
+ -----------------------
+
+ npm install chart.js@4 react-chartjs-2@5

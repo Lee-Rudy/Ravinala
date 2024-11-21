@@ -16,7 +16,8 @@ import {
   cilAddressBook,
   cilMap,
   cilPaperPlane,
-  cilChartLine
+  cilChartLine,
+  cilHistory
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -24,6 +25,19 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
 
+
+  {
+    component: CNavTitle,
+    name: 'Historique',
+  },
+  {
+    component: CNavGroup,
+    name: 'PLanning',
+    icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
+    component: CNavItem,
+        name: 'Historique',
+        to: '/historique',
+  },
 
   {
     component: CNavTitle,
@@ -47,29 +61,20 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'statistiques générales',
-        to: '/dashboard_admin',
+        name: 'usagers',
+        to: '/stat_usagers',
       },
       {
         component: CNavItem,
-        name: 'Poctualité et retard',
-        to: '/ponctualite',
+        name: 'cars',
+        to: '/stat_cars',
       },
       {
         component: CNavItem,
-        name: 'Fréquence et utilisation',
-        to: '/frequence',
+        name: 'consommation',
+        to: '/stat_consommation',
       },
-      {
-        component: CNavItem,
-        name: 'Absence et présence',
-        to: '/absence',
-      },
-      {
-        component: CNavItem,
-        name: 'consommation de carburant t coûts',
-        to: '/absence',
-      },
+
       // {
       //   component: CNavItem,
       //   name: 'Error 404',

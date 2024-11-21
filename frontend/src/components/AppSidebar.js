@@ -41,7 +41,7 @@ const AppSidebar = () => {
         <CSidebarBrand to="/">
           {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}
           {/* logo ravinala */}
-          <img src={logo_img} alt="Logo" className="sidebar-brand-full" height={100} />
+          <img src={logo_img} alt="Logo" className="sidebar-brand-full" height={85} />
 
           <CIcon customClassName="sidebar-brand-narrow" />
 
