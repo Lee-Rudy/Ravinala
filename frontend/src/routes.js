@@ -129,6 +129,13 @@ const Historique = React.lazy(()=> import('src/admin/historique/Historique'))
   //statistiques
   //statistiques usagers
 const Stat_usagers = React.lazy(()=> import('src/admin/stat/usagers/Stat_usagers'))
+//satistiques cars 
+const Stat_cars = React.lazy(()=> import('src/admin/stat/cars/Stat_cars'))
+//satatistiques consommation des cars
+const Consommation_car = React.lazy(()=> import('src/admin/stat/consommation/Consommation_car'))
+
+
+
 
 
 
@@ -208,7 +215,10 @@ const routes = [
   //statistiques
   //statistiques usagers
   {path:'stat_usagers', name: '', element:Stat_usagers},
-
+  //statistiques cars
+  {path:'stat_cars', name: '', element:Stat_cars},
+  //consommation des cars
+  {path:'stat_consommation', name: '', element:Consommation_car},
 
 
   ///////////////////////////////////////////////////////////////////////

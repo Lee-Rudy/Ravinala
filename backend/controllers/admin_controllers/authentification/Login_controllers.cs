@@ -51,7 +51,8 @@ namespace package_login_controller
                 nom = user.nom,
                 mail = user.mail,
                 est_admin = user.est_admin,
-                redirectUrl = user.est_admin == true ? "/dashboard_admin" : "/push" // URL selon le type d'utilisateur
+                // redirectUrl = user.est_admin == true ? "/dashboard_admin" : "/push" // URL selon le type d'utilisateur
+                redirectUrl = user.est_admin == true ? "/historique" : "/push"
             });
         }
 

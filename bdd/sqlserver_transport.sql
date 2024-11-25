@@ -27,6 +27,14 @@ CREATE TABLE login
     est_admin BIT DEFAULT 0  --1 : admin , 0 : non admin
 );
 
+--login mobile cars
+--tsy maintsy mitovy @ nom_car ny login ; ny mdp tsy voatery
+create login_cars
+(
+    id int identity(1,1) primary key not null,
+    nom_car_login nvarchar(100) not null,
+    mot_de_passe(50) not null
+);
 
 
 -- usagers=======================================================
@@ -150,12 +158,17 @@ CREATE TABLE cars
     nombre_place INT NOT NULL,
     prestataire_id INT FOREIGN KEY REFERENCES prestataire(id),
     type_cars_id INT FOREIGN KEY REFERENCES type_cars(id),
-    est_actif bit default 1,
+    est_actif bit default 1, --new fait
     litre_consommation decimal(10,2), -- new fait
     km_consommation decimal(10,2), -- new fait
     prix_consommation decimal(10,2), -- new fait
     type_carburant nvarchar(MAX) -- new fait
 );
+
+-- UPDATE nom_table
+-- SET colonne1 = valeur1, colonne2 = valeur2, ...
+-- WHERE condition;
+
 
 -- ALTER TABLE cars
 -- ADD litre_consommation decimal,

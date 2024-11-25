@@ -5,6 +5,9 @@ using System.Linq;
 //Login
 using package_login;
 
+//login cars
+using package_login_cars;
+
 //usagers
 using package_poste;
 using package_genre;
@@ -47,6 +50,9 @@ namespace package_my_db_context
 
         // DbSets pour chaque table
         public DbSet<Login> Login_instance { get; set; }
+
+        //login cars
+        public DbSet<Login_cars> Login_cars_instance { get; set; }
 
         //usagers
         public DbSet<Poste> Poste_instance { get; set; }

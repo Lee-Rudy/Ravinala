@@ -132,5 +132,6 @@ namespace package_stat_usagers_controller
                 });
             }
         }
+
     }
 }

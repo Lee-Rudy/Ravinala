@@ -4,6 +4,9 @@ VALUES ('tanjona', 'tanjona@ravinala.com',  '$2a$06$R7ZwO.ELyR2I2gh6MUBuu.tqwP5w
 INSERT INTO login (nom, mail, mot_de_passe,est_admin)
 VALUES ('toavina', 'toavina@ravinala.com','$2a$06$fk4mrsWb4RK7H8q8ulNkfOg1N/SuFRLfMI1k89S0XLd38EZBb9RrW',0);
 
+insert into login_cars(nom_car_login, mot_de_passe) values ('car1','car1!'),('car2','car2!'),('car3','car3!');
+
+
 insert into poste (poste) values 
 ('stagiaire'),--1
 ('RH'),--2

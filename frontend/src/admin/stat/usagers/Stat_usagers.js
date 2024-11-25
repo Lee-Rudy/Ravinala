@@ -23,9 +23,9 @@ import {
   CFormLabel,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilMagnifyingGlass, cilTruck, cilColorPalette } from '@coreui/icons'; // Importation des icônes supplémentaires
-import { Bar } from 'react-chartjs-2';
-import 'chart.js/auto'; // Nécessaire pour Chart.js v3+
+import { cilMagnifyingGlass, cilCheck } from '@coreui/icons';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 const Stat_usagers = () => {
   const [error, setError] = useState('');
@@ -34,8 +34,10 @@ const Stat_usagers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUsager, setSelectedUsager] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [stats, setStats] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [statsFrequentation, setStatsFrequentation] = useState(null);
+  const [statsTrafics, setStatsTrafics] = useState([]);
+  const [loadingFrequentation, setLoadingFrequentation] = useState(false);
+  const [loadingTrafics, setLoadingTrafics] = useState(false);
 
   const itemsPerPage = 5;
 
@@ -47,7 +49,6 @@ const Stat_usagers = () => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     try {
       const response = await axios.get(`${baseURL}/api/usagers/liste`);
-      console.log('Liste des usagers:', response.data);
       setUsagersList(response.data);
     } catch (error) {
       console.error(error);
@@ -61,11 +62,9 @@ const Stat_usagers = () => {
       (usager.nom && usager.nom.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (usager.prenom && usager.prenom.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (usager.axeRamassage && usager.axeRamassage.toLowerCase().includes(searchTerm.toLowerCase()));
-
     return searchFilter;
   });
 
-  // Pagination
   const paginatedUsagers = filteredUsagers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -73,13 +72,14 @@ const Stat_usagers = () => {
 
   const handleUsagerClick = (usager) => {
     setSelectedUsager(usager);
-    setStats([]); // Réinitialiser les stats pour le nouvel usager
+    setStatsFrequentation(null);
+    setStatsTrafics([]);
   };
 
-  const handleFetchStats = async () => {
+  const handleFetchTraficsStats = async () => {
     if (!selectedUsager || !selectedYear) return;
 
-    setLoading(true);
+    setLoadingTrafics(true);
     setError('');
     try {
       const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -89,32 +89,53 @@ const Stat_usagers = () => {
           annee: selectedYear,
         },
       });
-      console.log('Statistiques récupérées:', response.data);
-      setStats(response.data);
+      setStatsTrafics(response.data);
     } catch (error) {
       console.error(error);
-      setError('Erreur lors de la récupération des statistiques.');
+      setError('Erreur lors de la récupération des statistiques de trafics.');
     } finally {
-      setLoading(false);
+      setLoadingTrafics(false);
     }
   };
 
-  const generateChartData = () => {
-    if (!stats || stats.length === 0) return {};
+  const handleFetchFrequentationStats = async () => {
+    if (!selectedUsager || !selectedYear) return;
 
-    // Tableau des noms complets des mois
+    setLoadingFrequentation(true);
+    setError('');
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.get(`${baseURL}/api/stat/usagers/frequence`, {
+        params: {
+          matricule: selectedUsager.matricule,
+          annee: selectedYear,
+        },
+      });
+      setStatsFrequentation(response.data);
+    } catch (error) {
+      console.error(error);
+      setError('Erreur lors de la récupération des statistiques de fréquentation.');
+    } finally {
+      setLoadingFrequentation(false);
+    }
+  };
+
+  const generateBarChartDataTrafics = () => {
+    if (!statsTrafics || statsTrafics.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+
     const moisNoms = [
       'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
       'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
     ];
 
-    const labels = stats.map((stat) => moisNoms[stat.mois - 1]);
-    const ramassageData = stats.map((stat) => stat.ramassageTotal);
-    const depotData = stats.map((stat) => stat.depotTotal);
-
-    console.log('Labels:', labels);
-    console.log('Ramassage Data:', ramassageData);
-    console.log('Dépôt Data:', depotData);
+    const labels = statsTrafics.map((stat) => moisNoms[stat.mois - 1]);
+    const ramassageData = statsTrafics.map((stat) => stat.ramassageTotal);
+    const depotData = statsTrafics.map((stat) => stat.depotTotal);
 
     return {
       labels,
@@ -122,53 +143,108 @@ const Stat_usagers = () => {
         {
           label: 'Ramassage',
           data: ramassageData,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)', // Bleu
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
         },
         {
           label: 'Dépôt',
           data: depotData,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)', // Vert
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
         },
       ],
     };
   };
 
-  // Calculer les totaux des ramassages et dépôts
-  const totalRamassages = stats.reduce((acc, stat) => acc + stat.ramassageTotal, 0);
-  const totalDepots = stats.reduce((acc, stat) => acc + stat.depotTotal, 0);
-
-  // Ajout d'un useEffect pour surveiller les changements de stats
-  useEffect(() => {
-    if (stats.length > 0) {
-      console.log('Stats mises à jour:', stats);
+  const generateBarChartDataFrequentation = () => {
+    if (!statsFrequentation || !statsFrequentation.monthlyComparison) {
+      return {
+        labels: [],
+        datasets: [],
+      };
     }
-  }, [stats]);
+
+    const moisNoms = [
+      'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ];
+
+    const labels = statsFrequentation.monthlyComparison.map((stat) => moisNoms[stat.mois - 1]);
+    const ramassagePercentage = statsFrequentation.monthlyComparison.map((stat) => stat.topRamassagePercentage);
+    const depotPercentage = statsFrequentation.monthlyComparison.map((stat) => stat.topDepotPercentage);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Ramassage (%)',
+          data: ramassagePercentage,
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+        },
+        {
+          label: 'Dépôt (%)',
+          data: depotPercentage,
+          backgroundColor: 'rgba(255, 206, 86, 0.6)',
+        },
+      ],
+    };
+  };
+
+  const generateDoughnutData = (frequencyData) => {
+    if (!frequencyData || frequencyData.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+
+    const labels = frequencyData.map((item) => item.nomVoiture);
+    const data = frequencyData.map((item) => item.count);
+    const backgroundColors = [
+      '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF',
+      '#8B0000', '#00FF7F', '#FF1493',
+    ];
+
+    return {
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: backgroundColors.slice(0, frequencyData.length),
+          hoverBackgroundColor: backgroundColors.slice(0, frequencyData.length),
+        },
+      ],
+    };
+  };
+
+  const totalRamassagesTrafics = statsTrafics?.reduce((acc, stat) => acc + stat.ramassageTotal, 0) || 0;
+  const totalDepotsTrafics = statsTrafics?.reduce((acc, stat) => acc + stat.depotTotal, 0) || 0;
+  const totalRamassagesFrequentation = statsFrequentation?.ramassageFrequency?.reduce((acc, item) => acc + item.count, 0) || 0;
+  const totalDepotsFrequentation = statsFrequentation?.depotFrequency?.reduce((acc, item) => acc + item.count, 0) || 0;
 
   return (
     <CRow>
       {/* Blocs de Résumé au-dessus du Tableau */}
       <CCol xs={12}>
         <CRow className="mb-4">
-          {/* Bloc Total Ramassages */}
+          {/* Bloc Total Ramassages (Trafics) */}
           <CCol xs={12} sm={6} className="mb-3 mb-sm-0">
             <CCard className="text-white bg-primary">
               <CCardBody className="d-flex align-items-center">
-                <CIcon icon={cilTruck} size="3xl" className="me-3" />
+                <CIcon icon={cilCheck} size="3xl" className="me-3" />
                 <div>
-                  <h5>Total Ramassages</h5>
-                  <h3>{totalRamassages}</h3>
+                  <h5>Total Ramassages (Pendant l'année)</h5>
+                  <h3>{totalRamassagesTrafics}</h3>
                 </div>
               </CCardBody>
             </CCard>
           </CCol>
-          {/* Bloc Total Dépôts */}
+          {/* Bloc Total Dépôts (Trafics) */}
           <CCol xs={12} sm={6}>
             <CCard className="text-white bg-success">
               <CCardBody className="d-flex align-items-center">
-                <CIcon icon={cilColorPalette} size="3xl" className="me-3" />
+                <CIcon icon={cilCheck} size="3xl" className="me-3" />
                 <div>
-                  <h5>Total Dépôts</h5>
-                  <h3>{totalDepots}</h3>
+                  <h5>Total Dépôts (Pendant l'année)</h5>
+                  <h3>{totalDepotsTrafics}</h3>
                 </div>
               </CCardBody>
             </CCard>
@@ -176,10 +252,10 @@ const Stat_usagers = () => {
         </CRow>
       </CCol>
 
-      {/* Section Principale : Tableau et Graphique */}
+      {/* Section Principale : Tableau et Graphique Trafics */}
       <CCol xs={12}>
         <CRow>
-          {/* Colonne pour le Tableau */}
+          {/* Colonne pour le Tableau des Usagers */}
           <CCol xs={12} md={8}>
             <CCard>
               <CCardHeader>
@@ -258,72 +334,53 @@ const Stat_usagers = () => {
             </CCard>
           </CCol>
 
-          {/* Colonne pour le Graphique */}
+          {/* Colonne pour le Graphique Trafics */}
           <CCol xs={12} md={4}>
             {selectedUsager && (
               <CCard>
                 <CCardHeader>
-                  <strong>Statistiques de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
+                  <strong>Statistiques de Trafics de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
                 </CCardHeader>
                 <CCardBody>
-                  {/* Sélection de l'Année */}
-                  <CFormLabel htmlFor="selectYear">Sélectionner une année</CFormLabel>
+                  <CFormLabel htmlFor="selectYearTrafics">Sélectionner une année</CFormLabel>
                   <CFormSelect
-                    id="selectYear"
+                    id="selectYearTrafics"
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
                     className="mb-3"
                   >
-                    {/* Générer des années de 10 ans en arrière jusqu'à l'année en cours */}
                     {[...Array(10)].map((_, idx) => {
                       const year = new Date().getFullYear() - idx;
                       return <option key={year} value={year}>{year}</option>;
                     })}
                   </CFormSelect>
 
-                  <CButton color="primary" onClick={handleFetchStats} disabled={loading} block>
-                    {loading ? 'Chargement...' : 'Valider'}
+                  <CButton
+                    color="primary"
+                    onClick={handleFetchTraficsStats}
+                    disabled={loadingTrafics}
+                    className="w-100"
+                  >
+                    {loadingTrafics ? 'Chargement...' : 'Voir Statistiques Trafics'}
                   </CButton>
 
-                  {/* Graphique des Statistiques */}
                   <div className="mt-4">
-                    {stats.length > 0 ? (
+                    {statsTrafics && statsTrafics.length > 0 ? (
                       <Bar
-                        key={`${selectedUsager?.matricule}-${selectedYear}`} // Forcer le re-render
-                        data={generateChartData()}
+                        key={`${selectedUsager?.matricule}-${selectedYear}-trafics`}
+                        data={generateBarChartDataTrafics()}
                         options={{
                           responsive: true,
                           plugins: {
-                            legend: {
-                              position: 'top',
-                            },
+                            legend: { position: 'top' },
                             title: {
                               display: true,
-                              text: `Statistiques de ${selectedUsager.nom} ${selectedUsager.prenom} en ${selectedYear}`,
+                              text: `Comparaison Mensuelle de Trafics en ${selectedYear}`,
                             },
-                            tooltip: {
-                              enabled: true,
-                              callbacks: {
-                                label: function(context) {
-                                  let label = context.dataset.label || '';
-                                  if (label) {
-                                    label += ': ';
-                                  }
-                                  if (context.parsed.y !== null) {
-                                    label += context.parsed.y;
-                                  }
-                                  return label;
-                                }
-                              }
-                            }
                           },
                           scales: {
                             y: {
                               beginAtZero: true,
-                              title: {
-                                display: true,
-                                text: 'Nombre de Présences',
-                              },
                             },
                             x: {
                               title: {
@@ -336,7 +393,7 @@ const Stat_usagers = () => {
                       />
                     ) : (
                       <div>
-                        {loading ? <p>Chargement des données...</p> : <p>Aucune donnée disponible pour cette année.</p>}
+                        {loadingTrafics ? <p>Chargement des données...</p> : <p>Aucune donnée disponible pour cette année.</p>}
                       </div>
                     )}
                   </div>
@@ -345,6 +402,168 @@ const Stat_usagers = () => {
             )}
           </CCol>
         </CRow>
+      </CCol>
+
+      {/* Section pour les Statistiques de Fréquentation */}
+      <CCol xs={12} className="mt-4">
+        {selectedUsager && (
+          <CCard>
+            <CCardHeader>
+              <strong>Statistiques de Fréquentation de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
+            </CCardHeader>
+            <CCardBody>
+              <CButton
+                color="primary"
+                onClick={handleFetchFrequentationStats}
+                disabled={loadingFrequentation}
+                className="w-100"
+              >
+                {loadingFrequentation ? 'Chargement...' : 'Voir Fréquentation'}
+              </CButton>
+
+              <div className="mt-4">
+                {statsFrequentation && statsFrequentation.monthlyComparison ? (
+                  <>
+                    {/* Graphique Bar pour les Comparaisons Mensuelles Fréquentation */}
+                    {/* <Bar
+                      key={`${selectedUsager?.matricule}-${selectedYear}-frequentation`}
+                      data={generateBarChartDataFrequentation()}
+                      options={{
+                        responsive: true,
+                        plugins: {
+                          legend: { position: 'top' },
+                          title: {
+                            display: true,
+                            text: `Comparaison Mensuelle de Fréquentation en ${selectedYear}`,
+                          },
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                          x: {
+                            title: {
+                              display: true,
+                              text: 'Mois',
+                            },
+                          },
+                        },
+                      }}
+                    /> */}
+
+                    {/* Tableau des Comparaisons Mensuelles Fréquentation */}
+                    <CCard className="mt-4">
+                      <CCardHeader>
+                        <strong>Comparaison Mensuelle de Fréquentation</strong>
+                      </CCardHeader>
+                      <CCardBody>
+                        <CTable bordered borderColor="primary">
+                          <CTableHead>
+                            <CTableRow>
+                              <CTableHeaderCell>Mois</CTableHeaderCell>
+                              <CTableHeaderCell>Top Ramassage Voiture</CTableHeaderCell>
+                              <CTableHeaderCell>Ramassage (%)</CTableHeaderCell>
+                              <CTableHeaderCell>Top Dépôt Voiture</CTableHeaderCell>
+                              <CTableHeaderCell>Dépôt (%)</CTableHeaderCell>
+                              <CTableHeaderCell>Top Imprévu Voiture</CTableHeaderCell>
+                              <CTableHeaderCell>Imprévu (%)</CTableHeaderCell>
+                            </CTableRow>
+                          </CTableHead>
+                          <CTableBody>
+                            {statsFrequentation.monthlyComparison.map((stat, idx) => (
+                              <CTableRow key={idx}>
+                                <CTableDataCell>{stat.mois}</CTableDataCell>
+                                <CTableDataCell>{stat.topRamassageVoiture}</CTableDataCell>
+                                <CTableDataCell>{stat.topRamassagePercentage}%</CTableDataCell>
+                                <CTableDataCell>{stat.topDepotVoiture}</CTableDataCell>
+                                <CTableDataCell>{stat.topDepotPercentage}%</CTableDataCell>
+                                <CTableDataCell>{stat.topImprevuVoiture}</CTableDataCell>
+                                <CTableDataCell>{stat.topImprevuPercentage}%</CTableDataCell>
+                              </CTableRow>
+                            ))}
+                          </CTableBody>
+                        </CTable>
+                      </CCardBody>
+                    </CCard>
+
+                    {/* Diagrammes Circulaires pour Fréquentation */}
+                    <CRow className="mt-4">
+                      {/* Diagramme Circulaire pour Ramassage Fréquentation */}
+                      <CCol xs={12} md={6} className="mb-4">
+                        <CCard>
+                          <CCardHeader>
+                            <strong>Fréquence Ramassage (Fréquentation)</strong>
+                          </CCardHeader>
+                          <CCardBody>
+                            <Doughnut
+                              data={generateDoughnutData(statsFrequentation.ramassageFrequency)}
+                              options={{
+                                responsive: true,
+                                plugins: {
+                                  legend: { position: 'bottom' },
+                                  title: {
+                                    display: true,
+                                    text: `Distribution Ramassage en ${selectedYear}`,
+                                  },
+                                  tooltip: {
+                                    callbacks: {
+                                      label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        return `${label}: ${value} (${((value / totalRamassagesFrequentation) * 100).toFixed(2)}%)`;
+                                      }
+                                    }
+                                  }
+                                },
+                              }}
+                            />
+                          </CCardBody>
+                        </CCard>
+                      </CCol>
+
+                      {/* Diagramme Circulaire pour Dépôt Fréquentation */}
+                      <CCol xs={12} md={6} className="mb-4">
+                        <CCard>
+                          <CCardHeader>
+                            <strong>Fréquence Dépôt (Fréquentation)</strong>
+                          </CCardHeader>
+                          <CCardBody>
+                            <Doughnut
+                              data={generateDoughnutData(statsFrequentation.depotFrequency)}
+                              options={{
+                                responsive: true,
+                                plugins: {
+                                  legend: { position: 'bottom' },
+                                  title: {
+                                    display: true,
+                                    text: `Distribution Dépôt en ${selectedYear}`,
+                                  },
+                                  tooltip: {
+                                    callbacks: {
+                                      label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        return `${label}: ${value} (${((value / totalDepotsFrequentation) * 100).toFixed(2)}%)`;
+                                      }
+                                    }
+                                  }
+                                },
+                              }}
+                            />
+                          </CCardBody>
+                        </CCard>
+                      </CCol>
+                    </CRow>
+                  </>
+                ) : (
+                  <div>
+                    {loadingFrequentation ? <p>Chargement des données...</p> : <p>Aucune donnée disponible pour cette année.</p>}
+                  </div>
+                )}
+              </div>
+            </CCardBody>
+          </CCard>
+        )}
       </CCol>
     </CRow>
   );
