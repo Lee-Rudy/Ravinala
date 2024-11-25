@@ -205,16 +205,34 @@ const Conducteurs = () => {
                 </CTableBody>
               </CTable>
               <CPagination aria-label="Page navigation example" className="mt-4">
-                {[...Array(Math.ceil(filteredConducteurs.length / itemsPerPage)).keys()].map((number) => (
-                  <CPaginationItem 
-                    key={number + 1} 
-                    active={number + 1 === currentPage}
-                    onClick={() => setCurrentPage(number + 1)}
-                  >
-                    {number + 1}
-                  </CPaginationItem>
-                ))}
-              </CPagination>
+            {/* Bouton Précédent */}
+            <CPaginationItem
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Précédent
+            </CPaginationItem>
+
+            {/* Pages Numérotées */}
+            {[...Array(Math.ceil(filteredConducteurs.length / itemsPerPage)).keys()].map((number) => (
+              <CPaginationItem
+                key={number + 1}
+                active={number + 1 === currentPage}
+                onClick={() => setCurrentPage(number + 1)}
+              >
+                {number + 1}
+              </CPaginationItem>
+            ))}
+
+            {/* Bouton Suivant */}
+            <CPaginationItem
+              disabled={currentPage === Math.ceil(filteredConducteurs.length / itemsPerPage)}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Suivant
+            </CPaginationItem>
+          </CPagination>
+
             </CCardBody>
           </CCard>
         </CCol>

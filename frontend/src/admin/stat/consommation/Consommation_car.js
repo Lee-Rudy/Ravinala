@@ -23,7 +23,7 @@ import {
   CInputGroup
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilSearch, cilMagnifyingGlass } from '@coreui/icons';
+import { cilSearch, cilMagnifyingGlass,cilCarAlt,cilNotes, cilFile, cilChartLine, cilSpeedometer, cilMoney, cilDrop } from '@coreui/icons';
 
 const ConsommationCar = () => {
   // États pour la liste des voitures
@@ -221,30 +221,58 @@ const ConsommationCar = () => {
                   <div>Aucune voiture trouvée.</div>
                 ) : (
                   <>
-                    <CTable bordered color="info">
-                      <CTableHead>
-                        <CTableRow>
-                          <CTableHeaderCell scope="col">Sélection</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Nom de la Voiture</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Immatriculation</CTableHeaderCell>
-                        </CTableRow>
-                      </CTableHead>
-                      <CTableBody>
-                        {displayedCars.map((car) => (
-                          <CTableRow key={car.id}>
-                            <CTableDataCell>
-                              <CFormCheck
-                                type="checkbox"
-                                checked={selectedCars.includes(car.id)}
-                                onChange={() => handleSelectCar(car.id)}
-                              />
-                            </CTableDataCell>
-                            <CTableDataCell>{car.nom_car}</CTableDataCell>
-                            <CTableDataCell>{car.immatriculation}</CTableDataCell>
-                          </CTableRow>
-                        ))}
-                      </CTableBody>
-                    </CTable>
+                <CTable bordered borderColor="primary" className="mt-4">
+                <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col" className="text-center">
+                      <CIcon icon={cilNotes} className="me-2" />
+                      Sélection
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      <CIcon icon={cilCarAlt} className="me-2" />
+                      Nom de la Voiture
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      <CIcon icon={cilNotes} className="me-2" />
+                      Immatriculation
+                    </CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {displayedCars.map((car, index) => (
+                    <CTableRow
+                      key={car.id}
+                      style={{
+                        backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <CTableDataCell className="text-center">
+                        <CFormCheck
+                          type="checkbox"
+                          checked={selectedCars.includes(car.id)}
+                          onChange={() => handleSelectCar(car.id)}
+                          style={{ transform: 'scale(1.2)' }}
+                        />
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <span className="badge bg-success me-2">{index + 1}</span>
+                        {car.nom_car}
+                      </CTableDataCell>
+                      <CTableDataCell style={{ color: '#45B48E', fontWeight: 'bold' }}>
+                        {car.immatriculation}
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+
 
                     {/* Pagination */}
                     <CPagination className="mt-3" aria-label="Pagination">
@@ -318,33 +346,73 @@ const ConsommationCar = () => {
                 )}
                 {consumptionError && <div className="text-danger">{consumptionError}</div>}
                 {consumptionData && (
-  <CCard>
-    <CCardBody>
-      <h5>Consommation des Voitures</h5>
-      <p><strong>Période :</strong> {consumptionData.period}</p>
-      <p><strong>Coût Total :</strong> {Number(consumptionData.totalCost).toFixed(2)} AR</p>
-      <CTable color='warning'>
-        <CTableHead>
-          <CTableRow>
-            <CTableHeaderCell scope="col">Nom de la Voiture</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Total Kilomètres</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Total Prix (AR)</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Total Litres</CTableHeaderCell>
-          </CTableRow>
-        </CTableHead>
-        <CTableBody>
-          {consumptionData.costPerCar.map((car, index) => (
-            <CTableRow key={index}>
-              <CTableDataCell>{car.nomVoiture}</CTableDataCell>
-              <CTableDataCell>{Number(car.totalKm).toFixed(2)} km</CTableDataCell>
-              <CTableDataCell>{Number(car.totalPrix).toFixed(2)} AR</CTableDataCell>
-              <CTableDataCell>{Number(car.totalLitres).toFixed(2)} L</CTableDataCell>
-            </CTableRow>
-          ))}
-        </CTableBody>
-      </CTable>
-    </CCardBody>
-  </CCard>
+              <CCard className="shadow-sm mb-4">
+              <CCardBody>
+                <h5 style={{ color: '#45B48E' }}>
+                  <CIcon icon={cilChartLine} className="me-2" />
+                  Consommation des Voitures
+                </h5>
+                <p>
+                  <strong>Période :</strong> <span style={{ fontWeight: 'bold', color: '#6c757d' }}>{consumptionData.period}</span>
+                </p>
+                <p>
+                  <strong>Coût Total :</strong>{' '}
+                  <span className="badge bg-success">
+                    {Number(consumptionData.totalCost).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} AR
+                  </span>
+                </p>
+                <CTable bordered borderColor="primary" className="mt-3">
+                  <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
+                    <CTableRow>
+                      <CTableHeaderCell scope="col">
+                        <CIcon icon={cilCarAlt} className="me-2" />
+                        Nom de la Voiture
+                      </CTableHeaderCell>
+                      <CTableHeaderCell scope="col">
+                        <CIcon icon={cilSpeedometer} className="me-2" />
+                        Total Kilomètres
+                      </CTableHeaderCell>
+                      <CTableHeaderCell scope="col">
+                        <CIcon icon={cilMoney} className="me-2" />
+                        Total Prix (AR)
+                      </CTableHeaderCell>
+                      <CTableHeaderCell scope="col">
+                        <CIcon icon={cilDrop} className="me-2" />
+                        Total Litres
+                      </CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {consumptionData.costPerCar.map((car, index) => (
+                      <CTableRow
+                        key={index}
+                        style={{
+                          backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white',
+                        }}
+                      >
+                        <CTableDataCell>{car.nomVoiture}</CTableDataCell>
+                        <CTableDataCell>
+                          <span style={{ fontWeight: 'bold', color: '#45B48E' }}>
+                            {Number(car.totalKm).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} km
+                          </span>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <span className="badge bg-warning">
+                            {Number(car.totalPrix).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} AR
+                          </span>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <span style={{ fontWeight: 'bold', color: '#6c757d' }}>
+                            {Number(car.totalLitres).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} L
+                          </span>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              </CCardBody>
+            </CCard>
+
 )}
 
               </CCol>

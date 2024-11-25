@@ -218,78 +218,115 @@ const Map_ramassage = () => {
                         Voir les informations de l'axe
                     </CButton>
                     <COffcanvas placement="end" visible={visibleToggle} onHide={() => setVisibleToggle(false)}>
-                        <COffcanvasHeader>
-                            <COffcanvasTitle>Informations sur l'Axe</COffcanvasTitle>
-                            <CCloseButton className="text-reset" onClick={() => setVisibleToggle(false)} />
-                        </COffcanvasHeader>
-                        <COffcanvasBody>
-                            <p><strong>Axe sélectionné :</strong> {selectedAxe ? selectedAxe.label : 'Aucun axe sélectionné'}</p>
-                            {nbrePoints !== null && nbrePassagers !== null && (
-                                <>
-                                    <p><strong>Nombre de points :</strong> {nbrePoints}</p>
-                                    <p><strong>Nombre de passagers :</strong> {nbrePassagers}</p>
-                                </>
-                            )}
-                            {totalDistance && (
-                                <>
-                                    <p><strong>Distance totale :</strong> {totalDistance}</p>
-                                    <p><strong>Durée estimée en véhicule :</strong> {totalDuration}</p>
+                    <COffcanvasHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+                        <COffcanvasTitle>
+                        <i className="bi bi-map-fill me-2"></i>Informations sur l'Axe
+                        </COffcanvasTitle>
+                        <CCloseButton
+                        className="text-reset"
+                        onClick={() => setVisibleToggle(false)}
+                        style={{ color: 'white' }}
+                        />
+                    </COffcanvasHeader>
+                    <COffcanvasBody>
+                        <p>
+                        <strong>Axe sélectionné :</strong>{' '}
+                        <span className="badge bg-success">
+                            {selectedAxe ? selectedAxe.label : 'Aucun axe sélectionné'}
+                        </span>
+                        </p>
 
-                                    <p><strong>Consommation Total éstimé:</strong> {consommation} litres</p>
-                                    <p><strong>Prix total :</strong> {prixTotal} Ar</p>
-                                    <p><strong>Terminus :</strong>Ivato à 7h30</p>
+                        {nbrePoints !== null && nbrePassagers !== null && (
+                        <div className="mb-3">
+                            <p>
+                            <i className="bi bi-pin-map-fill text-primary me-2"></i>
+                            <strong>Nombre de points :</strong>{' '}
+                            <span className="badge bg-warning">{nbrePoints}</span>
+                            </p>
+                            <p>
+                            <i className="bi bi-people-fill text-warning me-2"></i>
+                            <strong>Nombre de passagers :</strong>{' '}
+                            <span className="badge bg-warning">{nbrePassagers}</span>
+                            </p>
+                        </div>
+                        )}
 
-                                </>
-                            )}
-
-                            
+                        {totalDistance && (
+                        <div className="mb-3">
+                            <p>
+                            <i className="bi bi-signpost-split text-info me-2"></i>
+                            <strong>Distance totale :</strong>{' '}
+                            <span className="badge bg-primary">{totalDistance}</span>
+                            </p>
+                            <p>
+                            <i className="bi bi-clock-fill text-dark me-2"></i>
+                            <strong>Durée estimée en véhicule :</strong>{' '}
+                            <span className="badge bg-dark">{totalDuration}</span>
+                            </p>
+                            <p>
+                            <i className="bi bi-fuel-pump-fill text-danger me-2"></i>
+                            <strong>Consommation Total estimée :</strong>{' '}
+                            <span className="badge bg-danger">{consommation} litres</span>
+                            </p>
+                            <p>
+                            <i className="bi bi-currency-exchange text-success me-2"></i>
+                            <strong>Prix total :</strong>{' '}
+                            <span className="badge bg-success">{Math.round(prixTotal).toLocaleString()} Ar</span>
+                            </p>
+                            <p>
+                            <i className="bi bi-geo-fill text-secondary me-2"></i>
+                            <strong>Terminus :</strong> Ivato à 7h30
+                            </p>
+                        </div>
+                        )}
 
                         {mapPoints.length > 0 && (
-                                        <CTable striped color="primary">
-                                            <CTableHead>
-                                                <CTableRow>
-                                                    <CTableHeaderCell scope="col">Ordre</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Lieu</CTableHeaderCell>
-                                                    <CTableHeaderCell scope="col">Heure</CTableHeaderCell>
-                                                </CTableRow>
-                                            </CTableHead>
-                                            <CTableBody>
-                                                {mapPoints.map((point, index) => {
-                                                    // Convertir l'index en lettre
-                                                    const orderLetter = String.fromCharCode(65 + index);
-
-                                                    return (
-                                                        <CTableRow key={index}>
-                                                            <CTableDataCell>{orderLetter}</CTableDataCell>
-                                                            <CTableDataCell>
-                                                            <CTooltip
-                                                                content={`Nom: ${point.nom} | Matricule: ${point.matricule}`}
-                                                                placement="right"
-                                                            >
-                                                                <span
-                                                                    style={{
-                                                                        cursor: 'pointer',
-                                                                        textDecoration: 'none',
-                                                                    }}
-                                                                >
-                                                                    {point.lieu}
-                                                                </span>
-                                                            </CTooltip>
-                                                            </CTableDataCell>
-                                                            <CTableDataCell>
-                                                                {point.heure_ramassage
-                                                                    ? new Date(`1970-01-01T${point.heure_ramassage}`).toLocaleTimeString()
-                                                                    : 'Heure non valide'}
-                                                            </CTableDataCell>
-                                                        </CTableRow>
-                                                    );
-                                                })}
-                                            </CTableBody>
-                                        </CTable>
-                            )}
-
-                        </COffcanvasBody>
+                        <CTable striped hover responsive className="table-bordered">
+                            <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
+                            <CTableRow>
+                                <CTableHeaderCell scope="col">Ordre</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Lieu</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Heure</CTableHeaderCell>
+                            </CTableRow>
+                            </CTableHead>
+                            <CTableBody>
+                            {mapPoints.map((point, index) => {
+                                const orderLetter = String.fromCharCode(65 + index);
+                                return (
+                                <CTableRow key={index}>
+                                    <CTableDataCell>
+                                    <span className="badge bg-dark">{orderLetter}</span>
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                    <CTooltip
+                                        content={`Nom: ${point.nom} | Matricule: ${point.matricule}`}
+                                        placement="right"
+                                    >
+                                        <span
+                                        style={{
+                                            cursor: 'pointer',
+                                            textDecoration: 'underline',
+                                            color: '#45B48E',
+                                        }}
+                                        >
+                                        {point.lieu}
+                                        </span>
+                                    </CTooltip>
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                    {point.heure_ramassage
+                                        ? new Date(`1970-01-01T${point.heure_ramassage}`).toLocaleTimeString()
+                                        : 'Heure non valide'}
+                                    </CTableDataCell>
+                                </CTableRow>
+                                );
+                            })}
+                            </CTableBody>
+                        </CTable>
+                        )}
+                    </COffcanvasBody>
                     </COffcanvas>
+
                 </div>
             </div>
 

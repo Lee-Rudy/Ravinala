@@ -19,9 +19,25 @@ import {
   CFormSelect,
   CPagination,
   CPaginationItem,
+  
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilSearch } from '@coreui/icons';
+
+import {
+  cilEnvelopeClosed,
+  cilPhone,
+  cilUser,
+  cilBriefcase,
+  cilBuilding,
+  cilMap,
+  cilClock,
+  cilLocationPin,
+  cilTruck,
+  cilArrowThickToBottom,
+  cilArrowThickToTop,
+  cilMagnifyingGlass,
+  cilSearch
+} from '@coreui/icons'
 
 const ITEMS_PER_PAGE = 10;
 
@@ -172,7 +188,7 @@ const Planning = () => {
               </CFormSelect>
             </CInputGroup>
 
-            <CTable  striped>
+            <CTable bordered borderColor="primary">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Matricule</CTableHeaderCell>
@@ -186,15 +202,36 @@ const Planning = () => {
               </CTableHead>
               <CTableBody>
                 {paginatedRamassageData.map((item, index) => (
-                  <CTableRow key={index}>
-                    <CTableDataCell>{item.matricule}</CTableDataCell>
-                    <CTableDataCell>{item.nomUsager}</CTableDataCell>
-                    <CTableDataCell>{item.nomAxe}</CTableDataCell>
-                    <CTableDataCell>{item.nomVoiture}</CTableDataCell>
-                    <CTableDataCell>{item.fokontany}</CTableDataCell>
-                    <CTableDataCell>{item.lieu}</CTableDataCell>
-                    <CTableDataCell>{item.heure}</CTableDataCell>
-                  </CTableRow>
+                  <CTableRow key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                  <CTableDataCell>
+                    <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{item.matricule}</span>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilUser} className="me-2 text-info" />
+                    {item.nomUsager}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilMap} className="me-2 text-warning" />
+                    {item.nomAxe}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    
+                    {item.nomVoiture}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilLocationPin} className="me-2 text-danger" />
+                    {item.fokontany}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilLocationPin} className="me-2 text-success" />
+                    {item.lieu}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilClock} className="me-2 text-secondary" />
+                    {item.heure}
+                  </CTableDataCell>
+                </CTableRow>
+                
                 ))}
               </CTableBody>
             </CTable>
@@ -258,7 +295,7 @@ const Planning = () => {
               </CFormSelect>
             </CInputGroup>
 
-            <CTable  striped>
+            <CTable  bordered borderColor="primary">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Matricule</CTableHeaderCell>
@@ -272,15 +309,35 @@ const Planning = () => {
               </CTableHead>
               <CTableBody>
                 {paginatedDepotData.map((item, index) => (
-                  <CTableRow key={index}>
-                    <CTableDataCell>{item.matricule}</CTableDataCell>
-                    <CTableDataCell>{item.nomUsager}</CTableDataCell>
-                    <CTableDataCell>{item.nomAxe}</CTableDataCell>
-                    <CTableDataCell>{item.nomVoiture}</CTableDataCell>
-                    <CTableDataCell>{item.fokontany}</CTableDataCell>
-                    <CTableDataCell>{item.lieu}</CTableDataCell>
-                    <CTableDataCell>{item.heure}</CTableDataCell>
-                  </CTableRow>
+                  <CTableRow key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                  <CTableDataCell>
+                    <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{item.matricule}</span>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilUser} className="me-2 text-info" />
+                    {item.nomUsager}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilMap} className="me-2 text-warning" />
+                    {item.nomAxe}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    
+                    {item.nomVoiture}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilLocationPin} className="me-2 text-danger" />
+                    {item.fokontany}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilLocationPin} className="me-2 text-success" />
+                    {item.lieu}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CIcon icon={cilClock} className="me-2 text-secondary" />
+                    {item.heure}
+                  </CTableDataCell>
+                </CTableRow>
                 ))}
               </CTableBody>
             </CTable>

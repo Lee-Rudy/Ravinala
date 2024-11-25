@@ -72,26 +72,34 @@ const AppHeader = () => {
         <CHeaderNav className="ms-auto">
           {/* Notifications */}
           <CNavItem>
-            <Link to="/notifications" style={{ textDecoration: 'none' }}>
-              <div className="position-relative">
-                <CIcon icon={cilBell} size="lg" style={{ marginTop: '8px' }} />
-                {incompleteAxes.length > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle" style={{ marginTop: '9px' }}>
-                  </span>
-                )}
-              </div>
-            </Link>
-          </CNavItem>
-          <CNavItem>
+          <Link to="/notifications" style={{ textDecoration: 'none' }}>
+            <div className="position-relative">
+              <CIcon icon={cilBell} size="lg" style={{ marginTop: '8px' }} />
+              {incompleteAxes.length > 0 && (
+                <span
+                  className="position-absolute top-0 start-55 translate-middle bg-danger border border-light rounded-circle"
+                  style={{
+                    width: '13px', // Largeur du cercle 12px
+                    height: '13px', // Hauteur du cercle 12px
+                    marginTop: '9px',
+                    padding: '0', // Supprime le remplissage excessif
+                  }}
+                ></span>
+              )}
+            </div>
+          </Link>
+        </CNavItem>
+
+          {/* <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilList} size="lg" />
             </CNavLink>
-          </CNavItem>
-          <CNavItem>
+          </CNavItem> */}
+          {/* <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilEnvelopeOpen} size="lg" />
             </CNavLink>
-          </CNavItem>
+          </CNavItem> */}
         </CHeaderNav>
         <CHeaderNav>
           <li className="nav-item py-1">

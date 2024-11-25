@@ -21,7 +21,7 @@ import {
     CFormSelect,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilMagnifyingGlass } from '@coreui/icons';
+import { cilMagnifyingGlass,cilCalendar,cilReload,cilBookmark,cilSearch } from '@coreui/icons';
 
 const Historique = () => {
     const [pointagesRamassage, setPointagesRamassage] = useState([]);
@@ -366,112 +366,130 @@ const Historique = () => {
             {/* Sections d'Historique avec Pagination */}
             <CRow>
             <CCol xs={12} md={4} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
-    <CCard className="mb-4 shadow-sm">
-        <CCardHeader className="bg-primary text-white text-center">
-            <strong>Dates Disponibles</strong>
-        </CCardHeader>
-        <CCardBody>
-            {/* Barre de recherche */}
-            <div className="mb-3">
+            <CCard className="mb-4 shadow-sm">
+            {/* En-tête avec Style Amélioré */}
+            <CCardHeader
+                className="text-white text-center"
+                style={{ fontSize: '1.25rem', backgroundColor: '#45B48E' }}
+            >
+                <CIcon icon={cilCalendar} className="me-2" />
+                <strong>Dates Disponibles</strong>
+            </CCardHeader>
+
+            <CCardBody>
+                {/* Barre de Recherche */}
+                <div className="mb-3">
                 <CInputGroup>
-                    <CInputGroupText className="bg-light border-0">
-                        <CIcon icon={cilMagnifyingGlass} />
+                    <CInputGroupText style={{ backgroundColor: '#45B48E', color: 'white', border: 'none' }}>
+                    <CIcon icon={cilMagnifyingGlass} />
                     </CInputGroupText>
                     <input
-                        type="date"
-                        value={searchDate}
-                        onChange={(e) => setSearchDate(e.target.value)}
-                        className="form-control border-0"
-                        placeholder="Sélectionnez une date"
-                        style={{
-                            borderRadius: '0 0.25rem 0.25rem 0',
-                            boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-                        }}
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="form-control border-0"
+                    placeholder="Sélectionnez une date"
+                    style={{
+                        borderRadius: '0 0.25rem 0.25rem 0',
+                        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                    }}
                     />
                 </CInputGroup>
-            </div>
+                </div>
 
-            {/* Boutons en dessous */}
-            <div className="d-flex justify-content-between">
+                {/* Boutons d'Action */}
+                <div className="d-flex justify-content-between">
                 <CButton
-                    color="primary"
-                    onClick={handleSearch}
                     style={{
-                        borderRadius: '0.25rem',
-                        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-                        flex: 1,
-                        marginRight: '0.5rem',
+                    backgroundColor: '#45B48E',
+                    color: 'white',
+                    borderRadius: '0.25rem',
+                    boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                    flex: 1,
+                    marginRight: '0.5rem',
                     }}
+                    onClick={handleSearch}
                 >
+                    <CIcon icon={cilSearch} className="me-2" />
                     Rechercher
                 </CButton>
                 <CButton
-                    color="secondary"
-                    onClick={() => {
-                        setSearchDate('');
-                        handleSearch();
-                    }}
                     style={{
-                        borderRadius: '0.25rem',
-                        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-                        flex: 1,
+                    backgroundColor: '#6c757d',
+                    color: 'white',
+                    borderRadius: '0.25rem',
+                    boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                    flex: 1,
+                    }}
+                    onClick={() => {
+                    setSearchDate('');
+                    handleSearch();
                     }}
                 >
+                    <CIcon icon={cilReload} className="me-2" />
                     Réinitialiser
                 </CButton>
-            </div>
+                </div>
 
-
-            {/* Liste des dates */}
-            {Object.entries(categories).map(([category, dates]) => (
+                {/* Liste des Dates */}
+                {Object.entries(categories).map(([category, dates]) => (
                 dates.length > 0 && (
                     <div key={category} className="mb-4">
-                        <h5 className="text-muted">{category}</h5>
-                        {dates.map((dateItem, index) => {
-                            const isSelected = selectedDate?.date === dateItem.date;
-                            return (
-                                <CCard
-                                    key={`${dateItem.date}-${index}`}
-                                    className={`mb-3 ${isSelected ? 'border-primary shadow' : 'border-light'}`}
-                                    style={{
-                                        border: isSelected ? '2px solid #0d6efd' : '1px solid #ddd',
-                                        cursor: 'pointer',
-                                        transition: 'transform 0.2s, box-shadow 0.2s',
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = 'scale(1.02)';
-                                        e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = 'scale(1)';
-                                        e.currentTarget.style.boxShadow = isSelected
-                                            ? '0 0 8px rgba(13, 110, 253, 0.5)'
-                                            : '0 2px 5px rgba(0, 0, 0, 0.1)';
-                                    }}
-                                    onClick={() => handleDateClick(dateItem.date)}
-                                >
-                                    <CCardHeader
-                                        className={`text-center ${isSelected ? 'bg-primary text-white' : ''}`}
-                                        style={{
-                                            fontSize: '0.9rem',
-                                            padding: '10px',
-                                        }}
-                                    >
-                                        {new Date(dateItem.date).toLocaleDateString('fr-FR', {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        })}
-                                    </CCardHeader>
-                                </CCard>
-                            );
-                        })}
+                    <h5 style={{ color: '#45B48E' }}>
+                        <CIcon icon={cilBookmark} className="me-2" />
+                        {category}
+                    </h5>
+                    {dates.map((dateItem, index) => {
+                        const isSelected = selectedDate?.date === dateItem.date;
+                        return (
+                        <CCard
+                            key={`${dateItem.date}-${index}`}
+                            className={`mb-3 ${isSelected ? 'shadow' : ''}`}
+                            style={{
+                            border: isSelected ? `2px solid #45B48E` : '1px solid #ddd',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s, box-shadow 0.2s',
+                            borderRadius: '0.5rem',
+                            }}
+                            onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.02)';
+                            e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                            }}
+                            onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = isSelected
+                                ? '0 0 8px rgba(69, 180, 142, 0.5)'
+                                : '0 2px 5px rgba(0, 0, 0, 0.1)';
+                            }}
+                            onClick={() => handleDateClick(dateItem.date)}
+                        >
+                            <CCardHeader
+                            className={`text-center ${isSelected ? 'text-white' : ''}`}
+                            style={{
+                                backgroundColor: isSelected ? '#45B48E' : 'white',
+                                fontSize: '1rem',
+                                padding: '10px',
+                                color: isSelected ? 'white' : '#45B48E',
+                            }}
+                            >
+                            {new Date(dateItem.date).toLocaleDateString('fr-FR', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                            {isSelected && <span className="badge bg-success ms-2">Sélectionné</span>}
+                            </CCardHeader>
+                        </CCard>
+                        );
+                    })}
                     </div>
                 )
-            ))}
-        </CCardBody>
-    </CCard>
+                ))}
+            </CCardBody>
+            </CCard>
+
+
 </CCol>
 
 

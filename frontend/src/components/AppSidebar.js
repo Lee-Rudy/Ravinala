@@ -29,7 +29,7 @@ const AppSidebar = () => {
   return (
     <CSidebar
       className="border-end"
-      colorScheme="light" //couleur du background color du menu slidebar "dark" ou "light" -->mode sombre et mode claire
+      colorScheme="dark" //couleur du background color du menu slidebar "dark" ou "light" -->mode sombre et mode claire
       position="fixed"
       unfoldable={unfoldable}
       visible={sidebarShow}
@@ -37,6 +37,25 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
+
+    {/* // #45B48E */}
+
+    
+
+{/* //  <CSidebar
+//    className="border-end"
+//    style={{ backgroundColor: '#758E81FF' }} // Couleur personnalisée
+//    colorScheme="secondary"
+//    position="fixed"
+//    unfoldable={unfoldable}
+//    visible={sidebarShow}
+//    onVisibleChange={(visible) => {
+//      dispatch({ type: 'set', sidebarShow: visible });
+//    }}
+//  > */}
+
+
+
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
           {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}

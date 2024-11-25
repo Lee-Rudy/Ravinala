@@ -23,9 +23,11 @@ import {
   CFormLabel,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilMagnifyingGlass, cilCheck } from '@coreui/icons';
+import { cilMagnifyingGlass, cilCheck,cilChartLine,cilCarAlt } from '@coreui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Select from 'react-select';
+
 
 const Stat_usagers = () => {
   const [error, setError] = useState('');
@@ -75,6 +77,14 @@ const Stat_usagers = () => {
     setStatsFrequentation(null);
     setStatsTrafics([]);
   };
+
+  // useEffect(() => {
+  //   if (paginatedUsagers.length > 0) {
+  //     setSelectedUsager(paginatedUsagers[0]); // Sélectionne automatiquement le premier usager
+  //     setStatsFrequentation(null);
+  //     setStatsTrafics([]);
+  //   }
+  // }, [paginatedUsagers]);
 
   const handleFetchTraficsStats = async () => {
     if (!selectedUsager || !selectedYear) return;
@@ -342,18 +352,43 @@ const Stat_usagers = () => {
                   <strong>Statistiques de Trafics de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
                 </CCardHeader>
                 <CCardBody>
-                  <CFormLabel htmlFor="selectYearTrafics">Sélectionner une année</CFormLabel>
-                  <CFormSelect
-                    id="selectYearTrafics"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                    className="mb-3"
-                  >
-                    {[...Array(10)].map((_, idx) => {
-                      const year = new Date().getFullYear() - idx;
-                      return <option key={year} value={year}>{year}</option>;
-                    })}
-                  </CFormSelect>
+                <div className="mb-3">
+                <label htmlFor="selectYearTrafics" className="form-label">
+                  Sélectionner une année
+                </label>
+                <Select
+                  id="selectYearTrafics"
+                  value={{ value: selectedYear, label: selectedYear }} // Formater la valeur sélectionnée
+                  onChange={(selectedOption) => setSelectedYear(selectedOption.value)} // Mettre à jour selectedYear
+                  options={[...Array(10)].map((_, idx) => {
+                    const year = new Date().getFullYear() - idx;
+                    return { value: year, label: year }; // Format attendu par react-select
+                  })}
+                  placeholder="Rechercher ou sélectionner une année"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      borderColor: '#45B48E', // Couleur de la bordure
+                      boxShadow: 'none', // Supprimer les ombres par défaut
+                      '&:hover': { borderColor: '#45B48E' }, // Bordure au survol
+                    }),
+                    option: (base, { isFocused, isSelected }) => ({
+                      ...base,
+                      backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', // Couleur de fond
+                      color: isSelected ? 'white' : 'black', // Couleur du texte
+                      '&:hover': { backgroundColor: '#45B48E', color: 'white' }, // Survol
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: '#45B48E', // Couleur du placeholder
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color: '#45B48E', // Couleur de la valeur sélectionnée
+                    }),
+                  }}
+                />
+              </div>
 
                   <CButton
                     color="primary"
@@ -453,38 +488,59 @@ const Stat_usagers = () => {
 
                     {/* Tableau des Comparaisons Mensuelles Fréquentation */}
                     <CCard className="mt-4">
-                      <CCardHeader>
-                        <strong>Comparaison Mensuelle de Fréquentation</strong>
-                      </CCardHeader>
-                      <CCardBody>
-                        <CTable bordered borderColor="primary">
-                          <CTableHead>
-                            <CTableRow>
-                              <CTableHeaderCell>Mois</CTableHeaderCell>
-                              <CTableHeaderCell>Top Ramassage Voiture</CTableHeaderCell>
-                              <CTableHeaderCell>Ramassage (%)</CTableHeaderCell>
-                              <CTableHeaderCell>Top Dépôt Voiture</CTableHeaderCell>
-                              <CTableHeaderCell>Dépôt (%)</CTableHeaderCell>
-                              <CTableHeaderCell>Top Imprévu Voiture</CTableHeaderCell>
-                              <CTableHeaderCell>Imprévu (%)</CTableHeaderCell>
-                            </CTableRow>
-                          </CTableHead>
-                          <CTableBody>
-                            {statsFrequentation.monthlyComparison.map((stat, idx) => (
-                              <CTableRow key={idx}>
-                                <CTableDataCell>{stat.mois}</CTableDataCell>
-                                <CTableDataCell>{stat.topRamassageVoiture}</CTableDataCell>
-                                <CTableDataCell>{stat.topRamassagePercentage}%</CTableDataCell>
-                                <CTableDataCell>{stat.topDepotVoiture}</CTableDataCell>
-                                <CTableDataCell>{stat.topDepotPercentage}%</CTableDataCell>
-                                <CTableDataCell>{stat.topImprevuVoiture}</CTableDataCell>
-                                <CTableDataCell>{stat.topImprevuPercentage}%</CTableDataCell>
-                              </CTableRow>
-                            ))}
-                          </CTableBody>
-                        </CTable>
-                      </CCardBody>
-                    </CCard>
+                <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+                  <strong>
+                    <CIcon icon={cilChartLine} className="me-2" />
+                    Comparaison Mensuelle de Fréquentation
+                  </strong>
+                </CCardHeader>
+                <CCardBody>
+                  <CTable bordered hover responsive>
+                    <CTableHead style={{ backgroundColor: '#e3f2fd' }}>
+                      <CTableRow>
+                        <CTableHeaderCell>Mois</CTableHeaderCell>
+                        <CTableHeaderCell>Top Ramassage Voiture</CTableHeaderCell>
+                        <CTableHeaderCell>Ramassage (%)</CTableHeaderCell>
+                        <CTableHeaderCell>Top Dépôt Voiture</CTableHeaderCell>
+                        <CTableHeaderCell>Dépôt (%)</CTableHeaderCell>
+                        <CTableHeaderCell>Top Imprévu Voiture</CTableHeaderCell>
+                        <CTableHeaderCell>Imprévu (%)</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      {statsFrequentation.monthlyComparison.map((stat, idx) => (
+                        <CTableRow key={idx} style={{ backgroundColor: idx % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                          <CTableDataCell>
+                            <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{stat.mois}</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CIcon icon={cilCarAlt} className="me-2 text-primary" />
+                            <span>{stat.topRamassageVoiture}</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <span className="badge bg-success">{stat.topRamassagePercentage}%</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CIcon icon={cilCarAlt} className="me-2 text-warning" />
+                            <span>{stat.topDepotVoiture}</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <span className="badge bg-warning">{stat.topDepotPercentage}%</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <CIcon icon={cilCarAlt} className="me-2 text-danger" />
+                            <span>{stat.topImprevuVoiture}</span>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <span className="badge bg-danger">{stat.topImprevuPercentage}%</span>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))}
+                    </CTableBody>
+                  </CTable>
+                </CCardBody>
+              </CCard>
+
 
                     {/* Diagrammes Circulaires pour Fréquentation */}
                     <CRow className="mt-4">

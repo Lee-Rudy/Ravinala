@@ -549,7 +549,7 @@ const handleError = (err) => {
                     </CCol>
                   </CRow>
     
-                  <CButton type="button" onClick={nextStep} color="info">
+                  <CButton type="button" onClick={nextStep} color="info" className="text-white">
                     Suivant
                   </CButton>
                   <span className="ms-3">1/3</span>
@@ -647,7 +647,7 @@ const handleError = (err) => {
                     </div>
   
                     <CButton type="button" onClick={prevStep} className="me-2" color="primary">Précédent</CButton>
-                    <CButton type="button" onClick={nextStep} color="info">Suivant</CButton>
+                    <CButton type="button" onClick={nextStep} color="info" className="text-white">Suivant</CButton>
                     <span className="mb-3" style={{ marginLeft: '10px' }}>2/3</span>
                   </form>
                 </CCardBody>
@@ -744,7 +744,7 @@ const handleError = (err) => {
                     </div>
   
                     <CButton type="button" onClick={prevStep} className="me-2" color="primary">Précédent</CButton>
-                    <CButton type="submit"color="success">Soumettre</CButton>
+                    <CButton type="submit"color="success" className="text-white">Soumettre</CButton>
                     <span className="mb-3" style={{ marginLeft: '10px' }}>3/3</span>
                   </form>
                 </CCardBody>

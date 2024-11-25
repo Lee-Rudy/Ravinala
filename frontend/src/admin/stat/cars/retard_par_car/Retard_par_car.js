@@ -24,6 +24,11 @@ import {
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
+import CIcon from '@coreui/icons-react';
+import {cilMagnifyingGlass } from '@coreui/icons';
+import Select from 'react-select';
+
+
 const RetardParCar = () => {
   const [carsList, setCarsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState(''); // Terme de recherche
@@ -256,32 +261,59 @@ const RetardParCar = () => {
     <div>
       {/* Barre de recherche */}
       <CInputGroup className="mb-3">
-        <CInputGroupText>Recherche</CInputGroupText>
-        <CFormInput
-          placeholder="Nom ou immatriculation du car"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </CInputGroup>
+
+                    <CInputGroupText>
+                      <CIcon icon={cilMagnifyingGlass} />
+                    </CInputGroupText>
+                    <CFormInput
+                      type="text"
+                      id="search"
+                      placeholder="Recherche par nom et immatriculation"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </CInputGroup>
+
+
 
       {/* Sélecteur de l'année */}
       <div className="mb-3">
-        <label htmlFor="yearSelect" className="form-label">Sélectionner une année :</label>
-        <CFormSelect
-          id="yearSelect"
-          value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-        >
-          {[...Array(30)].map((_, i) => {
-            const yearOption = new Date().getFullYear() - i;
-            return (
-              <option key={yearOption} value={yearOption}>
-                {yearOption}
-              </option>
-            );
-          })}
-        </CFormSelect>
-      </div>
+      <label htmlFor="yearSelect" className="form-label">
+        Sélectionner une année :
+      </label>
+      <Select
+        id="yearSelect"
+        value={{ value: year, label: year }} // Format attendu par react-select
+        onChange={(selectedOption) => setYear(selectedOption.value)} // Met à jour la valeur de l'année
+        options={[...Array(30)].map((_, i) => {
+          const yearOption = new Date().getFullYear() - i;
+          return { value: yearOption, label: yearOption }; // Format des options attendu par react-select
+        })}
+        placeholder="Rechercher ou sélectionner une année"
+        styles={{
+          control: (base) => ({
+            ...base,
+            borderColor: '#45B48E', // Couleur de la bordure
+            boxShadow: 'none', // Supprimer les ombres par défaut
+            '&:hover': { borderColor: '#45B48E' }, // Bordure au survol
+          }),
+          option: (base, { isFocused, isSelected }) => ({
+            ...base,
+            backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', // Couleur de fond
+            color: isSelected ? 'white' : 'black', // Couleur du texte
+            '&:hover': { backgroundColor: '#45B48E', color: 'white' }, // Survol
+          }),
+          placeholder: (base) => ({
+            ...base,
+            color: '#45B48E', // Couleur du placeholder
+          }),
+          singleValue: (base) => ({
+            ...base,
+            color: '#45B48E', // Couleur de la valeur sélectionnée
+          }),
+        }}
+      />
+    </div>
 
       <CRow>
         {/* Liste des voitures */}
