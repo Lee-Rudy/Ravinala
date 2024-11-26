@@ -406,7 +406,7 @@ const handleError = (err) => {
         <CRow className="justify-content-center">
           <CCol xs={12} md={12}>
             <CCard>
-              <CCardHeader>
+            <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                 <strong>Ajout d'un Usager</strong>
               </CCardHeader>
               <CCardBody>
@@ -565,7 +565,7 @@ const handleError = (err) => {
           <CRow>
             <CCol xs={{ span: 0, offset: 0 }}>
               <CCard>
-                <CCardHeader>
+              <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                   <strong>Informations de Ramassage</strong>
                 </CCardHeader>
                 <CCardBody>
@@ -661,7 +661,7 @@ const handleError = (err) => {
           <CRow>
             <CCol xs={{ span: 0, offset: 0 }}>
               <CCard>
-                <CCardHeader>
+                <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                   <strong>Informations de Dépôt</strong>
                 </CCardHeader>
                 <CCardBody>

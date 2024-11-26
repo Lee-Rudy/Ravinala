@@ -53,7 +53,9 @@ const Axe_conducteurs_cars_list = () => {
 
   return (
     <CCard>
-      <CCardHeader>
+      <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+      <strong>Liste des Axes et Conducteurs Associés aux Cars</strong>
+          </CCardHeader>
         <CNav variant="tabs" className="mb-3">
           <CNavItem>
             <Link to="/axe" style={{ textDecoration: 'none' }}>
@@ -66,8 +68,7 @@ const Axe_conducteurs_cars_list = () => {
             </Link>
           </CNavItem>
         </CNav>
-        <strong>Liste des Axes et Conducteurs Associés aux Cars</strong>
-      </CCardHeader>
+        
       <CCardBody>
         {/* Champ de recherche unique */}
         <CInputGroup className="mb-3">

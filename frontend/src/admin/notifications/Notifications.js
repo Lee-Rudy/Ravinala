@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   CCard,
   CCardBody,
@@ -10,25 +10,48 @@ import {
   CBadge,
 } from '@coreui/react';
 
-const NotificationCard = ({ axe }) => (
-  <CCard key={axe.id} className="mb-3" color="secondary">
-    <Link to={`/axe/update/${axe.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+const NotificationCard = ({ notification, type }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (type === 'axes') {
+      navigate(`/axe/update/${notification.id}`);
+    } else if (type === 'pointageRamassage') {
+      navigate('/notifications'); // Ou une route spécifique si nécessaire
+    }
+  };
+
+  return (
+    <CCard key={notification.id} className="mb-3" color="secondary" onClick={handleClick} style={{ cursor: 'pointer' }}>
       <CCardBody>
         <div className="d-flex justify-content-between align-items-center">
-          <p className="mb-0" style={{ fontWeight: 'bold', color: 'white' }}>
-            L'information sur l'axe {axe.axe} est incomplète
-          </p>
+          <div>
+            {type === 'axes' ? (
+              <p className="mb-0" style={{ fontWeight: 'bold', color: 'white' }}>
+                L'information sur l'axe {notification.axe} est incomplète
+              </p>
+            ) : (
+              <p className="mb-0" style={{ fontWeight: 'bold', color: 'white' }}>
+                Ramassage pour {notification.nomUsager} ({notification.matricule})
+              </p>
+            )}
+            {type === 'pointageRamassage' && (
+              <small style={{ color: 'lightgray' }}>
+                Reçu le : {new Date(notification.recuLe).toLocaleString()}
+              </small>
+            )}
+          </div>
           <CBadge color="warning">Rappel</CBadge>
         </div>
       </CCardBody>
-    </Link>
-  </CCard>
-);
+    </CCard>
+  );
+};
 
 const Notifications = () => {
   const [incompleteAxes, setIncompleteAxes] = useState([]);
+  const [pointageRamassage, setPointageRamassage] = useState([]);
 
-  // Récupérer les notifications à partir de l'API
   useEffect(() => {
     const fetchIncompleteAxes = async () => {
       try {
@@ -36,11 +59,25 @@ const Notifications = () => {
         const response = await axios.get(`${baseURL}/api/axe/notifications`);
         setIncompleteAxes(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des notifications :", error);
+        console.error("Erreur lors de la récupération des notifications Axes :", error);
+      }
+    };
+
+    const fetchPointageRamassage = async () => {
+      try {
+        const baseURL = import.meta.env.VITE_API_BASE_URL;
+        const lastChecked = new Date(); // Ajustez selon vos besoins
+        const response = await axios.get(`${baseURL}/api/notifications/pointageRamassage`, {
+          params: { lastChecked: lastChecked.toISOString() }
+        });
+        setPointageRamassage(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des notifications Pointage Ramassage :", error);
       }
     };
 
     fetchIncompleteAxes();
+    fetchPointageRamassage();
   }, []);
 
   return (
@@ -52,34 +89,36 @@ const Notifications = () => {
           </CCardHeader>
           <CCardBody>
             <CRow>
+              {/* Notifications Axes */}
               <CCol xs={12} md={4}>
                 <h5>Rappel sur l'information de l'axe</h5>
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                   {incompleteAxes.length > 0 ? (
-                    incompleteAxes.map((axe) => <NotificationCard axe={axe} />)
+                    incompleteAxes.map((axe) => <NotificationCard key={axe.id} notification={axe} type="axes" />)
                   ) : (
                     <p className="text-center">Aucune notification</p>
                   )}
                 </div>
               </CCol>
+
+              {/* Notifications Push Ramassage */}
               <CCol xs={12} md={4}>
-                <h5>Rappel push</h5>
+                <h5>Rappel Push Ramassage</h5>
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  {incompleteAxes.length > 0 ? (
-                    incompleteAxes.map((axe) => <NotificationCard axe={axe} />)
+                  {pointageRamassage.length > 0 ? (
+                    pointageRamassage.map((push) => <NotificationCard key={push.id} notification={push} type="pointageRamassage" />)
                   ) : (
                     <p className="text-center">Aucune notification</p>
                   )}
                 </div>
               </CCol>
+
+              {/* Notifications Fin de Contrat */}
               <CCol xs={12} md={4}>
                 <h5>Rappel fin de contrat</h5>
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  {incompleteAxes.length > 0 ? (
-                    incompleteAxes.map((axe) => <NotificationCard axe={axe} />)
-                  ) : (
-                    <p className="text-center">Aucune notification</p>
-                  )}
+                  {/* Implémentez de manière similaire si vous avez des notifications pour cela */}
+                  <p className="text-center">Aucune notification</p>
                 </div>
               </CCol>
             </CRow>

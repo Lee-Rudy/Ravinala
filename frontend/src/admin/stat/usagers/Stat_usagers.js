@@ -268,7 +268,7 @@ const Stat_usagers = () => {
           {/* Colonne pour le Tableau des Usagers */}
           <CCol xs={12} md={8}>
             <CCard>
-              <CCardHeader>
+            <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                 <strong>Liste des Usagers</strong>
               </CCardHeader>
               <CCardBody>
@@ -295,22 +295,22 @@ const Stat_usagers = () => {
                 <CTable bordered borderColor="primary">
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>Matricule</CTableHeaderCell>
-                      <CTableHeaderCell>Nom et prénom</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Matricule</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Nom et prénom</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
                     {paginatedUsagers.map((usager) => (
                       <CTableRow key={usager.id}>
-                        <CTableDataCell
+                        <CTableDataCell className="text-center"
                           onClick={() => handleUsagerClick(usager)}
                           style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
                           onMouseOver={(e) => (e.currentTarget.style.color = 'darkblue')}
                           onMouseOut={(e) => (e.currentTarget.style.color = 'blue')}
                         >
                           {usager.matricule}
-                        </CTableDataCell>
-                        <CTableDataCell>{usager.nom} {usager.prenom}</CTableDataCell>
+                        </CTableDataCell  >
+                        <CTableDataCell className="text-center">{usager.nom} {usager.prenom}</CTableDataCell>
                       </CTableRow>
                     ))}
                   </CTableBody>
@@ -348,7 +348,7 @@ const Stat_usagers = () => {
           <CCol xs={12} md={4}>
             {selectedUsager && (
               <CCard>
-                <CCardHeader>
+                <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                   <strong>Statistiques de Trafics de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
                 </CCardHeader>
                 <CCardBody>
@@ -443,7 +443,7 @@ const Stat_usagers = () => {
       <CCol xs={12} className="mt-4">
         {selectedUsager && (
           <CCard>
-            <CCardHeader>
+            <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <strong>Statistiques de Fréquentation de {selectedUsager.nom} {selectedUsager.prenom} en {selectedYear}</strong>
             </CCardHeader>
             <CCardBody>
@@ -498,40 +498,40 @@ const Stat_usagers = () => {
                   <CTable bordered hover responsive>
                     <CTableHead style={{ backgroundColor: '#e3f2fd' }}>
                       <CTableRow>
-                        <CTableHeaderCell>Mois</CTableHeaderCell>
-                        <CTableHeaderCell>Top Ramassage Voiture</CTableHeaderCell>
-                        <CTableHeaderCell>Ramassage (%)</CTableHeaderCell>
-                        <CTableHeaderCell>Top Dépôt Voiture</CTableHeaderCell>
-                        <CTableHeaderCell>Dépôt (%)</CTableHeaderCell>
-                        <CTableHeaderCell>Top Imprévu Voiture</CTableHeaderCell>
-                        <CTableHeaderCell>Imprévu (%)</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Mois</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Top Ramassage Voiture</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Ramassage (%)</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Top Dépôt Voiture</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Dépôt (%)</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Top Imprévu Voiture</CTableHeaderCell>
+                        <CTableHeaderCell className="text-center">Imprévu (%)</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
                       {statsFrequentation.monthlyComparison.map((stat, idx) => (
                         <CTableRow key={idx} style={{ backgroundColor: idx % 2 === 0 ? '#f8f9fa' : 'white' }}>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{stat.mois}</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <CIcon icon={cilCarAlt} className="me-2 text-primary" />
                             <span>{stat.topRamassageVoiture}</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <span className="badge bg-success">{stat.topRamassagePercentage}%</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <CIcon icon={cilCarAlt} className="me-2 text-warning" />
                             <span>{stat.topDepotVoiture}</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <span className="badge bg-warning">{stat.topDepotPercentage}%</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <CIcon icon={cilCarAlt} className="me-2 text-danger" />
                             <span>{stat.topImprevuVoiture}</span>
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell className="text-center">
                             <span className="badge bg-danger">{stat.topImprevuPercentage}%</span>
                           </CTableDataCell>
                         </CTableRow>
@@ -547,7 +547,7 @@ const Stat_usagers = () => {
                       {/* Diagramme Circulaire pour Ramassage Fréquentation */}
                       <CCol xs={12} md={6} className="mb-4">
                         <CCard>
-                          <CCardHeader>
+                        <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                             <strong>Fréquence Ramassage (Fréquentation)</strong>
                           </CCardHeader>
                           <CCardBody>
@@ -580,7 +580,7 @@ const Stat_usagers = () => {
                       {/* Diagramme Circulaire pour Dépôt Fréquentation */}
                       <CCol xs={12} md={6} className="mb-4">
                         <CCard>
-                          <CCardHeader>
+                        <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
                             <strong>Fréquence Dépôt (Fréquentation)</strong>
                           </CCardHeader>
                           <CCardBody>

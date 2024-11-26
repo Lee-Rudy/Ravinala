@@ -285,9 +285,9 @@ const Map_depot = () => {
                         <CTable striped hover responsive className="table-bordered">
                             <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
                             <CTableRow>
-                                <CTableHeaderCell scope="col">Ordre</CTableHeaderCell>
-                                <CTableHeaderCell scope="col">Lieu</CTableHeaderCell>
-                                <CTableHeaderCell scope="col">Heure</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-center">Ordre</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-center">Lieu</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-center">Heure</CTableHeaderCell>
                             </CTableRow>
                             </CTableHead>
                             <CTableBody>
@@ -295,10 +295,10 @@ const Map_depot = () => {
                                 const orderLetter = String.fromCharCode(65 + index);
                                 return (
                                 <CTableRow key={index}>
-                                    <CTableDataCell>
+                                    <CTableDataCell className="text-center">
                                     <span className="badge bg-dark">{orderLetter}</span>
                                     </CTableDataCell>
-                                    <CTableDataCell>
+                                    <CTableDataCell className="text-center">
                                     <CTooltip
                                         content={`Nom: ${point.nom} | Matricule: ${point.matricule}`}
                                         placement="right"
@@ -314,7 +314,7 @@ const Map_depot = () => {
                                         </span>
                                     </CTooltip>
                                     </CTableDataCell>
-                                    <CTableDataCell>
+                                    <CTableDataCell className="text-center">
                                     {point.heure_depot
                                         ? new Date(`1970-01-01T${point.heure_depot}`).toLocaleTimeString()
                                         : 'Heure non valide'}

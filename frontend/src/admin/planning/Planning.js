@@ -135,7 +135,7 @@ const Planning = () => {
 
   return (
     <CCard>
-      <CCardHeader>
+      <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <strong>Liste des usagers actifs</strong>
             </CCardHeader>
       <CCardHeader>
@@ -191,30 +191,30 @@ const Planning = () => {
             <CTable bordered borderColor="primary">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell>Matricule</CTableHeaderCell>
-                  <CTableHeaderCell>Nom Usager</CTableHeaderCell>
-                  <CTableHeaderCell>Axe</CTableHeaderCell>
-                  <CTableHeaderCell>Voiture</CTableHeaderCell>
-                  <CTableHeaderCell>Fokontany</CTableHeaderCell>
-                  <CTableHeaderCell>Lieu</CTableHeaderCell>
-                  <CTableHeaderCell>Heure prévue</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Matricule</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Nom Usager</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Axe</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Voiture</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Fokontany</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Lieu</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Heure prévue</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {paginatedRamassageData.map((item, index) => (
                   <CTableRow key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{item.matricule}</span>
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilUser} className="me-2 text-info" />
                     {item.nomUsager}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilMap} className="me-2 text-warning" />
                     {item.nomAxe}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     
                     {item.nomVoiture}
                   </CTableDataCell>
@@ -226,7 +226,7 @@ const Planning = () => {
                     <CIcon icon={cilLocationPin} className="me-2 text-success" />
                     {item.lieu}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilClock} className="me-2 text-secondary" />
                     {item.heure}
                   </CTableDataCell>
@@ -298,30 +298,30 @@ const Planning = () => {
             <CTable  bordered borderColor="primary">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell>Matricule</CTableHeaderCell>
-                  <CTableHeaderCell>Nom Usager</CTableHeaderCell>
-                  <CTableHeaderCell>Axe</CTableHeaderCell>
-                  <CTableHeaderCell>Voiture</CTableHeaderCell>
-                  <CTableHeaderCell>Fokontany</CTableHeaderCell>
-                  <CTableHeaderCell>Lieu</CTableHeaderCell>
-                  <CTableHeaderCell>Heure prévue</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Matricule</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Nom Usager</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Axe</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Voiture</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Fokontany</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Lieu</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Heure prévue</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {paginatedDepotData.map((item, index) => (
                   <CTableRow key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <span style={{ fontWeight: 'bold', color: '#45B48E' }}>{item.matricule}</span>
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilUser} className="me-2 text-info" />
                     {item.nomUsager}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilMap} className="me-2 text-warning" />
                     {item.nomAxe}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     
                     {item.nomVoiture}
                   </CTableDataCell>
@@ -333,7 +333,7 @@ const Planning = () => {
                     <CIcon icon={cilLocationPin} className="me-2 text-success" />
                     {item.lieu}
                   </CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CIcon icon={cilClock} className="me-2 text-secondary" />
                     {item.heure}
                   </CTableDataCell>

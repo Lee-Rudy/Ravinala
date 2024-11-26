@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -11,7 +11,6 @@ import {
   CHeader,
   CHeaderNav,
   CHeaderToggler,
-  CNavLink,
   CNavItem,
   CBadge,
   useColorModes
@@ -20,7 +19,6 @@ import CIcon from '@coreui/icons-react';
 import {
   cilBell,
   cilContrast,
-  cilEnvelopeOpen,
   cilList,
   cilMenu,
   cilMoon,
@@ -32,33 +30,78 @@ import { AppHeaderDropdown } from './header/index';
 
 const AppHeader = () => {
   const [incompleteAxes, setIncompleteAxes] = useState([]);
+  const [pointageRamassage, setPointageRamassage] = useState([]);
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
   const headerRef = useRef();
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme');
+  const navigate = useNavigate();
 
-  // Fetch notifications
+  const [lastReset, setLastReset] = useState(new Date());
+
+  const fetchNotifications = async () => {
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+      const axesResponse = await axios.get(`${baseURL}/api/axe/notifications`);
+      setIncompleteAxes(axesResponse.data);
+
+      const pushResponse = await axios.get(`${baseURL}/api/notifications/pointageRamassage`);
+      setPointageRamassage(pushResponse.data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des notifications :", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchIncompleteAxes = async () => {
-      try {
-        const baseURL = import.meta.env.VITE_API_BASE_URL;
-        const response = await axios.get(`${baseURL}/api/axe/notifications`);
-        setIncompleteAxes(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des notifications :", error);
-      }
-    };
+    fetchNotifications();
 
-    fetchIncompleteAxes();
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 60000); // 60 secondes //aza hadino ny manova an'ito pour intérroger le serveur
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    document.addEventListener('scroll', () => {
+    const handleScroll = () => {
       if (headerRef.current) {
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
       }
-    });
+    };
+
+    document.addEventListener('scroll', handleScroll);
+
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  const unreadCount = useMemo(() => {
+    return [
+      ...incompleteAxes,
+      ...pointageRamassage
+    ].filter(notification => new Date(notification.recuLe) > lastReset).length;
+  }, [incompleteAxes, pointageRamassage, lastReset]);
+
+  const handleDropdownToggle = (isOpen) => {
+    if (isOpen) {
+      console.log("Dropdown ouvert, réinitialisation du compteur");
+      setLastReset(new Date());
+      // Optionnel : Marquer les notifications comme lues sur le serveur
+      // markNotificationsAsRead();
+    }
+  };
+
+  // Optionnel : Fonction pour marquer les notifications comme lues sur le serveur
+  const markNotificationsAsRead = async () => {
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+      await axios.post(`${baseURL}/api/notifications/markAsRead`);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour des notifications comme lues :", error);
+    }
+  };
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -72,47 +115,162 @@ const AppHeader = () => {
         <CHeaderNav className="ms-auto">
           {/* Notifications */}
           <CNavItem>
-          <Link to="/notifications" style={{ textDecoration: 'none' }}>
-            <div className="position-relative">
-              <CIcon icon={cilBell} size="lg" style={{ marginTop: '8px' }} />
-              {incompleteAxes.length > 0 && (
-                <span
-                  className="position-absolute top-0 start-55 translate-middle bg-danger border border-light rounded-circle"
+            <CDropdown
+              variant="nav-item"
+              placement="bottom-end"
+              onShowChange={handleDropdownToggle}
+            >
+              <CDropdownToggle
+                caret={false}
+                className="position-relative d-flex align-items-center"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  boxShadow: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                <CIcon
+                  icon={cilBell}
+                  size="lg"
                   style={{
-                    width: '13px', // Largeur du cercle 12px
-                    height: '13px', // Hauteur du cercle 12px
-                    marginTop: '9px',
-                    padding: '0', // Supprime le remplissage excessif
+                    color: '#45B48E',
+                    marginRight: '5px',
                   }}
-                ></span>
-              )}
-            </div>
-          </Link>
-        </CNavItem>
+                />
+                {unreadCount > 0 && (
+                  <CBadge
+                    color="danger"
+                    className="position-absolute translate-middle"
+                    style={{
+                      top: '5px',
+                      right: '-5px',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {unreadCount}
+                  </CBadge>
+                )}
+              </CDropdownToggle>
 
-          {/* <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilList} size="lg" />
-            </CNavLink>
-          </CNavItem> */}
-          {/* <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilEnvelopeOpen} size="lg" />
-            </CNavLink>
-          </CNavItem> */}
+              <CDropdownMenu
+              className="shadow-lg"
+              style={{
+                width: '320px',
+                maxHeight: '400px', // Limite la hauteur
+                overflowY: 'auto',  // Active la barre de défilement verticale
+                borderRadius: '8px',
+                border: '1px solid #ddd',
+                padding: '0',
+              }}
+            >
+                <CDropdownItem
+                  header
+                  className="text-center text-white"
+                  style={{
+                    backgroundColor: '#45B48E',
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
+                  }}
+                >
+                  <strong>Notifications</strong>
+                </CDropdownItem>
+
+                {/* Notifications Axes */}
+                {incompleteAxes.length > 0 ? (
+                  incompleteAxes.map((axe) => (
+                    <CDropdownItem
+                      key={`axe-${axe.id}`}
+                      className="d-flex align-items-center"
+                      style={{
+                        padding: '10px 15px',
+                        borderBottom: '1px solid #f0f0f0',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => navigate(`/axe/update/${axe.id}`)}
+                    >
+                      <CIcon
+                        icon={cilList}
+                        size="lg"
+                        style={{ marginRight: '10px', color: '#45B48E' }}
+                      />
+                      <span>{axe.axe || 'Nouvelle notification'} incomplète</span>
+                    </CDropdownItem>
+                  ))
+                ) : null}
+
+                {/* Notifications Push Ramassage */}
+                {pointageRamassage.length > 0 ? (
+                  pointageRamassage.map((push) => (
+                    <CDropdownItem
+                      key={`push-${push.id}`}
+                      className="d-flex align-items-center"
+                      style={{
+                        padding: '10px 15px',
+                        borderBottom: '1px solid #f0f0f0',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer',
+                      }}
+                      // onClick={() => navigate('/notifications')}
+                      onClick={() => navigate('/historique')}
+                    >
+                      <CIcon
+                        icon={cilList}
+                        size="lg"
+                        style={{ marginRight: '10px', color: '#45B48E' }}
+                      />
+                      <span>{push.nomVoiture} :</span>
+                      <small style={{ marginLeft: 'auto', color: 'gray' }}>
+                        {new Date(push.recuLe).toLocaleDateString()}
+                      </small>
+                    </CDropdownItem>
+                  ))
+                ) : null}
+
+                {(incompleteAxes.length + pointageRamassage.length) === 0 && (
+                  <CDropdownItem className="text-center text-muted py-3">
+                    Aucune notification
+                  </CDropdownItem>
+                )}
+
+                <CDropdownItem
+                  className="text-center text-primary"
+                  style={{ padding: '10px', borderTop: '1px solid #f0f0f0' }}
+                >
+                  <Link
+                    to="/notifications"
+                    style={{ textDecoration: 'none', color: '#45B48E' }}
+                    onClick={() => navigate('/notifications')}
+                  >
+                    Voir toutes les notifications
+                  </Link>
+                </CDropdownItem>
+              </CDropdownMenu>
+            </CDropdown>
+          </CNavItem>
+
+          {/* ... (autres éléments de navigation) */}
         </CHeaderNav>
         <CHeaderNav>
           <li className="nav-item py-1">
-            <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
+            <div className="vr h-100 mx-3 text-body text-opacity-75"></div>
           </li>
           <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>
               {colorMode === 'dark' ? (
-                <CIcon icon={cilMoon} size="lg" />
+                <CIcon icon={cilMoon} size="lg" style={{ color: '#45B48E' }} />
               ) : colorMode === 'auto' ? (
-                <CIcon icon={cilContrast} size="lg" />
+                <CIcon icon={cilContrast} size="lg" style={{ color: '#45B48E' }} />
               ) : (
-                <CIcon icon={cilSun} size="lg" />
+                <CIcon icon={cilSun} size="lg" style={{ color: '#45B48E' }} />
               )}
             </CDropdownToggle>
             <CDropdownMenu>
@@ -145,9 +303,7 @@ const AppHeader = () => {
               </CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
-          <li className="nav-item py-1">
-            <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
-          </li>
+          {/* ... */}
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>

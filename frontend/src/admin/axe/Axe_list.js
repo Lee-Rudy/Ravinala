@@ -74,7 +74,9 @@ const Axe_list = () => {
       <CCol xs={12}>
         <CCard>
           
-          <CCardHeader>
+        <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+              <strong>Liste des axes</strong>
+          </CCardHeader>
           <CNav variant="tabs" className="mb-3">
             <CNavItem>
                 <Link to="/axe" style={{ textDecoration: 'none' }}>
@@ -88,8 +90,7 @@ const Axe_list = () => {
                 </Link>
             </CNavItem>
         </CNav>
-            <strong>Liste des Axes</strong>
-          </CCardHeader>
+  
           <CCardBody>
             {/* Ligne de recherche et filtre */}
             <CRow className="align-items-end mb-3">
@@ -133,18 +134,18 @@ const Axe_list = () => {
             <CTable bordered responsive borderColor="primary">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell>Nom de l'axe</CTableHeaderCell>
-                  <CTableHeaderCell>Distance (km)</CTableHeaderCell>
-                  <CTableHeaderCell>Durée (minutes)</CTableHeaderCell>
-                  <CTableHeaderCell>Actions</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Nom de l'axe</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Distance (km)</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Durée (minutes)</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {paginatedAxes.map((axe) => (
                   <CTableRow key={axe.id}>
-                    <CTableDataCell>{axe.axe}</CTableDataCell>
-                    <CTableDataCell>{axe.distance_km}</CTableDataCell>
-                    <CTableDataCell>{axe.duree_trajet}</CTableDataCell>
+                    <CTableDataCell className="text-center">{axe.axe}</CTableDataCell>
+                    <CTableDataCell className="text-center">{axe.distance_km}</CTableDataCell>
+                    <CTableDataCell className="text-center">{axe.duree_trajet}</CTableDataCell>
                     <CTableDataCell>
                       <Link to={`/axe/update/${axe.id}`}>
                         <CButton color="warning" size="sm">

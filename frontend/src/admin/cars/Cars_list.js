@@ -111,7 +111,7 @@ const Cars_list = () => {
       <CRow>
         <CCol xs={12}>
           <CCard>
-            <CCardHeader>
+          <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <strong>Liste des Cars</strong>
             </CCardHeader>
             <CCardBody>
@@ -143,6 +143,8 @@ const Cars_list = () => {
 
 
               {/* Filtre par type de voiture */}
+              <CRow className="mb-3">
+              <CCol>
               <CFormLabel htmlFor="typeSelect">Catégories</CFormLabel>
               <CFormSelect
                 id="typeSelect"
@@ -157,8 +159,10 @@ const Cars_list = () => {
                   </option>
                 ))}
               </CFormSelect>
+              </CCol>
 
               {/* Filtre par nombre de places */}
+              <CCol>
               <CFormLabel htmlFor="sortOrderSelect">Trier par nombre de places</CFormLabel>
               <CFormSelect
                 id="sortOrderSelect"
@@ -169,30 +173,32 @@ const Cars_list = () => {
                 <option value="asc">Croissant</option>
                 <option value="desc">Décroissant</option>
               </CFormSelect>
+              </CCol>
+              </CRow>
 
               {/* Tableau des résultats filtrés */}
               <CTable bordered borderColor="primary">
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell>Nom du Car</CTableHeaderCell>
-                    <CTableHeaderCell>Catégorie</CTableHeaderCell>
-                    <CTableHeaderCell>Immatriculation</CTableHeaderCell>
-                    <CTableHeaderCell>Nombre de places</CTableHeaderCell>
-                    <CTableHeaderCell>Prestataire</CTableHeaderCell>
-                    <CTableHeaderCell>Contrat Début</CTableHeaderCell>
-                    <CTableHeaderCell>Contrat Fin</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Nom du Car</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Catégorie</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Immatriculation</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Nombre de places</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Prestataire</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Contrat Début</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Contrat Fin</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
                   {paginatedCars.map((car) => (
                     <CTableRow key={car.id}>
-                      <CTableDataCell>{car.nomCar}</CTableDataCell>
-                      <CTableDataCell>{car.typeCar}</CTableDataCell>
-                      <CTableDataCell>{car.immatriculation}</CTableDataCell>
-                      <CTableDataCell>{car.nombrePlace}</CTableDataCell>
-                      <CTableDataCell>{car.prestataire}</CTableDataCell>
-                      <CTableDataCell>{car.debutContrat ? car.debutContrat.slice(0,10) :  ''}</CTableDataCell>
-                      <CTableDataCell>{car.finContrat ? car.finContrat.slice(0,10): ''}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.nomCar}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.typeCar}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.immatriculation}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.nombrePlace}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.prestataire}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.debutContrat ? car.debutContrat.slice(0,10) :  ''}</CTableDataCell>
+                      <CTableDataCell className="text-center">{car.finContrat ? car.finContrat.slice(0,10): ''}</CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>

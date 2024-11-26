@@ -137,7 +137,7 @@ const Conducteurs = () => {
       <CRow>
         <CCol xs={12}>
           <CCard>
-            <CCardHeader>
+          <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <strong>Liste des Chauffeurs</strong>
               <CButton
                 color="primary"
@@ -158,8 +158,11 @@ const Conducteurs = () => {
                 Créer une assignation
               </CButton>
               </Link>
+            </CCardHeader>
 
-              <CInputGroup className="mt-3">
+            
+
+              <CInputGroup className="mt-3" style={{ maxWidth: '400px', marginLeft:'15px' }}>
               <CInputGroupText>
                 <CIcon icon={cilMagnifyingGlass} />
               </CInputGroupText>
@@ -170,29 +173,28 @@ const Conducteurs = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </CInputGroup>
-            </CCardHeader>
             <CCardBody>
               {error && <CAlert color="danger">{error}</CAlert>}
               <CTable bordered borderColor="primary">
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell>Nom</CTableHeaderCell>
-                    <CTableHeaderCell>Date de naissance</CTableHeaderCell>
-                    <CTableHeaderCell>Contact</CTableHeaderCell>
-                    <CTableHeaderCell>Adresse</CTableHeaderCell>
-                    <CTableHeaderCell>Mail</CTableHeaderCell>
-                    <CTableHeaderCell>Options</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Nom</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Date de naissance</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Contact</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Adresse</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Mail</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Options</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
                   {filteredConducteurs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((conducteur) => (
                     <CTableRow key={conducteur.id}>
-                      <CTableDataCell>{conducteur.nom}</CTableDataCell>
-                      <CTableDataCell>{conducteur.date_naissance ? conducteur.date_naissance.slice(0,10) : ''}</CTableDataCell>
-                      <CTableDataCell>{conducteur.contact}</CTableDataCell>
-                      <CTableDataCell>{conducteur.adresse}</CTableDataCell>
-                      <CTableDataCell>{conducteur.mail}</CTableDataCell>
-                      <CTableDataCell>
+                      <CTableDataCell className="text-center">{conducteur.nom}</CTableDataCell>
+                      <CTableDataCell className="text-center">{conducteur.date_naissance ? conducteur.date_naissance.slice(0,10) : ''}</CTableDataCell>
+                      <CTableDataCell className="text-center">{conducteur.contact}</CTableDataCell>
+                      <CTableDataCell className="text-center">{conducteur.adresse}</CTableDataCell>
+                      <CTableDataCell className="text-center">{conducteur.mail}</CTableDataCell>
+                      <CTableDataCell className="text-center">
                         <CButton color="warning" onClick={() => handleEdit(conducteur.id)} className="me-2">
                           <FontAwesomeIcon icon={faEdit} />
                         </CButton>

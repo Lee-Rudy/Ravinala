@@ -94,7 +94,7 @@ const UsagersList = () => {
       <CRow>
         <CCol xs={12}>
           <CCard>
-            <CCardHeader>
+          <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <strong>Liste des Usagers</strong>
             </CCardHeader>
             <CCardBody>
@@ -158,79 +158,99 @@ const UsagersList = () => {
                 </CCol>
               </CRow>
 
-              <CTable bordered borderColor="primary">
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell>Matricule</CTableHeaderCell>
-                    <CTableHeaderCell>Nom et prénom</CTableHeaderCell>
-                    <CTableHeaderCell>Axe ramassage</CTableHeaderCell>
-                    <CTableHeaderCell>Axe dépôt</CTableHeaderCell>
-                    <CTableHeaderCell>Statut Ramassage</CTableHeaderCell>
-                    <CTableHeaderCell>Statut Dépôt</CTableHeaderCell>
-                    <CTableHeaderCell>Affectation</CTableHeaderCell>
+              <CTable bordered borderColor="primary" className="mt-4">
+            <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
+              <CTableRow>
+                <CTableHeaderCell className="text-center">Matricule</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Nom et prénom</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Axe ramassage</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Axe dépôt</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Statut Ramassage</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Statut Dépôt</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Affectation</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              {paginatedUsagers.map((usager, index) => (
+                <CTableRow
+                  key={usager.usagerId}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  {/* Matricule avec surbrillance au survol */}
+                  <CTableDataCell
+                    className="text-center"
+                    style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                    onMouseOver={(e) => (e.currentTarget.style.color = 'darkblue')}
+                    onMouseOut={(e) => (e.currentTarget.style.color = 'blue')}
+                    onClick={() => handleUsagerClick(usager)}
+                  >
+                    {usager.matricule}
+                  </CTableDataCell>
 
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                {paginatedUsagers.map((usager) => (
-                    <CTableRow key={usager.usagerId}>
-                      <CTableDataCell
-                      onClick={() => handleUsagerClick(usager)}
-                      style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} // surligneure
-                      onMouseOver={(e) => e.currentTarget.style.color = 'darkblue'} // survol color 
-                      onMouseOut={(e) => e.currentTarget.style.color = 'blue'}
-                      >
-                        {usager.matricule}
-                      </CTableDataCell>
-                      <CTableDataCell>{usager.nom} {usager.prenom}</CTableDataCell>
-                      <CTableDataCell>{usager.axeRamassage || 'N/A'}</CTableDataCell>
-                      <CTableDataCell>{usager.axeDepot || 'N/A'}</CTableDataCell>
+                  {/* Nom et Prénom */}
+                  <CTableDataCell className="text-center">
+                    {usager.nom} {usager.prenom}
+                  </CTableDataCell>
 
+                  {/* Axe Ramassage */}
+                  <CTableDataCell className="text-center">{usager.axeRamassage || 'N/A'}</CTableDataCell>
 
-                      {/* Statut Ramassage avec badge */}
-                      <CTableDataCell>
-                        <CBadge color={usager.estActifRamassage ? 'success' : 'warning'}>
-                          {usager.estActifRamassage ? 'Actif' : 'Inactif'}
-                        </CBadge>
-                      </CTableDataCell>
+                  {/* Axe Dépôt */}
+                  <CTableDataCell className="text-center">{usager.axeDepot || 'N/A'}</CTableDataCell>
 
-                      {/* Statut Dépôt avec badge */}
-                      <CTableDataCell>
-                        <CBadge color={usager.estActifDepot ? 'success' : 'warning'}>
-                          {usager.estActifDepot ? 'Actif' : 'Inactif'}
-                        </CBadge>
-                      </CTableDataCell>
+                  {/* Statut Ramassage avec Badge */}
+                  <CTableDataCell className="text-center">
+                    <CBadge color={usager.estActifRamassage ? 'success' : 'warning'}>
+                      {usager.estActifRamassage ? 'Actif' : 'Inactif'}
+                    </CBadge>
+                  </CTableDataCell>
 
-                      <CTableDataCell>
-                      <CDropdown>
-                        <CDropdownToggle className="btn btn-outline-secondary">Affecter</CDropdownToggle>
-                        <CDropdownMenu>
-                          <CDropdownItem>
-                            
-                          <Link 
-                          to={`/usagers/affecter_ramassage/${usager.usagerId}`} 
-                          style={{ textDecoration: 'none' }}>
-                          Ramassage
-                        </Link>
-                          </CDropdownItem>
-                          <CDropdownItem>
-                          
-                          <Link 
-                          to={`/usagers/affecter_depot/${usager.usagerId}`} 
-                          style={{ textDecoration: 'none' }}>
-                          Dépôt
-                        </Link>
-                          </CDropdownItem>
-                        </CDropdownMenu>
-                      </CDropdown>
-                    </CTableDataCell>
+                  {/* Statut Dépôt avec Badge */}
+                  <CTableDataCell className="text-center">
+                    <CBadge color={usager.estActifDepot ? 'success' : 'warning'}>
+                      {usager.estActifDepot ? 'Actif' : 'Inactif'}
+                    </CBadge>
+                  </CTableDataCell>
 
+                  {/* Affectation */}
+                  <CTableDataCell className="text-center">
+                    <CDropdown>
+                    {/* caret={false} // Désactive la flèche */}
+                      <CDropdownToggle className="btn btn-outline-secondary" caret={false}>Affecter</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem>
+                          <Link
+                            to={`/usagers/affecter_ramassage/${usager.usagerId}`}
+                            style={{ textDecoration: 'none', color: '#212529' }}
+                          >
+                            Ramassage
+                          </Link>
+                        </CDropdownItem>
+                        <CDropdownItem>
+                          <Link
+                            to={`/usagers/affecter_depot/${usager.usagerId}`}
+                            style={{ textDecoration: 'none', color: '#212529' }}
+                          >
+                            Dépôt
+                          </Link>
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CTableDataCell>
+                </CTableRow>
+              ))}
+            </CTableBody>
+          </CTable>
 
-
-                    </CTableRow>
-                  ))}
-                </CTableBody>
-              </CTable>
 
               {/* Pagination */}
               <CPagination aria-label="Pagination">

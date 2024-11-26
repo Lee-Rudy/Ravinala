@@ -83,7 +83,7 @@ const Axe = () => {
 
   return (
     <CCard>
-      <CCardHeader>{axeId ? 'Modifier' : 'Ajouter'} un Axe</CCardHeader>
+      <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>{axeId ? 'Modifier' : 'Ajouter'} un Axe</CCardHeader>
       <CCardBody>
         <form onSubmit={handleSubmit}>
           <CRow className="mb-3">

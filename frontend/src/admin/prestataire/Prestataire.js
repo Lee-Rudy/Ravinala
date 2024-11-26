@@ -106,7 +106,7 @@ const Prestataire = () => {
 
   return (
     <CCard>
-      <CCardHeader>
+      <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
         <h5>Gestion des Prestataires</h5>
       </CCardHeader>
       <CCardBody>
@@ -145,7 +145,7 @@ const Prestataire = () => {
             </CCol>
             <CCol md={3} className="d-flex align-items-end gap-2">
             <CButton type="submit" color="primary">
-                {selectedPrestataire ? 'Mettre à jour' : 'Ajouter'}
+                {selectedPrestataire ? 'Mettre à jour' : ' + Ajouter'}
             </CButton>
             {selectedPrestataire && (
                 <CButton color="secondary" onClick={resetForm}>
@@ -161,19 +161,19 @@ const Prestataire = () => {
         <CTable bordered borderColor='primary' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell>Nom du Prestataire</CTableHeaderCell>
-              <CTableHeaderCell>Début Contrat</CTableHeaderCell>
-              <CTableHeaderCell>Fin Contrat</CTableHeaderCell>
-              <CTableHeaderCell>Actions</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Nom du Prestataire</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Début Contrat</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Fin Contrat</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
             {currentItems.map((prestataire) => (
               <CTableRow key={prestataire.id}>
-                <CTableDataCell>{prestataire.prestataire}</CTableDataCell>
-                <CTableDataCell>{prestataire.debut_contrat ? prestataire.debut_contrat.slice(0, 10) : ''}</CTableDataCell>
-                <CTableDataCell>{prestataire.fin_contrat ? prestataire.fin_contrat.slice(0, 10) : ''}</CTableDataCell>
-                <CTableDataCell>
+                <CTableDataCell className="text-center">{prestataire.prestataire}</CTableDataCell>
+                <CTableDataCell className="text-center">{prestataire.debut_contrat ? prestataire.debut_contrat.slice(0, 10) : ''}</CTableDataCell>
+                <CTableDataCell className="text-center">{prestataire.fin_contrat ? prestataire.fin_contrat.slice(0, 10) : ''}</CTableDataCell>
+                <CTableDataCell className="text-center">
                   <CButton color="warning" onClick={() => handleEdit(prestataire)} className="me-2">
                   <CIcon icon={cilPencil} />Modifier
                   </CButton>

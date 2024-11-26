@@ -118,7 +118,7 @@ const Cars = () => {
     <CRow>
       <CCol xs={12} md={12}>
         <CCard>
-          <CCardHeader>
+        <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
             <strong>Ajout d'un véhicule / car</strong>
           </CCardHeader>
           <CCardBody>

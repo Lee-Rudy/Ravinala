@@ -25,7 +25,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 import CIcon from '@coreui/icons-react';
-import {cilMagnifyingGlass } from '@coreui/icons';
+import {cilMagnifyingGlass, cilChartLine, cilSync, cilWarning, cilCarAlt, cilCalendar, cilPeople, cilUserFollow, cilInfo } from '@coreui/icons';
 import Select from 'react-select';
 
 
@@ -323,14 +323,14 @@ const RetardParCar = () => {
           <CTable bordered borderColor="primary">
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell>Nom du car</CTableHeaderCell>
-                <CTableHeaderCell>Immatriculation</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Nom du car</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Immatriculation</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {paginatedCars.map((car) => (
                 <CTableRow key={car.id}>
-                  <CTableDataCell
+                  <CTableDataCell className="text-center"
                     onClick={() => handleCarClick(car)}
                     style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
                     onMouseOver={(e) => (e.currentTarget.style.color = 'darkblue')}
@@ -338,7 +338,7 @@ const RetardParCar = () => {
                   >
                     {car.nom_car}
                   </CTableDataCell>
-                  <CTableDataCell>{car.immatriculation}</CTableDataCell>
+                  <CTableDataCell className="text-center">{car.immatriculation}</CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
@@ -375,7 +375,7 @@ const RetardParCar = () => {
         <CCol xs={12} lg={8}>
           {/* Histogramme des Retards */}
           <CCard className="mb-4">
-            <CCardHeader>
+          <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <h5>Histogramme des Retards</h5>
             </CCardHeader>
             <CCardBody>
@@ -391,7 +391,7 @@ const RetardParCar = () => {
 
           {/* Histogramme Combiné Ramassage-Dépot */}
           <CCard className="mb-4">
-            <CCardHeader>
+          <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
               <h5>Moyenne Ramassage et Dépot des Passagers</h5>
             </CCardHeader>
             <CCardBody>
@@ -408,60 +408,106 @@ const RetardParCar = () => {
           </CCard>
 
           {/* Tableau des Statistiques Générales des Passagers */}
-          <CCard>
-            <CCardHeader>
-              <h5>Statistiques Générales des Passagers</h5>
-            </CCardHeader>
-            <CCardBody>
-              {passengerLoading ? (
-                <p>Chargement des données des passagers...</p>
-              ) : passengerError ? (
-                <p style={{ color: 'red' }}>{passengerError}</p>
-              ) : passengerGeneralStats ? (
-                <>
-                  <CTable bordered color='warning'>
-                    <CTableHead>
-                      <CTableRow>
-                        <CTableHeaderCell>Voiture</CTableHeaderCell>
-                        <CTableHeaderCell>Année</CTableHeaderCell>
-                        <CTableHeaderCell>Passagers Totaux</CTableHeaderCell>
-                        <CTableHeaderCell>Passagers Moyens</CTableHeaderCell>
-                      </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      <CTableRow>
-                        <CTableDataCell>{passengerGeneralStats.car}</CTableDataCell>
-                        <CTableDataCell>{passengerGeneralStats.year}</CTableDataCell>
-                        <CTableDataCell>{passengerGeneralStats.totalPassengers}</CTableDataCell>
-                        <CTableDataCell>{passengerGeneralStats.averagePassengers}</CTableDataCell>
-                      </CTableRow>
-                    </CTableBody>
-                  </CTable>
-                  
-                  
-                  <h6 className="mt-4">Passagers par Mois</h6>
-                  <CTable bordered borderColor="primary">
-                    <CTableHead>
-                      <CTableRow>
-                        <CTableHeaderCell>Mois</CTableHeaderCell>
-                        <CTableHeaderCell>Passagers</CTableHeaderCell>
-                      </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      {passengerGeneralStats.passengersByMonth.map((item) => (
-                        <CTableRow key={item.month}>
-                          <CTableDataCell>{monthNames[Number(item.month) - 1]}</CTableDataCell>
-                          <CTableDataCell>{item.passengers}</CTableDataCell>
-                        </CTableRow>
-                      ))}
-                    </CTableBody>
-                  </CTable>
-                </>
-              ) : (
-                <p>Aucune donnée disponible.</p>
-              )}
-            </CCardBody>
-          </CCard>
+          <CCard className="shadow-sm mb-4">
+  <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+    <h5>
+      <CIcon icon={cilChartLine} className="me-2" />
+      Statistiques Générales des Passagers
+    </h5>
+  </CCardHeader>
+  <CCardBody>
+    {passengerLoading ? (
+      <p style={{ fontSize: '1rem', color: '#6c757d' }}>
+        <CIcon icon={cilSync} className="me-2" spin />
+        Chargement des données des passagers...
+      </p>
+    ) : passengerError ? (
+      <p style={{ color: 'red', fontSize: '1rem' }}>
+        <CIcon icon={cilWarning} className="me-2" />
+        {passengerError}
+      </p>
+    ) : passengerGeneralStats ? (
+      <>
+        {/* Tableau Statistiques Générales */}
+        <CTable bordered hover responsive className="mb-4">
+          <CTableHead style={{ backgroundColor: '#ffc107', color: '#212529' }}>
+            <CTableRow>
+              <CTableHeaderCell className="text-center">
+                <CIcon icon={cilCarAlt} className="me-2" />
+                Voiture
+              </CTableHeaderCell>
+              <CTableHeaderCell className="text-center">
+                <CIcon icon={cilCalendar} className="me-2" />
+                Année
+              </CTableHeaderCell>
+              <CTableHeaderCell className="text-center">
+                <CIcon icon={cilPeople} className="me-2" />
+                Passagers Totaux
+              </CTableHeaderCell>
+              <CTableHeaderCell className="text-center">
+                <CIcon icon={cilUserFollow} className="me-2" />
+                Passagers Moyens
+              </CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            <CTableRow style={{ backgroundColor: '#f8f9fa' }}>
+              <CTableDataCell className="text-center">{passengerGeneralStats.car}</CTableDataCell>
+              <CTableDataCell className="text-center">{passengerGeneralStats.year}</CTableDataCell>
+              <CTableDataCell className="text-center">
+                <span className="badge bg-success">
+                  {Number(passengerGeneralStats.totalPassengers).toLocaleString('fr-FR')}
+                </span>
+              </CTableDataCell>
+              <CTableDataCell className="text-center">
+                <span style={{ fontWeight: 'bold', color: '#45B48E' }}>
+                  {Number(passengerGeneralStats.averagePassengers).toLocaleString('fr-FR')}
+                </span>
+              </CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+
+        {/* Tableau Passagers par Mois */}
+        <h6 style={{ color: '#45B48E', fontWeight: 'bold' }} className="mt-4">
+          <CIcon icon={cilCalendar} className="me-2" />
+          Passagers par Mois
+        </h6>
+        <CTable bordered hover responsive>
+          <CTableHead style={{ backgroundColor: '#e3f2fd', color: '#212529' }}>
+            <CTableRow>
+              <CTableHeaderCell className="text-center">Mois</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Passagers</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {passengerGeneralStats.passengersByMonth.map((item, index) => (
+              <CTableRow
+                key={item.month}
+                style={{
+                  backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white',
+                }}
+              >
+                <CTableDataCell className="text-center">{monthNames[Number(item.month) - 1]}</CTableDataCell>
+                <CTableDataCell className="text-center">
+                  <span className="badge bg-info">
+                    {Number(item.passengers).toLocaleString('fr-FR')}
+                  </span>
+                </CTableDataCell>
+              </CTableRow>
+            ))}
+          </CTableBody>
+        </CTable>
+      </>
+    ) : (
+      <p style={{ fontSize: '1rem', color: '#6c757d' }}>
+        <CIcon icon={cilInfo} className="me-2" />
+        Aucune donnée disponible.
+      </p>
+    )}
+  </CCardBody>
+</CCard>
+
         </CCol>
       </CRow>
     </div>

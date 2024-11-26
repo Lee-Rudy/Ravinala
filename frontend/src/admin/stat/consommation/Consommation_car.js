@@ -20,7 +20,8 @@ import {
   CSpinner,
   CFormCheck,
   CInputGroupText,
-  CInputGroup
+  CInputGroup,
+  CCardHeader
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilSearch, cilMagnifyingGlass,cilCarAlt,cilNotes, cilFile, cilChartLine, cilSpeedometer, cilMoney, cilDrop } from '@coreui/icons';
@@ -177,6 +178,9 @@ const ConsommationCar = () => {
     <CRow>
       <CCol xs={12}>
         <CCard>
+        <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
+          <strong>Analyses et consommations</strong>
+          </CCardHeader>
           <CCardBody>
             {/* Formulaire de recherche */}
             <CForm onSubmit={handleSearch}>
@@ -228,11 +232,11 @@ const ConsommationCar = () => {
                       <CIcon icon={cilNotes} className="me-2" />
                       Sélection
                     </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">
+                    <CTableHeaderCell scope="col" className="text-center">
                       <CIcon icon={cilCarAlt} className="me-2" />
                       Nom de la Voiture
                     </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">
+                    <CTableHeaderCell scope="col" className="text-center">
                       <CIcon icon={cilNotes} className="me-2" />
                       Immatriculation
                     </CTableHeaderCell>
@@ -261,11 +265,11 @@ const ConsommationCar = () => {
                           style={{ transform: 'scale(1.2)' }}
                         />
                       </CTableDataCell>
-                      <CTableDataCell>
+                      <CTableDataCell className="text-center">
                         <span className="badge bg-success me-2">{index + 1}</span>
                         {car.nom_car}
                       </CTableDataCell>
-                      <CTableDataCell style={{ color: '#45B48E', fontWeight: 'bold' }}>
+                      <CTableDataCell style={{ color: '#45B48E', fontWeight: 'bold' }} className="text-center">
                         {car.immatriculation}
                       </CTableDataCell>
                     </CTableRow>
@@ -364,19 +368,19 @@ const ConsommationCar = () => {
                 <CTable bordered borderColor="primary" className="mt-3">
                   <CTableHead style={{ backgroundColor: '#45B48E', color: 'white' }}>
                     <CTableRow>
-                      <CTableHeaderCell scope="col">
+                      <CTableHeaderCell scope="col" className="text-center">
                         <CIcon icon={cilCarAlt} className="me-2" />
                         Nom de la Voiture
                       </CTableHeaderCell>
-                      <CTableHeaderCell scope="col">
+                      <CTableHeaderCell scope="col" className="text-center">
                         <CIcon icon={cilSpeedometer} className="me-2" />
                         Total Kilomètres
                       </CTableHeaderCell>
-                      <CTableHeaderCell scope="col">
+                      <CTableHeaderCell scope="col" className="text-center">
                         <CIcon icon={cilMoney} className="me-2" />
                         Total Prix (AR)
                       </CTableHeaderCell>
-                      <CTableHeaderCell scope="col">
+                      <CTableHeaderCell scope="col" className="text-center">
                         <CIcon icon={cilDrop} className="me-2" />
                         Total Litres
                       </CTableHeaderCell>
@@ -390,18 +394,18 @@ const ConsommationCar = () => {
                           backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white',
                         }}
                       >
-                        <CTableDataCell>{car.nomVoiture}</CTableDataCell>
-                        <CTableDataCell>
+                        <CTableDataCell className="text-center">{car.nomVoiture}</CTableDataCell>
+                        <CTableDataCell className="text-center">
                           <span style={{ fontWeight: 'bold', color: '#45B48E' }}>
                             {Number(car.totalKm).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} km
                           </span>
                         </CTableDataCell>
-                        <CTableDataCell>
+                        <CTableDataCell className="text-center">
                           <span className="badge bg-warning">
                             {Number(car.totalPrix).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} AR
                           </span>
                         </CTableDataCell>
-                        <CTableDataCell>
+                        <CTableDataCell className="text-center">
                           <span style={{ fontWeight: 'bold', color: '#6c757d' }}>
                             {Number(car.totalLitres).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} L
                           </span>
