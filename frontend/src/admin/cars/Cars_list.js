@@ -19,7 +19,8 @@ import {
   CPaginationItem,
   CPagination,
   CInputGroupText,
-  CInputGroup
+  CInputGroup,
+  CBadge
 } from '@coreui/react';
 
 import CIcon from '@coreui/icons-react'
@@ -178,31 +179,42 @@ const Cars_list = () => {
 
               {/* Tableau des résultats filtrés */}
               <CTable bordered borderColor="primary">
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell className="text-center">Nom du Car</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Catégorie</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Immatriculation</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Nombre de places</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Prestataire</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Contrat Début</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Contrat Fin</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {paginatedCars.map((car) => (
-                    <CTableRow key={car.id}>
-                      <CTableDataCell className="text-center">{car.nomCar}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.typeCar}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.immatriculation}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.nombrePlace}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.prestataire}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.debutContrat ? car.debutContrat.slice(0,10) :  ''}</CTableDataCell>
-                      <CTableDataCell className="text-center">{car.finContrat ? car.finContrat.slice(0,10): ''}</CTableDataCell>
-                    </CTableRow>
-                  ))}
-                </CTableBody>
-              </CTable>
+  <CTableHead>
+    <CTableRow>
+      <CTableHeaderCell className="text-center">Nom du Car</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">Catégorie</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">Immatriculation</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">Nombre de places</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">Prestataire</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">litre de consommation </CTableHeaderCell>
+      <CTableHeaderCell className="text-center">km de consommation</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">prix consommation</CTableHeaderCell>
+      <CTableHeaderCell className="text-center">Statuts</CTableHeaderCell>
+    </CTableRow>
+  </CTableHead>
+  <CTableBody>
+    {paginatedCars.map((car) => (
+      <CTableRow key={car.id}>
+        <CTableDataCell className="text-center">{car.nomCar}</CTableDataCell>
+        <CTableDataCell className="text-center">{car.typeCar}</CTableDataCell>
+        <CTableDataCell className="text-center">{car.immatriculation}</CTableDataCell>
+        <CTableDataCell className="text-center">{car.nombrePlace}</CTableDataCell>
+        <CTableDataCell className="text-center">{car.prestataire}</CTableDataCell>
+        <CTableDataCell className="text-center">{Number(car.litre_consommation).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} L</CTableDataCell>
+        <CTableDataCell className="text-center">{Number(car.km_consommation).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} KM </CTableDataCell>
+        <CTableDataCell className="text-center">{Number(car.prix_consommation).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} AR</CTableDataCell>
+        {/* <CTableDataCell className="text-center">{car.debutContrat ? car.debutContrat.slice(0, 10) : ''}</CTableDataCell>
+        <CTableDataCell className="text-center">{car.finContrat ? car.finContrat.slice(0, 10) : ''}</CTableDataCell> */}
+        <CTableDataCell className="text-center">
+          <CBadge color={car.est_actif ? 'success' : 'warning'}>
+                      {car.est_actif ? 'Actif' : 'Inactif'}
+          </CBadge>
+          </CTableDataCell>
+      </CTableRow>
+    ))}
+  </CTableBody>
+</CTable>
+
 
               {/* Pagination */}
               <CPagination aria-label="Pagination">

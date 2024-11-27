@@ -49,7 +49,10 @@ const Cars = () => {
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
-    setCarsData({ ...carsData, [id]: value });
+    setCarsData({
+      ...carsData,
+      [id]: id === 'type_cars_id' || id === 'prestataire_id' ? parseInt(value, 10) : value,
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -73,7 +76,7 @@ const Cars = () => {
           Type_carsDto: {
             id: carsData.type_cars_id
           },
-          PrestataireDto: {
+          PrestaitaireDto: {
             id: carsData.prestataire_id
           }
         };

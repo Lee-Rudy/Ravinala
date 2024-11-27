@@ -50,7 +50,11 @@ namespace package_cars_controller
                                                     typeCar = typeCar.type_cars,
                                                     prestataire = prestataire.prestataire,
                                                     debutContrat = prestataire.debut_contrat,
-                                                    finContrat = prestataire.fin_contrat
+                                                    finContrat = prestataire.fin_contrat,
+                                                    est_actif = car.est_actif,
+                                                    litre_consommation = car.litre_consommation,
+                                                    km_consommation = car.km_consommation,
+                                                    prix_consommation = car.prix_consommation
                                                 }).ToListAsync();
 
                     return Ok(carsWithDetails);
@@ -79,13 +83,39 @@ namespace package_cars_controller
             // }
             // }
 
-            [HttpPost ("ajout")]
+
+
+
+            // {
+            //   "CarsDto": {
+            //     "nom_car": "Car1",
+            //     "immatriculation": "0228TBH",
+            //     "nombre_place": 32,
+            //     "litre_consommation": 14,
+            //     "km_consommation": 100,
+            //     "prix_consommation": 80000,
+            //     "type_carburant": "Gasoil"
+            //   },
+            //   "PrestaitaireDto": {
+            //     "id": 1
+            //   },
+            //   "Type_carsDto": {
+            //     "id": 1
+            //   }
+            // }
+
+            [HttpPost("ajout")]
             public async Task<ActionResult<Cars>> addCars([FromBody] CarsRequest request)
             {
+                Console.WriteLine($"Nom car : {request.CarsDto.nom_car}");
+                Console.WriteLine($"Prestataire ID : {request.PrestaitaireDto.id}"); //PrestaitaireDto "misy i supplémentaire"
+                Console.WriteLine($"Type car ID : {request.Type_carsDto.id}");
+
                 if (!ModelState.IsValid)
                 {
-                    var errors = ModelState.Values.SelectMany(ValidateAntiForgeryTokenAttribute => ValidateAntiForgeryTokenAttribute.Errors).Select(errors => errors.ErrorMessage);
-
+                    var errors = ModelState.Values
+                                            .SelectMany(v => v.Errors)
+                                            .Select(e => e.ErrorMessage);
                     return BadRequest(new { Errors = errors });
                 }
 
@@ -101,12 +131,11 @@ namespace package_cars_controller
                         prix_consommation = request.CarsDto.prix_consommation,
                         type_carburant = request.CarsDto.type_carburant,
                         prestataire_id = request.PrestaitaireDto.id,
-                        type_cars_id = request.Type_carsDto.id
+                        type_cars_id = request.Type_carsDto.id,
                     };
 
-                    // Adding car
+                    // Ajouter la voiture dans la base de données
                     _context.Cars_instance.Add(car);
-
                     await _context.SaveChangesAsync();
 
                     return Ok("Cars ajouté avec succès !");
@@ -116,8 +145,7 @@ namespace package_cars_controller
                     return StatusCode(500, $"Erreur du serveur: {ex.Message}");
                 }
             }
-
-        }
+                    }
 
 
     }

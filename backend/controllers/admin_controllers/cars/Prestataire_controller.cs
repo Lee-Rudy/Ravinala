@@ -44,11 +44,29 @@ namespace package_prestataire_controller
         [HttpPost("ajouter")]
         public async Task<ActionResult<Prestataire>> CreatePrestataire(Prestataire prestataire)
         {
+            // Vérification des données
+            if (string.IsNullOrWhiteSpace(prestataire.prestataire))
+            {
+                return BadRequest("Le nom du prestataire est obligatoire.");
+            }
+
+            if (!prestataire.debut_contrat.HasValue || !prestataire.fin_contrat.HasValue)
+            {
+                return BadRequest("Les dates de début et de fin du contrat sont obligatoires.");
+            }
+
+            if (prestataire.debut_contrat.Value > prestataire.fin_contrat.Value)
+            {
+                return BadRequest("La date de début du contrat ne peut pas être postérieure à la date de fin.");
+            }
+
+            // Ajout dans la base de données
             _context.Prestataire_instance.Add(prestataire);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPrestataireById), new { id = prestataire.id }, prestataire);
         }
+
 
         // Update prestataire
         [HttpPut("update/{id}")]

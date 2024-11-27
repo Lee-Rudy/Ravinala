@@ -51,18 +51,27 @@ const Prestataire = () => {
   // Fonction pour ajouter ou mettre à jour un prestataire
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Construire les données dynamiquement en fonction de selectedPrestataire
     const data = {
-      id: selectedPrestataire, // Assurez-vous d'inclure l'ID ici pour l'update
       prestataire: nomPrestataire,
       debut_contrat: debutContrat,
       fin_contrat: finContrat,
     };
   
+    // Inclure l'id uniquement pour les mises à jour
+    if (selectedPrestataire) {
+      data.id = selectedPrestataire;
+    }
+  
+    console.log("Données envoyées :", JSON.stringify(data, null, 2)); // Débogage
+  
     try {
       if (selectedPrestataire) {
-        console.log("selectedPrestataire ID pour update:", selectedPrestataire);
+        // Requête PUT pour la mise à jour
         await axios.put(`${baseURL}/api/prestataire/update/${selectedPrestataire}`, data);
       } else {
+        // Requête POST pour l'ajout
         await axios.post(`${baseURL}/api/prestataire/ajouter`, data);
       }
       resetForm();
@@ -71,6 +80,8 @@ const Prestataire = () => {
       console.error("Erreur lors de l'ajout ou de la mise à jour du prestataire :", error.response?.data || error);
     }
   };
+  
+  
   
   
 
