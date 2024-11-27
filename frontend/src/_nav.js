@@ -32,13 +32,27 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'PLanning',
+    name: 'Historique',
     icon: <CIcon icon={cilHistory} customClassName="nav-icon" style={{
       color: '#45B48E',
-    }} />,
-    component: CNavItem,
-        name: 'Historique',
+    }}/>,
+    
+    items: [
+      {
+        component: CNavItem,
+        name: 'historique',
         to: '/historique',
+        style: { color: '#45B48E' },
+
+      },
+      {
+        component: CNavItem,
+        name: 'historique des cars',
+        to: '/historique_cars',
+        style: { color: '#45B48E' },
+
+      },
+    ],
   },
 
   {

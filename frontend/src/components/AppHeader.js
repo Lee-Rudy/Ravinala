@@ -58,7 +58,8 @@ const AppHeader = () => {
 
     const interval = setInterval(() => {
       fetchNotifications();
-    }, 60000); // 60 secondes //aza hadino ny manova an'ito pour intérroger le serveur
+    }, 600000); // 60 secondes //aza hadino ny manova an'ito pour intérroger le serveur 
+    //3000 = 30s
 
     return () => clearInterval(interval);
   }, []);

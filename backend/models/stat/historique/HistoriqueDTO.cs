@@ -41,4 +41,66 @@ namespace package_historique
         public DateTime RecuLeDate { get; set; }
         public TimeSpan RecuLeTime { get; set; }
     }
+
+    //historique des cars 
+    public class BtnResponseDTO
+    {
+        public int Id {get;set;}
+        public DateTime DatetimeDepart {get;set;}
+
+        public TimeSpan HeureDepart { get; set; }
+
+
+        public DateTime DatetimeArrivee {get;set;}
+
+        public TimeSpan HeureArrivee { get; set; }
+
+        public string NomVoiture {get;set;}
+
+        public DateTime RecuLeDate { get; set; }
+
+
+        public TimeSpan RecuLeTime { get; set; }
+    }
+
+    public class KmMatinResponseDTO 
+    {
+        public int Id {get;set;}
+
+        public string Depart {get;set;}
+
+        public string Fin {get;set;}
+
+        public DateTime DatetimeMatin {get; set;}
+
+        public TimeSpan HeureMatin { get; set; }
+
+
+        public string NomVoiture {get;set;}
+
+        public DateTime RecuLeDate { get; set; }
+
+
+        public TimeSpan RecuLeTime { get; set; }
+    }
+
+     public class KmSoirResponseDTO 
+    {
+        public int Id {get;set;}
+
+        public string Depart {get;set;}
+
+        public string Fin {get;set;}
+
+        public DateTime DatetimeSoir {get; set;}
+
+        public TimeSpan HeureSoir { get; set; }
+
+        public string NomVoiture {get;set;}
+
+        public DateTime RecuLeDate { get; set; }
+
+
+        public TimeSpan RecuLeTime { get; set; }
+    }
 }

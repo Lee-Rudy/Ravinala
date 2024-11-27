@@ -32,38 +32,39 @@ namespace package_cars_controller
             }
 
             [HttpGet("liste_type_cars_prestataire")]
-            public async Task<ActionResult> GetCarsTypecarsPrestataire()
-            {
-                try
-                {
-                    // Combine Cars, TypeCars, and Prestataire using joins
-                    var carsWithDetails = await (from car in _context.Cars_instance
-                                                join typeCar in _context.Type_cars_instance
-                                                on car.type_cars_id equals typeCar.id
-                                                join prestataire in _context.Prestataire_instance
-                                                on car.prestataire_id equals prestataire.id
-                                                select new
-                                                {
-                                                    nomCar = car.nom_car,
-                                                    immatriculation = car.immatriculation,
-                                                    nombrePlace = car.nombre_place,
-                                                    typeCar = typeCar.type_cars,
-                                                    prestataire = prestataire.prestataire,
-                                                    debutContrat = prestataire.debut_contrat,
-                                                    finContrat = prestataire.fin_contrat,
-                                                    est_actif = car.est_actif,
-                                                    litre_consommation = car.litre_consommation,
-                                                    km_consommation = car.km_consommation,
-                                                    prix_consommation = car.prix_consommation
-                                                }).ToListAsync();
+public async Task<ActionResult> GetCarsTypecarsPrestataire()
+{
+    try
+    {
+        var carsWithDetails = await (from car in _context.Cars_instance
+                                     join typeCar in _context.Type_cars_instance
+                                     on car.type_cars_id equals typeCar.id
+                                     join prestataire in _context.Prestataire_instance
+                                     on car.prestataire_id equals prestataire.id
+                                     select new
+                                     {
+                                         id = car.id, // Assurez-vous que l'ID est inclus
+                                         nomCar = car.nom_car,
+                                         immatriculation = car.immatriculation,
+                                         nombrePlace = car.nombre_place,
+                                         typeCar = typeCar.type_cars,
+                                         prestataire = prestataire.prestataire,
+                                         debutContrat = prestataire.debut_contrat,
+                                         finContrat = prestataire.fin_contrat,
+                                         est_actif = car.est_actif,
+                                         litre_consommation = car.litre_consommation,
+                                         km_consommation = car.km_consommation,
+                                         prix_consommation = car.prix_consommation
+                                     }).ToListAsync();
 
-                    return Ok(carsWithDetails);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Erreur serveur: {ex.Message}");
-                }
-            }
+        return Ok(carsWithDetails);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Erreur serveur: {ex.Message}");
+    }
+}
+
 
 
             //add cars
@@ -145,7 +146,77 @@ namespace package_cars_controller
                     return StatusCode(500, $"Erreur du serveur: {ex.Message}");
                 }
             }
-                    }
 
 
+
+//http://localhost:5218/api/cars/update/9
+//             {
+//   "CarsDto": {
+//     "nom_car": "Car4",
+//     "immatriculation": "1234XYZ",
+//     "nombre_place": 20,
+//     "litre_consommation": 15,
+//     "km_consommation": 120,
+//     "prix_consommation": 90000,
+//     "type_carburant": "Essence"
+//   },
+//   "PrestaitaireDto": {
+//     "id": 2
+//   },
+//   "Type_carsDto": {
+//     "id": 3
+//   }
+// }
+
+
+            [HttpPut("update/{id}")]
+public async Task<IActionResult> UpdateCars(int id, [FromBody] CarsRequest request)
+{
+    if (!ModelState.IsValid)
+    {
+        var errors = ModelState.Values
+                                .SelectMany(v => v.Errors)
+                                .Select(e => e.ErrorMessage);
+        return BadRequest(new { Errors = errors });
     }
+
+    try
+    {
+        var car = await _context.Cars_instance.FindAsync(id);
+        if (car == null)
+        {
+            return NotFound($"Cars avec l'ID {id} n'a pas été trouvé.");
+        }
+
+        // Mettre à jour les propriétés du véhicule
+        car.nom_car = request.CarsDto.nom_car;
+        car.immatriculation = request.CarsDto.immatriculation;
+        car.nombre_place = request.CarsDto.nombre_place;
+        car.litre_consommation = request.CarsDto.litre_consommation;
+        car.km_consommation = request.CarsDto.km_consommation;
+        car.prix_consommation = request.CarsDto.prix_consommation;
+        car.type_carburant = request.CarsDto.type_carburant;
+        car.est_actif = request.CarsDto.est_actif; // Mise à jour du statut
+        car.prestataire_id = request.PrestaitaireDto.id;
+        car.type_cars_id = request.Type_carsDto.id;
+
+        // Mettre à jour l'entité dans le contexte
+        _context.Cars_instance.Update(car);
+        await _context.SaveChangesAsync();
+
+        return Ok("Véhicule mis à jour avec succès !");
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Erreur du serveur: {ex.Message}");
+    }
+}
+
+
+
+            
+
+
+        }
+        
+}

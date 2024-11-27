@@ -125,6 +125,8 @@ const Planning = React.lazy(()=> import('src/admin/planning/Planning'))
 
 //historique
 const Historique = React.lazy(()=> import('src/admin/historique/Historique'))
+const HistoriqueCars = React.lazy(()=> import('src/admin/historique/HistoriqueCars'))
+
 
   //statistiques
   //statistiques usagers
@@ -210,6 +212,8 @@ const routes = [
 
   //historique
   {path:'historique', name: 'historique', element:Historique},
+  {path:'historique_cars', name: 'historique', element:HistoriqueCars},
+
 
 
   //statistiques
