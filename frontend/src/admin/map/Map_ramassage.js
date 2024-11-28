@@ -205,11 +205,11 @@ const Map_ramassage = () => {
                     </CNavLink>
                 </Link>
                 </CNavItem> */}
-                <CNavItem>
+                {/* <CNavItem>
                     <CNavLink href="#" disabled>
                         Navigation
                     </CNavLink>
-                </CNavItem>
+                </CNavItem> */}
             </CNav>
 
             <div className="mb-3">

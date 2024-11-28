@@ -135,10 +135,16 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Register',
-        to: '/register',
+        name: 'Login cars',
+        to: '/login_cars',
         style: { color: '#45B48E' },
       },
+      // {
+      //   component: CNavItem,
+      //   name: 'Register',
+      //   to: '/register',
+      //   style: { color: '#45B48E' },
+      // },
       // {
       //   component: CNavItem,
       //   name: 'Error 404',

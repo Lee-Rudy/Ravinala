@@ -54,7 +54,8 @@ public async Task<ActionResult> GetCarsTypecarsPrestataire()
                                          est_actif = car.est_actif,
                                          litre_consommation = car.litre_consommation,
                                          km_consommation = car.km_consommation,
-                                         prix_consommation = car.prix_consommation
+                                         prix_consommation = car.prix_consommation,
+                                         type_carburant = car.type_carburant
                                      }).ToListAsync();
 
         return Ok(carsWithDetails);

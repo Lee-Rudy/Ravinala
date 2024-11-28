@@ -34,7 +34,7 @@ import CIcon from '@coreui/icons-react';
 import { cilMagnifyingGlass } from '@coreui/icons';
 
 import { Link } from 'react-router-dom';
-import { color } from 'html2canvas/dist/types/css/types/color';
+// import { color } from 'html2canvas/dist/types/css/types/color';
 
 const Cars_list = () => {
   // Variables d'état
@@ -614,6 +614,10 @@ const Cars_list = () => {
                           <li>
                             <i className="bi bi-person-fill"></i>
                             <strong>Fin contrat :</strong> {selectedCar.finContrat ? selectedCar.finContrat.slice(0, 10) : ''}
+                          </li>
+                          <li>
+                            <i className="bi bi-person-fill"></i>
+                            <strong>Carburant :</strong> {selectedCar.type_carburant ? selectedCar.type_carburant.slice(0, 10) : ''}
                           </li>
                           {/* Ajoutez d'autres détails si nécessaire */}
                         </ul>
