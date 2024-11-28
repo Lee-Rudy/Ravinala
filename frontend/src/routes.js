@@ -62,6 +62,9 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 //dashboard admin
 const Dashboard_admin = React.lazy(()=> import('src/admin/dashboard_admin/Dashboard_admin'))
 
+//login_cars
+const Login_cars = React.lazy(() => import('src/user_tablette/login_cars/Login_cars'))
+
 //admin path routes
 const Admin = React.lazy(() => import('src/admin/Admin'))
 
@@ -126,6 +129,9 @@ const Planning = React.lazy(()=> import('src/admin/planning/Planning'))
 //historique
 const Historique = React.lazy(()=> import('src/admin/historique/Historique'))
 const HistoriqueCars = React.lazy(()=> import('src/admin/historique/HistoriqueCars'))
+const Historique_comptage = React.lazy(()=> import('src/admin/historique/Historique_comptage'))
+
+
 
 
   //statistiques
@@ -156,6 +162,9 @@ const routes = [
 
   //admin path
   { path: '/admin', name: 'Admin', element: Admin },
+
+  //login_cars
+  {path: '/login_cars' , name: 'Gestion des utilisateurs des cars', element: Login_cars},
 
   //dashboard
   { path: '/dashboard_admin', name: 'Admin', element: Dashboard_admin },
@@ -213,8 +222,9 @@ const routes = [
   //historique
   {path:'historique', name: 'historique', element:Historique},
   {path:'historique_cars', name: 'historique', element:HistoriqueCars},
+  {path:'historique_comptage', name: 'historique', element:Historique_comptage},
 
-
+  
 
   //statistiques
   //statistiques usagers

@@ -123,6 +123,43 @@ namespace package_login_cars.Controllers
                 user = new { user.Id, user.nom_car_login }
             });
         }
+
+
+        ///<summary>
+        /// Ajoute un nouvel enregistrement Login_cars.
+        ///</summary>
+        [HttpPost("auth/create")]
+        public async Task<ActionResult<Login_cars>> AddLogin_car([FromBody] Login_cars newLoginCar)
+        {
+            if (string.IsNullOrEmpty(newLoginCar.nom_car_login) || string.IsNullOrEmpty(newLoginCar.mot_de_passe))
+            {
+                return BadRequest("Le nom et le mot de passe sont obligatoires.");
+            }
+
+            _context.Login_cars_instance.Add(newLoginCar);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetLogin_carsById), new { id = newLoginCar.Id }, newLoginCar);
+        }
+
+        ///<summary>
+        /// Supprime un enregistrement Login_cars par son ID.
+        ///</summary>
+        [HttpDelete("auth/delete/{id}")]
+        public async Task<IActionResult> DeleteLogin_car(int id)
+        {
+            var car_login = await _context.Login_cars_instance.FindAsync(id);
+
+            if (car_login == null)
+            {
+                return NotFound("Identifiant introuvable");
+            }
+
+            _context.Login_cars_instance.Remove(car_login);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 
     /// <summary>

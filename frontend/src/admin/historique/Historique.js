@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {
     CButton,
@@ -19,9 +19,10 @@ import {
     CPagination,
     CPaginationItem,
     CFormSelect,
+    CAlert,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilMagnifyingGlass,cilCalendar,cilReload,cilBookmark,cilSearch } from '@coreui/icons';
+import { cilMagnifyingGlass, cilCalendar, cilReload, cilBookmark, cilSearch } from '@coreui/icons';
 
 const Historique = () => {
     const [pointagesRamassage, setPointagesRamassage] = useState([]);
@@ -265,6 +266,14 @@ const Historique = () => {
         return uniqueCarNames;
     };
 
+    // Fonction pour déterminer si un imprévu est un ramassage ou un dépôt
+    const isRamassage = (item) => {
+        const [hours, minutes, seconds] = item.heureImprevu.split(':').map(Number);
+        const imprevuTime = new Date(1970, 0, 1, hours, minutes, seconds);
+        const thresholdTime = new Date(1970, 0, 1, 15, 30, 0); // 15:30
+        return imprevuTime < thresholdTime;
+    };
+
     // Appliquer les filtres aux données sélectionnées
     const getFilteredData = () => {
         if (!selectedDate) return { ramassages: [], depots: [], imprévus: [] };
@@ -312,6 +321,34 @@ const Historique = () => {
     };
 
     const filteredData = getFilteredData();
+
+    // Calcul des totaux après sélection d'une date
+    const totals = useMemo(() => {
+        if (!selectedDate) return null;
+
+        const ramassagePresent = selectedDate.ramassages.filter(r => r.estPresent).length;
+        const ramassageAbsent = selectedDate.ramassages.length - ramassagePresent;
+
+        const depotPresent = selectedDate.depots.filter(d => d.estPresent).length;
+        const depotAbsent = selectedDate.depots.length - depotPresent;
+
+        const imprévusRamassage = selectedDate.imprévus.filter(item => isRamassage(item)).length;
+        const imprévusDepot = selectedDate.imprévus.length - imprévusRamassage;
+
+        const totalPresences = ramassagePresent + depotPresent + imprévusRamassage + imprévusDepot;
+        const totalMax = selectedDate.ramassages.length + selectedDate.depots.length + selectedDate.imprévus.length;
+
+        return {
+            ramassagePresent,
+            ramassageAbsent,
+            depotPresent,
+            depotAbsent,
+            imprévusRamassage,
+            imprévusDepot,
+            totalPresences,
+            totalMax,
+        };
+    }, [selectedDate]);
 
     if (loading) {
         return <div>Chargement...</div>;
@@ -365,157 +402,154 @@ const Historique = () => {
 
             {/* Sections d'Historique avec Pagination */}
             <CRow>
-            <CCol xs={12} md={4} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
-            <CCard
-  className="shadow-sm"
-  style={{
-    position: 'fixed',
-    top: '50',
-    left: '100',
-    height: '72vh', // Occupe toute la hauteur de la fenêtre
-    width: '360px', // Largeur ajustable selon vos besoins
-    overflowY: 'auto', // Permet de faire défiler le contenu si nécessaire
-    backgroundColor: 'white', // Assure un fond blanc
-    zIndex: '1050', // Garantit qu'il reste au-dessus d'autres éléments
-    borderRight: '1px solid #ddd', // Optionnel : ligne de séparation
-  }}
->
-  <CCardHeader
-    className="text-white text-center"
-    style={{
-      fontSize: '1.25rem',
-      backgroundColor: '#45B48E',
-    }}
-  >
-    <CIcon icon={cilCalendar} className="me-2" />
-    <strong>Dates Disponibles</strong>
-  </CCardHeader>
+                <CCol xs={12} md={4} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+                    <CCard
+                        className="shadow-sm"
+                        style={{
+                            position: 'fixed',
+                            top: '50',
+                            left: '100',
+                            height: '72vh', // Occupe toute la hauteur de la fenêtre
+                            width: '360px', // Largeur ajustable selon vos besoins
+                            overflowY: 'auto', // Permet de faire défiler le contenu si nécessaire
+                            backgroundColor: 'white', // Assure un fond blanc
+                            zIndex: '1050', // Garantit qu'il reste au-dessus d'autres éléments
+                            borderRight: '1px solid #ddd', // Optionnel : ligne de séparation
+                        }}
+                    >
+                        <CCardHeader
+                            className="text-white text-center"
+                            style={{
+                                fontSize: '1.25rem',
+                                backgroundColor: '#45B48E',
+                            }}
+                        >
+                            <CIcon icon={cilCalendar} className="me-2" />
+                            <strong>Dates Disponibles</strong>
+                        </CCardHeader>
 
-  <CCardBody>
-    {/* Barre de Recherche */}
-    <div className="mb-3">
-      <CInputGroup>
-        <CInputGroupText
-          style={{
-            backgroundColor: '#45B48E',
-            color: 'white',
-            border: 'none',
-          }}
-        >
-          <CIcon icon={cilMagnifyingGlass} />
-        </CInputGroupText>
-        <input
-          type="date"
-          value={searchDate}
-          onChange={(e) => setSearchDate(e.target.value)}
-          className="form-control border-0"
-          placeholder="Sélectionnez une date"
-          style={{
-            borderRadius: '0 0.25rem 0.25rem 0',
-            boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-          }}
-        />
-      </CInputGroup>
-    </div>
+                        <CCardBody>
+                            {/* Barre de Recherche */}
+                            <div className="mb-3">
+                                <CInputGroup>
+                                    <CInputGroupText
+                                        style={{
+                                            backgroundColor: '#45B48E',
+                                            color: 'white',
+                                            border: 'none',
+                                        }}
+                                    >
+                                        <CIcon icon={cilMagnifyingGlass} />
+                                    </CInputGroupText>
+                                    <input
+                                        type="date"
+                                        value={searchDate}
+                                        onChange={(e) => setSearchDate(e.target.value)}
+                                        className="form-control border-0"
+                                        placeholder="Sélectionnez une date"
+                                        style={{
+                                            borderRadius: '0 0.25rem 0.25rem 0',
+                                            boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                                        }}
+                                    />
+                                </CInputGroup>
+                            </div>
 
-    {/* Boutons d'Action */}
-    <div className="d-flex justify-content-between">
-      <CButton
-        style={{
-          backgroundColor: '#45B48E',
-          color: 'white',
-          borderRadius: '0.25rem',
-          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-          flex: 1,
-          marginRight: '0.5rem',
-        }}
-        onClick={handleSearch}
-      >
-        <CIcon icon={cilSearch} className="me-2" />
-        Rechercher
-      </CButton>
-      <CButton
-        style={{
-          backgroundColor: '#6c757d',
-          color: 'white',
-          borderRadius: '0.25rem',
-          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-          flex: 1,
-        }}
-        onClick={() => {
-          setSearchDate('');
-          handleSearch();
-        }}
-      >
-        <CIcon icon={cilReload} className="me-2" />
-        Réinitialiser
-      </CButton>
-    </div>
+                            {/* Boutons d'Action */}
+                            <div className="d-flex justify-content-between">
+                                <CButton
+                                    style={{
+                                        backgroundColor: '#45B48E',
+                                        color: 'white',
+                                        borderRadius: '0.25rem',
+                                        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                                        flex: 1,
+                                        marginRight: '0.5rem',
+                                    }}
+                                    onClick={handleSearch}
+                                >
+                                    <CIcon icon={cilSearch} className="me-2" />
+                                    Rechercher
+                                </CButton>
+                                <CButton
+                                    style={{
+                                        backgroundColor: '#6c757d',
+                                        color: 'white',
+                                        borderRadius: '0.25rem',
+                                        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+                                        flex: 1,
+                                    }}
+                                    onClick={() => {
+                                        setSearchDate('');
+                                        handleSearch();
+                                    }}
+                                >
+                                    <CIcon icon={cilReload} className="me-2" />
+                                    Réinitialiser
+                                </CButton>
+                            </div>
 
-    {/* Liste des Dates */}
-    {Object.entries(categories).map(([category, dates]) =>
-      dates.length > 0 ? (
-        <div key={category} className="mb-4">
-          <h5 style={{ color: '#45B48E' }}>
-            <CIcon icon={cilBookmark} className="me-2" />
-            {category}
-          </h5>
-          {dates.map((dateItem, index) => {
-            const isSelected = selectedDate?.date === dateItem.date;
-            return (
-              <CCard
-                key={`${dateItem.date}-${index}`}
-                className={`mb-3 ${isSelected ? 'shadow' : ''}`}
-                style={{
-                  border: isSelected ? `2px solid #45B48E` : '1px solid #ddd',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  borderRadius: '0.5rem',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow =
-                    '0 4px 10px rgba(0, 0, 0, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = isSelected
-                    ? '0 0 8px rgba(69, 180, 142, 0.5)'
-                    : '0 2px 5px rgba(0, 0, 0, 0.1)';
-                }}
-                onClick={() => handleDateClick(dateItem.date)}
-              >
-                <CCardHeader
-                  className={`text-center ${isSelected ? 'text-white' : ''}`}
-                  style={{
-                    backgroundColor: isSelected ? '#45B48E' : 'white',
-                    fontSize: '1rem',
-                    padding: '10px',
-                    color: isSelected ? 'white' : '#45B48E',
-                  }}
-                >
-                  {new Date(dateItem.date).toLocaleDateString('fr-FR', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                  {isSelected && (
-                    <span className="badge bg-success ms-2">Sélectionné</span>
-                  )}
-                </CCardHeader>
-              </CCard>
-            );
-          })}
-        </div>
-      ) : null
-    )}
-  </CCardBody>
-</CCard>
-
-            </CCol>
-
-
+                            {/* Liste des Dates */}
+                            {Object.entries(categories).map(([category, dates]) =>
+                                dates.length > 0 ? (
+                                    <div key={category} className="mb-4">
+                                        <h5 style={{ color: '#45B48E' }}>
+                                            <CIcon icon={cilBookmark} className="me-2" />
+                                            {category}
+                                        </h5>
+                                        {dates.map((dateItem, index) => {
+                                            const isSelected = selectedDate?.date === dateItem.date;
+                                            return (
+                                                <CCard
+                                                    key={`${dateItem.date}-${index}`}
+                                                    className={`mb-3 ${isSelected ? 'shadow' : ''}`}
+                                                    style={{
+                                                        border: isSelected ? `2px solid #45B48E` : '1px solid #ddd',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s, box-shadow 0.2s',
+                                                        borderRadius: '0.5rem',
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1.02)';
+                                                        e.currentTarget.style.boxShadow =
+                                                            '0 4px 10px rgba(0, 0, 0, 0.2)';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.transform = 'scale(1)';
+                                                        e.currentTarget.style.boxShadow = isSelected
+                                                            ? '0 0 8px rgba(69, 180, 142, 0.5)'
+                                                            : '0 2px 5px rgba(0, 0, 0, 0.1)';
+                                                    }}
+                                                    onClick={() => handleDateClick(dateItem.date)}
+                                                >
+                                                    <CCardHeader
+                                                        className={`text-center ${isSelected ? 'text-white' : ''}`}
+                                                        style={{
+                                                            backgroundColor: isSelected ? '#45B48E' : 'white',
+                                                            fontSize: '1rem',
+                                                            padding: '10px',
+                                                            color: isSelected ? 'white' : '#45B48E',
+                                                        }}
+                                                    >
+                                                        {new Date(dateItem.date).toLocaleDateString('fr-FR', {
+                                                            weekday: 'long',
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                        })}
+                                                        {isSelected && (
+                                                            <span className="badge bg-success ms-2">Sélectionné</span>
+                                                        )}
+                                                    </CCardHeader>
+                                                </CCard>
+                                            );
+                                        })}
+                                    </div>
+                                ) : null
+                            )}
+                        </CCardBody>
+                    </CCard>
+                </CCol>
 
                 {/* Affichage des Détails pour la Date Sélectionnée */}
                 <CCol xs={12} md={8}>
@@ -525,6 +559,94 @@ const Historique = () => {
                                 <h5>Détails pour le {new Date(selectedDate.date).toLocaleDateString('fr-FR')}</h5>
                             </CCardHeader>
                             <CCardBody>
+                                {/* Section des Totaux */}
+                                <CRow className="mb-4">
+  <CCol>
+    <CCard className="mb-3 shadow-sm" style={{ border: '1px solid #45B48E' }}>
+      <CCardHeader
+        style={{
+          backgroundColor: '#45B48E',
+          color: 'white',
+          fontWeight: 'bold',
+          fontSize: '1.2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <CIcon icon={cilMagnifyingGlass} className="me-2" />
+        Résumé des Pointages
+      </CCardHeader>
+      <CCardBody style={{ backgroundColor: '#f9f9f9', color: '#343a40' }}>
+        {/* Row 1 */}
+        <CRow className="mb-3">
+          <CCol md={6}>
+            <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
+              Ramassage Présent :
+            </span>{' '}
+            <strong>{totals.ramassagePresent}</strong> / {selectedDate.ramassages.length}
+          </CCol>
+          <CCol md={6}>
+            <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
+              Ramassage Absent :
+            </span>{' '}
+            <strong>{totals.ramassageAbsent}</strong>
+          </CCol>
+        </CRow>
+
+        {/* Row 2 */}
+        <CRow className="mb-3">
+          <CCol md={6}>
+            <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
+              Dépôt Présent :
+            </span>{' '}
+            <strong>{totals.depotPresent}</strong> / {selectedDate.depots.length}
+          </CCol>
+          <CCol md={6}>
+            <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
+              Dépôt Absent :
+            </span>{' '}
+            <strong>{totals.depotAbsent}</strong>
+          </CCol>
+        </CRow>
+
+        {/* Row 3 */}
+        <CRow className="mb-3">
+          <CCol md={6}>
+            <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
+              Imprévus Ramassage :
+            </span>{' '}
+            <strong>{totals.imprévusRamassage}</strong>
+          </CCol>
+          <CCol md={6}>
+            <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
+              Imprévus Dépôt :
+            </span>{' '}
+            <strong>{totals.imprévusDepot}</strong>
+          </CCol>
+        </CRow>
+
+        {/* Total Présences */}
+        <CRow className="mt-3">
+          <CCol>
+            <CAlert
+              style={{
+                backgroundColor: '#17A2B8',
+                color: 'white',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+              }}
+            >
+              <strong>Total Présences :</strong> {totals.totalPresences} /{' '}
+              {totals.totalMax}
+            </CAlert>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
+  </CCol>
+</CRow>
+
+
                                 {/* Section des Filtres */}
                                 <CRow className="mb-4">
                                     <CCol md={4} className="mb-2">
@@ -680,8 +802,6 @@ const Historique = () => {
                                     ) : (
                                         <p>Aucun pointage imprévu correspondant aux filtres.</p>
                                     )}
-
-
                                     </CCol>
                                 </CRow>
 

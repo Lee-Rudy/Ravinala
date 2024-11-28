@@ -52,6 +52,13 @@ const _nav = [
         style: { color: '#45B48E' },
 
       },
+      {
+        component: CNavItem,
+        name: 'historique de comptage',
+        to: '/historique_comptage',
+        style: { color: '#45B48E' },
+
+      },
     ],
   },
 
