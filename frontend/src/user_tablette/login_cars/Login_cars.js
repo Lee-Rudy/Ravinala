@@ -12,6 +12,10 @@ import {
   CCardBody,
   CCardHeader,
   CForm,
+  CToast,
+  CToastHeader,
+  CToastBody,
+  CToaster,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilUser, cilSave, cilPencil, cilTrash, cilLockLocked } from '@coreui/icons';
@@ -23,6 +27,10 @@ const Login_cars = () => {
   const [showPassword, setShowPassword] = useState(false); // État pour contrôler la visibilité du mot de passe
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+  // États pour le toast
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   // Fetch users
   useEffect(() => {
@@ -46,8 +54,12 @@ const Login_cars = () => {
       axios.post(`${baseURL}/api/cars/auth/create`, newUser)
         .then(() => {
           alert('Utilisateur créé avec succès.');
+          // setToastMessage('Utilisateur créé avec succès.');
+          // setToastVisible(true);
           setNewUser({ nom_car_login: '', mot_de_passe: '' });
           window.location.reload();
+          // Ajoute le nouvel utilisateur à la liste
+        // setUsers([...users, response.data]);
         })
         .catch((error) => console.error(error));
     }
@@ -64,6 +76,27 @@ const Login_cars = () => {
 
   return (
     <CContainer>
+      <CToaster
+        position="top-end"
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1050,// eo ambony ny élément rehetra
+        }}
+      >
+      <CToast
+        visible={toastVisible}
+        onClose={() => setToastVisible(false)}
+        autohide={3000} //fermeture après 3 secondes
+        className="bg-success text-white"
+      >
+        <CToastHeader closeButton>
+          <strong className="me-auto">Succès</strong>
+        </CToastHeader>
+        <CToastBody>{toastMessage}</CToastBody>
+      </CToast>
+    </CToaster>
       <CRow className="mb-4">
         <CCol>
           <CCard>
