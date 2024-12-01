@@ -71,13 +71,15 @@ namespace package_push_controller
                 // Ajout des données de bouton
                 if (request.Btn != null && request.Btn.Any())
                 {
-                    var boutons = request.Btn.Select(b => new Btn_push
-                    {
-                        NomVoiture = b.NomVoiture,
-                        DatetimeDepart = b.DatetimeDepart,  // Enregistrer en tant que string
-                        DatetimeArrivee = b.DatetimeArrivee,  // Enregistrer en tant que string
-                        RecuLe = DateTime.Now
-                    }).ToList();
+                var boutons = request.Btn.Select(b => new Btn_push
+                {
+                    NomVoiture = b.NomVoiture,
+                    DatetimeDepart = b.DatetimeDepart == null ? null : b.DatetimeDepart.ToString(),
+                    DatetimeArrivee = b.DatetimeArrivee == null ? null : b.DatetimeArrivee.ToString(),
+                    RecuLe = DateTime.Now
+                                // Format standard pour stocker en string
+                }).ToList();
+
 
                     _context.BtnPushes_instance.AddRange(boutons);
                     _logger.LogInformation($"Ajout de {boutons.Count} boutons.");
@@ -89,6 +91,7 @@ namespace package_push_controller
                     var imprévus = request.PointageUsagersImprevu.Select(i => new Pointage_usagers_imprevu_push
                     {
                         Matricule = i.Matricule,
+                        nom = i.nom,
                         NomVoiture = i.NomVoiture,
                         DatetimeImprevu = i.DatetimeImprevu,  // Enregistrer en tant que string
                         RecuLe = DateTime.Now

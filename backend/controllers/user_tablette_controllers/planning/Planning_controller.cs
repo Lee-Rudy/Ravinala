@@ -171,7 +171,7 @@ namespace package_planning_controller
                     {
                         IdUsagers = combined.u.id,
                         Matricule = combined.u.matricule,
-                        NomUsager = combined.u.nom,
+                        NomUsager = combined.u.prenom,
                         // PrenomUsager = combined.u.prenom,
                         NomAxe = combined.a.axe,
                         // IdCar = c.id,
@@ -214,7 +214,7 @@ namespace package_planning_controller
                     {
                         IdUsagers = combined.u.id,
                         Matricule = combined.u.matricule,
-                        NomUsager = combined.u.nom,
+                        NomUsager = combined.u.prenom,
                         // PrenomUsager = combined.u.prenom,
                         NomAxe = combined.a.axe,
                         // IdCar = c.id,

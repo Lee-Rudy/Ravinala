@@ -9,9 +9,9 @@
 -- values ('ST-123', 'christina', 'car1', '2024-11-26T19:16:10Z', '1' ),
 --  ('ST-123', 'mikoja', 'car3', '2024-11-26T19:16:10Z', '1' );
 
-insert into pointage_ramassage_push(matricule, nomUsager, nomVoiture, datetime_ramassage, est_present) 
-values ('ST-126', 'jaques', 'car1', '2024-11-26T19:16:10Z', '1' ),
- ('ST-127', 'kojakoja', 'car3', '2024-11-26T19:16:10Z', '1' );
+-- insert into pointage_ramassage_push(matricule, nomUsager, nomVoiture, datetime_ramassage, est_present) 
+-- values ('ST-126', 'jaques', 'car1', '2024-11-26T19:16:10Z', '1' ),
+--  ('ST-127', 'kojakoja', 'car3', '2024-11-26T19:16:10Z', '1' );
 
 
 insert into pointage_ramassage_push(matricule, nomUsager, nomVoiture, datetime_ramassage, est_present) 

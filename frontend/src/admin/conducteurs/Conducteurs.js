@@ -206,7 +206,7 @@ const Conducteurs = () => {
                   ))}
                 </CTableBody>
               </CTable>
-              <CPagination aria-label="Page navigation example" className="mt-4">
+              <CPagination aria-label="Page navigation example" className="mt-4" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
             {/* Bouton Précédent */}
             <CPaginationItem
               disabled={currentPage === 1}

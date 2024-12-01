@@ -26,6 +26,7 @@ using iText.Layout.Properties;
 using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 
+//la date format avant : yyyy-MM-ddTHH:mm:ssZ
 
 // using QuestPDF.Fluent;
 // using QuestPDF.Helpers;
@@ -65,7 +66,7 @@ namespace package_push_controller.Controllers
                 // Parser DatetimeRamassage
                 bool isRamassageParsed = DateTime.TryParseExact(
                     p.DatetimeRamassage,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeRamassage);
@@ -109,7 +110,7 @@ namespace package_push_controller.Controllers
                 // Parser DatetimeDepot
                 bool isDepotParsed = DateTime.TryParseExact(
                     p.DatetimeDepot,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeDepot);
@@ -140,43 +141,64 @@ namespace package_push_controller.Controllers
         }
 
 
-        [HttpGet("imprevus")]
-        public async Task<ActionResult<IEnumerable<PointageImprevuResponseDTO>>> GetPointagesImprevus()
+       [HttpGet("imprevus")]
+public async Task<ActionResult<IEnumerable<PointageImprevuResponseDTO>>> GetPointagesImprevus()
+{
+    var pointages = await _context.PointageUsagersImprevuPushes_instance.ToListAsync();
+
+    var dtoList = pointages.Select(p =>
+    {
+        // Initialisation des variables par défaut
+        DateTime datetimeImprevu = DateTime.MinValue;
+        DateTime recuLeDate = DateTime.MinValue;
+        TimeSpan recuLeTime = TimeSpan.Zero;
+
+        // Parsing de DatetimeImprevu
+        bool isImprevuParsed = DateTime.TryParseExact(
+            p.DatetimeImprevu,
+            "yyyy-MM-ddTHH:mm:ss.ffffffZ",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+            out datetimeImprevu);
+
+        // Parsing de RecuLe
+        if (p.RecuLe != null)
         {
-            var pointages = await _context.PointageUsagersImprevuPushes_instance.ToListAsync();
-
-            var dtoList = pointages.Select(p =>
-            {
-                // Parser DatetimeImprevu
-                bool isImprevuParsed = DateTime.TryParseExact(
-                    p.DatetimeImprevu,
-                    "yyyy-MM-ddTHH:mm:ssZ",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
-                    out DateTime datetimeImprevu);
-
-                // Parser RecuLe
-                bool isRecuLeParsed = DateTime.TryParse(
-                    p.RecuLe.ToString("o"), // Assuming RecuLe is already DateTime
-                    out DateTime recuLeParsed);
-
-                return new PointageImprevuResponseDTO
-                {
-                    Id = p.Id,
-                    Matricule = p.Matricule,
-                    NomVoiture = p.NomVoiture,
-                    DateImprevu = isImprevuParsed ? datetimeImprevu.Date : DateTime.MinValue,
-                    HeureImprevu = isImprevuParsed ? datetimeImprevu.TimeOfDay : TimeSpan.Zero,
-                    RecuLeDate = isRecuLeParsed ? recuLeParsed.Date : DateTime.MinValue,
-                    RecuLeTime = isRecuLeParsed ? recuLeParsed.TimeOfDay : TimeSpan.Zero
-                };
-            })
-            .OrderBy(dto => dto.DateImprevu)
-            .ThenBy(dto => dto.HeureImprevu)
-            .ToList();
-
-            return Ok(dtoList);
+            recuLeDate = p.RecuLe.Date;
+            recuLeTime = p.RecuLe.TimeOfDay;
         }
+
+        // Déterminer le type d'imprévu basé sur l'heure
+        string typeImprevu = "matin"; // Valeur par défaut ramasasge
+        if (isImprevuParsed)
+        {
+            // Seuil : 15h30
+            TimeSpan seuilDepot = new TimeSpan(15, 30, 0);
+            if (datetimeImprevu.TimeOfDay >= seuilDepot)
+            {
+                typeImprevu = "soir";
+            }
+        }
+
+        // Construction du DTO
+        return new PointageImprevuResponseDTO
+        {
+            Id = p.Id,
+            Matricule = p.Matricule,
+            nom = p.nom,
+            NomVoiture = p.NomVoiture,
+            DateImprevu = isImprevuParsed ? datetimeImprevu.Date : DateTime.MinValue,
+            HeureImprevu = isImprevuParsed ? datetimeImprevu.ToString("HH:mm:ss") : string.Empty,
+            RecuLeDate = recuLeDate,
+            RecuLeTime = recuLeTime,
+            TypeImprevu = typeImprevu
+        };
+    }).ToList();
+
+    return Ok(dtoList);
+}
+
+
 
 
 
@@ -381,8 +403,8 @@ public async Task<IActionResult> ExportComptagePDF([FromQuery] string startDate,
     }
 
     // Convertir les dates en chaînes dans le même format que la base de données
-    string startString = start.ToString("yyyy-MM-ddTHH:mm:ssZ");
-    string endString = end.AddDays(1).AddTicks(-1).ToString("yyyy-MM-ddTHH:mm:ssZ");
+    string startString = start.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ");
+    string endString = end.AddDays(1).AddTicks(-1).ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ");
 
     // Récupérer les pointages de ramassage et dépôt dans la période en comparant les chaînes
     var ramassages = await _context.PointageRamassagePushes_instance

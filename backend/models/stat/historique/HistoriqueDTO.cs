@@ -1,5 +1,7 @@
 // DTOs/PointageImprevuResponseDTO.cs
 using System;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace package_historique
 {
@@ -31,16 +33,34 @@ namespace package_historique
     }
 
 
-    public class PointageImprevuResponseDTO
-    {
-        public int Id { get; set; }
-        public string Matricule { get; set; }
-        public string NomVoiture { get; set; }
-        public DateTime DateImprevu { get; set; }
-        public TimeSpan HeureImprevu { get; set; }
-        public DateTime RecuLeDate { get; set; }
-        public TimeSpan RecuLeTime { get; set; }
-    }
+
+
+public class PointageImprevuResponseDTO
+{
+    public int Id { get; set; }
+    public string Matricule { get; set; }
+    public string nom { get; set; }
+    public string NomVoiture { get; set; }
+    public DateTime DateImprevu { get; set; }
+    [JsonPropertyName("heureImprevu")]
+    public string HeureImprevu { get; set; } // Changer de TimeSpan à string
+    public DateTime RecuLeDate { get; set; }
+    public TimeSpan RecuLeTime { get; set; }
+    public string TypeImprevu { get; set; } // Nouveau champ
+}
+
+// public class PointageImprevuResponseDTO
+//     {
+//         public int Id { get; set; }
+//         public string Matricule { get; set; }
+//         public string nom { get; set; }
+//         public string NomVoiture { get; set; }
+//         public DateTime DateImprevu { get; set; }
+//         public TimeSpan HeureImprevu { get; set; }
+//         public DateTime RecuLeDate { get; set; }
+//         public TimeSpan RecuLeTime { get; set; }
+//     }
+
 
     //historique des cars 
     public class BtnResponseDTO

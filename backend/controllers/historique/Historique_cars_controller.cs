@@ -32,7 +32,7 @@ namespace package_push_controller.Controllers
                 // Parser DatetimeDepart
                 bool isDateDepartParsed = DateTime.TryParseExact(
                     p.DatetimeDepart,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeDepart);
@@ -45,7 +45,7 @@ namespace package_push_controller.Controllers
                 // Parser DatetimeArrivee
                 bool isDateArriveeParsed = DateTime.TryParseExact(
                     p.DatetimeArrivee,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeArrivee);
@@ -82,7 +82,7 @@ namespace package_push_controller.Controllers
                 // Parsing DatetimeMatin
                 bool isDatetimeMatinParsed = DateTime.TryParseExact(
                     p.DatetimeMatin,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeMatin);
@@ -122,7 +122,7 @@ namespace package_push_controller.Controllers
                 // Parsing DatetimeSoir
                 bool isDatetimeSoirParsed = DateTime.TryParseExact(
                     p.DatetimeSoir,
-                    "yyyy-MM-ddTHH:mm:ssZ",
+                    "yyyy-MM-ddTHH:mm:ss.ffffffZ",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeSoir);

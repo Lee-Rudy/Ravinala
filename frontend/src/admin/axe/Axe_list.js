@@ -159,7 +159,7 @@ const Axe_list = () => {
             </CTable>
 
             {/* Pagination */}
-            <CPagination align="center" aria-label="Pagination">
+            <CPagination align="center" aria-label="Pagination" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
               <CPaginationItem
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(currentPage - 1)}

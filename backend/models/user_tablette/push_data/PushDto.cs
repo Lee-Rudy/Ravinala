@@ -68,16 +68,19 @@ namespace package_push_controller.DTOs
         public string NomVoiture { get; set; }
 
         [JsonProperty("datetime_depart")]
-        public string? DatetimeDepart { get; set; } // Date en String
+        public string? DatetimeDepart { get; set; } // Date en String peut être null
 
         [JsonProperty("datetime_arrivee")]
-        public string? DatetimeArrivee { get; set; } // Date en String
+        public string? DatetimeArrivee { get; set; } // Date en String peut être null
     }
 
     public class PointageImprevuDTO
     {
         [JsonProperty("matricule")]
         public string Matricule { get; set; }
+
+        [JsonProperty("nom")]
+        public string nom { get; set; }
 
         [JsonProperty("nomVoiture")]
         public string NomVoiture { get; set; }

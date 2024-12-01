@@ -73,7 +73,7 @@ const TotalTauxPonctualite = ({ year }) => {
                   ) : error ? (
                     <h3 style={{ color: 'red' }}>{error}</h3>
                   ) : (
-                    <h3>{punctualityRate}%</h3>
+                    <h3>{punctualityRate.toFixed(2)}%</h3>
                   )}
                 </div>
               </CCardBody>

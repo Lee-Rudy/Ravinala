@@ -317,7 +317,7 @@ const Stat_usagers = () => {
                 </CTable>
 
                 {/* Pagination */}
-                <CPagination aria-label="Pagination" className="mt-3">
+                <CPagination aria-label="Pagination" className="mt-3" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
                   <CPaginationItem
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage(currentPage - 1)}

@@ -195,7 +195,7 @@ const Prestataire = () => {
         </CTable>
 
         {/* Pagination */}
-        <CPagination align="center" className="mt-3">
+        <CPagination align="center" className="mt-3" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
           <CPaginationItem
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

@@ -33,6 +33,7 @@ CREATE TABLE pointage_usagers_imprevu_push
 (
     id INTEGER IDENTITY(1,1) PRIMARY KEY NOT NULL,
     matricule NVARCHAR(MAX),
+    nom nvarchar(max), --new
     datetime_imprevu NVARCHAR(MAX),    -- Changer NVARCHAR en DATETIME pour assurer la cohérence
     nomVoiture NVARCHAR(MAX),
     recu_le DATETIME DEFAULT GETDATE()  -- Date actuelle par défaut

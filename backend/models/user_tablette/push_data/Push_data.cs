@@ -69,6 +69,7 @@ namespace package_push_data
 
     }
 
+    [Table("btn_push")]
     public class Btn_push
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -101,6 +102,9 @@ namespace package_push_data
 
         [Column("matricule")]
         public string Matricule { get; set; }
+
+         [Column("nom")]
+        public string nom { get; set; }
 
         [Column("datetime_imprevu")]
         public string DatetimeImprevu { get; set; }

@@ -235,7 +235,7 @@ const Planning = () => {
                 ))}
               </CTableBody>
             </CTable>
-            <CPagination align="center" className="mt-3">
+            <CPagination align="center" className="mt-3" style={{ cursor: currentPageRamassage === 0 ? 'not-allowed' : 'pointer' }}>
               <CPaginationItem
                 disabled={currentPageRamassage === 1}
                 onClick={() => handlePageChangeRamassage(currentPageRamassage - 1)}
@@ -341,7 +341,7 @@ const Planning = () => {
                 ))}
               </CTableBody>
             </CTable>
-            <CPagination align="center" className="mt-3">
+            <CPagination align="center" className="mt-3" style={{ cursor: currentPageDepot === 0 ? 'not-allowed' : 'pointer' }}>
               <CPaginationItem
                 disabled={currentPageDepot === 1}
                 onClick={() => handlePageChangeDepot(currentPageDepot - 1)}

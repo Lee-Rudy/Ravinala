@@ -161,78 +161,78 @@ const Consommation_car = React.lazy(()=> import('src/admin/stat/consommation/Con
 const routes = [
 
   //admin path
-  { path: '/admin', name: 'Admin', element: Admin },
+  { path: '/admin', name: 'Admin', element: Admin , isProtected: true},
 
   //login_cars
-  {path: '/login_cars' , name: 'Gestion des utilisateurs des cars', element: Login_cars},
+  {path: '/login_cars' , name: 'Gestion des utilisateurs des cars', element: Login_cars, isProtected: true},
 
   //dashboard
-  { path: '/dashboard_admin', name: 'Admin', element: Dashboard_admin },
+  { path: '/dashboard_admin', name: 'Admin', element: Dashboard_admin, isProtected: true },
 
 
 
   //usagers==========================
-  { path: '/usagers', name: '', element: Usagers_list },
+  { path: '/usagers', name: '', element: Usagers_list, isProtected: true},
   { path: '/usagers/add', name: 'Usagers', element: Usagers },
 
   //usagers_ramassage
-  { path: '/usagers/ramassage', name: 'ramassage de l\'usager ', element: Usagers_ramassage },
+  { path: '/usagers/ramassage', name: 'ramassage de l\'usager ', element: Usagers_ramassage, isProtected: true },
     //usagers_depot
-    { path: '/usagers/depot', name: 'depot de l\'usager', element: Usagers_depot },
+    { path: '/usagers/depot', name: 'depot de l\'usager', element: Usagers_depot, isProtected: true },
 
     //affecter usagers
-    { path: '/usagers/affecter_ramassage/:usagerId', name: 'affecter usagers', element: Usagers_affecter_ramassage },
-    { path: '/usagers/affecter_depot/:usagerId', name: 'affecter usagers', element: Usagers_affecter_depot },
+    { path: '/usagers/affecter_ramassage/:usagerId', name: 'affecter usagers', element: Usagers_affecter_ramassage, isProtected: true },
+    { path: '/usagers/affecter_depot/:usagerId', name: 'affecter usagers', element: Usagers_affecter_depot},
 
 
 
   //conducteurs / chauffeurs==================================================
-  { path: '/conducteurs', name: 'chauffeurs', element: Conducteurs },
-  { path: '/conducteurs/assignation', name: 'chauffeurs à assigner', element: Conducteurs_assignation },
+  { path: '/conducteurs', name: 'chauffeurs', element: Conducteurs, isProtected: true },
+  { path: '/conducteurs/assignation', name: 'chauffeurs à assigner', element: Conducteurs_assignation, isProtected: true },
 
 
   //cars =========================================================
-  { path: '/cars', name: 'cars', element: Cars },
-  { path: '/cars_liste', name: 'cars', element: Cars_list },
+  { path: '/cars', name: 'cars', element: Cars, isProtected: true },
+  { path: '/cars_liste', name: 'cars', element: Cars_list, isProtected: true },
 
   //prestataire=============================================
-  { path: '/prestataire', name: 'cars', element: Prestataire },
+  { path: '/prestataire', name: 'cars', element: Prestataire, isProtected: true },
 
   //Map
-  { path: '/map/ramassage', name: 'map de ramassage', element: Map_ramassage },
-  { path: '/map/depot', name: 'map de depot', element: Map_depot },
+  { path: '/map/ramassage', name: 'map de ramassage', element: Map_ramassage , isProtected: true},
+  { path: '/map/depot', name: 'map de depot', element: Map_depot, isProtected: true },
   //planning itinéraire
-  {path:'map/confondu', name: 'tout axe', element:Axe_confondu},
+  {path:'map/confondu', name: 'tout axe', element:Axe_confondu, isProtected: true},
   //map correction 
-  {path:'map/correction', name: 'correcteur de parcours', element:Correction_map},
+  {path:'map/correction', name: 'correcteur de parcours', element:Correction_map, isProtected: true},
   //axe 
-  {path:'axe', name: 'liste des axes', element:Axe_list},
-  {path:'axe/add', name: 'ajouter un axe', element:Axe},
-  { path: 'axe/update/:axeId', name: 'Mis à jour', element: Axe },
-  { path: 'axe_conducteurs', name: 'Attributions des cars', element: Axe_conducteurs_cars_list },
-  { path: '/conducteurs/assignation/:assignationId', name: 'modifications assignation', element: Conducteurs_assignation },
+  {path:'axe', name: 'liste des axes', element:Axe_list, isProtected: true},
+  {path:'axe/add', name: 'ajouter un axe', element:Axe, isProtected: true},
+  { path: 'axe/update/:axeId', name: 'Mis à jour', element: Axe},
+  { path: 'axe_conducteurs', name: 'Attributions des cars', element: Axe_conducteurs_cars_list, isProtected: true },
+  { path: '/conducteurs/assignation/:assignationId', name: 'modifications assignation', element: Conducteurs_assignation, isProtected: true },
 
 
   //notifications
-  {path:'notifications', name: 'notificactions', element:Notifications},
+  {path:'notifications', name: 'notificactions', element:Notifications, isProtected: true},
 
   //planning
-  {path:'planning', name: 'usagers actif', element:Planning},
+  {path:'planning', name: 'usagers actif', element:Planning, isProtected: true},
 
   //historique
-  {path:'historique', name: 'historique', element:Historique},
-  {path:'historique_cars', name: 'historique', element:HistoriqueCars},
-  {path:'historique_comptage', name: 'historique', element:Historique_comptage},
+  {path:'historique', name: 'historique', element:Historique, isProtected: true},
+  {path:'historique_cars', name: 'historique', element:HistoriqueCars, isProtected: true},
+  {path:'historique_comptage', name: 'historique', element:Historique_comptage, isProtected: true},
 
   
 
   //statistiques
   //statistiques usagers
-  {path:'stat_usagers', name: '', element:Stat_usagers},
+  {path:'stat_usagers', name: '', element:Stat_usagers, isProtected: true},
   //statistiques cars
-  {path:'stat_cars', name: '', element:Stat_cars},
+  {path:'stat_cars', name: '', element:Stat_cars, isProtected: true},
   //consommation des cars
-  {path:'stat_consommation', name: '', element:Consommation_car},
+  {path:'stat_consommation', name: '', element:Consommation_car, isProtected: true},
 
 
   ///////////////////////////////////////////////////////////////////////

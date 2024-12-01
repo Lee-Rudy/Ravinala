@@ -242,10 +242,10 @@ const Historique_comptage = () => {
             <CTable bordered borderColor='primary' hover className="mt-4">
               <CTableHead color="primary">
                 <CTableRow>
-                  <CTableHeaderCell>Matricule</CTableHeaderCell>
-                  <CTableHeaderCell>Total Ramassages Présents</CTableHeaderCell>
-                  <CTableHeaderCell>Total Dépôts Présents</CTableHeaderCell>
-                  <CTableHeaderCell>Total Présences</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Matricule</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Total Ramassages Présents</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Total Dépôts Présents</CTableHeaderCell>
+                  <CTableHeaderCell className="text-center">Total Présences</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -264,10 +264,10 @@ const Historique_comptage = () => {
                 ) : (
                   comptageData.map((comptage, index) => (
                     <CTableRow key={index}>
-                      <CTableDataCell style={{ fontWeight: 'bold', color: '#45B48E' }}>{comptage.matricule}</CTableDataCell>
-                      <CTableDataCell>{comptage.totalRamassagePresent}</CTableDataCell>
-                      <CTableDataCell>{comptage.totalDepotPresent}</CTableDataCell>
-                      <CTableDataCell>{comptage.totalPresences}</CTableDataCell>
+                      <CTableDataCell className="text-center" style={{ fontWeight: 'bold', color: '#45B48E' }}>{comptage.matricule}</CTableDataCell>
+                      <CTableDataCell className="text-center">{comptage.totalRamassagePresent}</CTableDataCell>
+                      <CTableDataCell className="text-center">{comptage.totalDepotPresent}</CTableDataCell>
+                      <CTableDataCell className="text-center">{comptage.totalPresences}</CTableDataCell>
                     </CTableRow>
                   ))
                 )}

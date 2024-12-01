@@ -268,11 +268,45 @@ const Historique = () => {
 
     // Fonction pour déterminer si un imprévu est un ramassage ou un dépôt
     const isRamassage = (item) => {
-        const [hours, minutes, seconds] = item.heureImprevu.split(':').map(Number);
-        const imprevuTime = new Date(1970, 0, 1, hours, minutes, seconds);
-        const thresholdTime = new Date(1970, 0, 1, 15, 30, 0); // 15:30
-        return imprevuTime < thresholdTime;
+        const heureImprevu = item.heureImprevu;
+    
+        if (!heureImprevu) {
+            console.log(`HeureImprevu est manquante pour l'item ID: ${item.id}`);
+            return false;
+        }
+    
+        // Supprimer les fractions de seconde si elles existent
+        const timeParts = heureImprevu.split(':');
+        if (timeParts.length < 2) {
+            console.log(`Format de HeureImprevu incorrect: ${heureImprevu}`);
+            return false;
+        }
+    
+        const hours = parseInt(timeParts[0], 10);
+        const minutes = parseInt(timeParts[1], 10);
+        let seconds = 0;
+    
+        if (timeParts.length >= 3) {
+            // Supprimer tout caractère non numérique dans les secondes
+            const secondsStr = timeParts[2].split('.')[0]; // Prendre uniquement la partie entière
+            seconds = parseInt(secondsStr, 10) || 0;
+        }
+    
+        if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+            console.log(`HeureImprevu contient des valeurs non valides: ${heureImprevu}`);
+            return false;
+        }
+    
+        const totalMinutes = hours * 60 + minutes + seconds / 60;
+        const thresholdMinutes = 14 * 60; // 14h00 correspond à 840 minutes
+    
+        const result = totalMinutes < thresholdMinutes;
+        console.log(`Heure Imprévu: ${heureImprevu}, Total Minutes: ${totalMinutes}, Ramassage: ${result}`);
+        return result;
     };
+    
+    
+    
 
     // Appliquer les filtres aux données sélectionnées
     const getFilteredData = () => {
@@ -360,46 +394,6 @@ const Historique = () => {
 
     return (
         <>
-            {/* Section de Recherche */}
-            {/* <CRow className="mb-3"> */}
-                {/* <CCol xs={12}> */}
-                    {/* <CCard className="mb-4"> */}
-                        {/* <CCardHeader>
-                            <strong>Recherche d'Historique des Pointages</strong>
-                        </CCardHeader> */}
-                        {/* <CCardBody> */}
-                            {/* <CRow className="align-items-center"> */}
-                                {/* <CCol md={4} className="mb-2">
-                                    <CInputGroup>
-                                        <CInputGroupText>
-                                            <CIcon icon={cilMagnifyingGlass} />
-                                        </CInputGroupText>
-                                        <input
-                                            type="date"
-                                            value={searchDate}
-                                            onChange={(e) => setSearchDate(e.target.value)}
-                                            className="form-control"
-                                            placeholder="Sélectionnez une date"
-                                        />
-                                    </CInputGroup>
-                                </CCol>
-                                <CCol md={2} className="mb-2">
-                                    <CButton color="primary" onClick={handleSearch}>
-                                        Rechercher
-                                    </CButton>
-                                </CCol> */}
-
-                                {/* <CCol md={2} className="mb-2 text-end">
-                                    <CButton color="secondary" onClick={() => { setSearchDate(''); handleSearch(); }}>
-                                        Réinitialiser
-                                    </CButton>
-                                </CCol> */}
-                            {/* </CRow> */}
-                        {/* </CCardBody> */}
-                    {/* </CCard> */}
-                 {/* </CCol> */}
-            {/*  </CRow> */}
-
             {/* Sections d'Historique avec Pagination */}
             <CRow>
                 <CCol xs={12} md={4} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
@@ -409,12 +403,12 @@ const Historique = () => {
                             position: 'fixed',
                             top: '50',
                             left: '100',
-                            height: '72vh', // Occupe toute la hauteur de la fenêtre
-                            width: '360px', // Largeur ajustable selon vos besoins
-                            overflowY: 'auto', // Permet de faire défiler le contenu si nécessaire
-                            backgroundColor: 'white', // Assure un fond blanc
-                            zIndex: '1050', // Garantit qu'il reste au-dessus d'autres éléments
-                            borderRight: '1px solid #ddd', // Optionnel : ligne de séparation
+                            height: '72vh',
+                            width: '360px',
+                            overflowY: 'auto',
+                            backgroundColor: 'white',
+                            zIndex: '1050',
+                            borderRight: '1px solid #ddd',
                         }}
                     >
                         <CCardHeader
@@ -561,91 +555,90 @@ const Historique = () => {
                             <CCardBody>
                                 {/* Section des Totaux */}
                                 <CRow className="mb-4">
-  <CCol>
-    <CCard className="mb-3 shadow-sm" style={{ border: '1px solid #45B48E' }}>
-      <CCardHeader
-        style={{
-          backgroundColor: '#45B48E',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: '1.2rem',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <CIcon icon={cilMagnifyingGlass} className="me-2" />
-        Résumé des Pointages
-      </CCardHeader>
-      <CCardBody style={{ backgroundColor: '#f9f9f9', color: '#343a40' }}>
-        {/* Row 1 */}
-        <CRow className="mb-3">
-          <CCol md={6}>
-            <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
-              Ramassage Présent :
-            </span>{' '}
-            <strong>{totals.ramassagePresent}</strong> / {selectedDate.ramassages.length}
-          </CCol>
-          <CCol md={6}>
-            <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
-              Ramassage Absent :
-            </span>{' '}
-            <strong>{totals.ramassageAbsent}</strong>
-          </CCol>
-        </CRow>
+                                    <CCol>
+                                        <CCard className="mb-3 shadow-sm" style={{ border: '1px solid #45B48E' }}>
+                                            <CCardHeader
+                                                style={{
+                                                    backgroundColor: '#45B48E',
+                                                    color: 'white',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '1.2rem',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <CIcon icon={cilMagnifyingGlass} className="me-2" />
+                                                Résumé des Pointages
+                                            </CCardHeader>
+                                            <CCardBody style={{ backgroundColor: '#f9f9f9', color: '#343a40' }}>
+                                                {/* Row 1 */}
+                                                <CRow className="mb-3">
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
+                                                            Ramassage Présent :
+                                                        </span>{' '}
+                                                        <strong>{totals.ramassagePresent}</strong> / {selectedDate.ramassages.length}
+                                                    </CCol>
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
+                                                            Ramassage Absent :
+                                                        </span>{' '}
+                                                        <strong>{totals.ramassageAbsent}</strong>
+                                                    </CCol>
+                                                </CRow>
 
-        {/* Row 2 */}
-        <CRow className="mb-3">
-          <CCol md={6}>
-            <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
-              Dépôt Présent :
-            </span>{' '}
-            <strong>{totals.depotPresent}</strong> / {selectedDate.depots.length}
-          </CCol>
-          <CCol md={6}>
-            <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
-              Dépôt Absent :
-            </span>{' '}
-            <strong>{totals.depotAbsent}</strong>
-          </CCol>
-        </CRow>
+                                                {/* Row 2 */}
+                                                <CRow className="mb-3">
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#007BFF', fontWeight: 'bold' }}>
+                                                            Dépôt Présent :
+                                                        </span>{' '}
+                                                        <strong>{totals.depotPresent}</strong> / {selectedDate.depots.length}
+                                                    </CCol>
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#DC3545', fontWeight: 'bold' }}>
+                                                            Dépôt Absent :
+                                                        </span>{' '}
+                                                        <strong>{totals.depotAbsent}</strong>
+                                                    </CCol>
+                                                </CRow>
 
-        {/* Row 3 */}
-        <CRow className="mb-3">
-          <CCol md={6}>
-            <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
-              Imprévus Ramassage :
-            </span>{' '}
-            <strong>{totals.imprévusRamassage}</strong>
-          </CCol>
-          <CCol md={6}>
-            <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
-              Imprévus Dépôt :
-            </span>{' '}
-            <strong>{totals.imprévusDepot}</strong>
-          </CCol>
-        </CRow>
+                                                {/* Row 3 */}
+                                                <CRow className="mb-3">
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
+                                                            Imprévus Ramassage :
+                                                        </span>{' '}
+                                                        <strong>{totals.imprévusRamassage}</strong>
+                                                    </CCol>
+                                                    <CCol md={6}>
+                                                        <span style={{ color: '#FFC107', fontWeight: 'bold' }}>
+                                                            Imprévus Dépôt :
+                                                        </span>{' '}
+                                                        <strong>{totals.imprévusDepot}</strong>
+                                                    </CCol>
+                                                </CRow>
 
-        {/* Total Présences */}
-        <CRow className="mt-3">
-          <CCol>
-            <CAlert
-              style={{
-                backgroundColor: '#17A2B8',
-                color: 'white',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-              }}
-            >
-              <strong>Total Présences :</strong> {totals.totalPresences} /{' '}
-              {totals.totalMax}
-            </CAlert>
-          </CCol>
-        </CRow>
-      </CCardBody>
-    </CCard>
-  </CCol>
-</CRow>
-
+                                                {/* Total Présences */}
+                                                <CRow className="mt-3">
+                                                    <CCol>
+                                                        <CAlert
+                                                            style={{
+                                                                backgroundColor: '#17A2B8',
+                                                                color: 'white',
+                                                                fontSize: '1rem',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            <strong>Total Présences :</strong> {totals.totalPresences} /{' '}
+                                                            {totals.totalMax}
+                                                        </CAlert>
+                                                    </CCol>
+                                                </CRow>
+                                            </CCardBody>
+                                        </CCard>
+                                    </CCol>
+                                </CRow>
 
                                 {/* Section des Filtres */}
                                 <CRow className="mb-4">
@@ -709,25 +702,27 @@ const Historique = () => {
                                                     {filteredData.ramassages
                                                         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                                                         .map((item, index) => (
-                                                        <CTableRow key={`${item.id}-${index}`}>
-                                                            <CTableDataCell>{item.matricule}</CTableDataCell>
-                                                            <CTableDataCell>{item.nomUsager}</CTableDataCell>
-                                                            <CTableDataCell>{item.nomVoiture}</CTableDataCell>
-                                                            <CTableDataCell>{item.heureRamassage}</CTableDataCell>
-                                                            <CTableDataCell>
-                                                                <CBadge color={item.estPresent ? 'success' : 'danger'}>
-                                                                    {item.estPresent ? 'Présent' : 'Absent'}
-                                                                </CBadge>
-                                                            </CTableDataCell>
-                                                        </CTableRow>
-                                                    ))}
+                                                            <CTableRow key={`${item.id}-${index}`}>
+                                                                <CTableDataCell>{item.matricule}</CTableDataCell>
+                                                                <CTableDataCell>{item.nomUsager}</CTableDataCell>
+                                                                <CTableDataCell>{item.nomVoiture}</CTableDataCell>
+                                                                <CTableDataCell>
+                                                                    {new Date(`1970-01-01T${item.heureRamassage}Z`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                </CTableDataCell>
+                                                                <CTableDataCell>
+                                                                    <CBadge color={item.estPresent ? 'success' : 'danger'}>
+                                                                        {item.estPresent ? 'Présent' : 'Absent'}
+                                                                    </CBadge>
+                                                                </CTableDataCell>
+                                                            </CTableRow>
+                                                        ))}
                                                 </CTableBody>
                                             </CTable>
                                         ) : (
                                             <p>Aucun pointage de ramassage correspondant aux filtres.</p>
                                         )}
                                     </CCol>
-                                    <CCol md={6}>
+                                    <CCol md={5}>
                                         <h6>Pointages de Dépôt</h6>
                                         {filteredData.depots.length > 0 ? (
                                             <CTable striped>
@@ -744,18 +739,20 @@ const Historique = () => {
                                                     {filteredData.depots
                                                         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                                                         .map((item, index) => (
-                                                        <CTableRow key={`${item.id}-${index}`}>
-                                                            <CTableDataCell>{item.matricule}</CTableDataCell>
-                                                            <CTableDataCell>{item.nomUsager}</CTableDataCell>
-                                                            <CTableDataCell>{item.nomVoiture}</CTableDataCell>
-                                                            <CTableDataCell>{item.heureDepot}</CTableDataCell>
-                                                            <CTableDataCell>
-                                                                <CBadge color={item.estPresent ? 'success' : 'danger'}>
-                                                                    {item.estPresent ? 'Présent' : 'Absent'}
-                                                                </CBadge>
-                                                            </CTableDataCell>
-                                                        </CTableRow>
-                                                    ))}
+                                                            <CTableRow key={`${item.id}-${index}`}>
+                                                                <CTableDataCell>{item.matricule}</CTableDataCell>
+                                                                <CTableDataCell>{item.nomUsager}</CTableDataCell>
+                                                                <CTableDataCell>{item.nomVoiture}</CTableDataCell>
+                                                                <CTableDataCell>
+                                                                    {new Date(`1970-01-01T${item.heureDepot}Z`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                </CTableDataCell>
+                                                                <CTableDataCell>
+                                                                    <CBadge color={item.estPresent ? 'success' : 'danger'}>
+                                                                        {item.estPresent ? 'Présent' : 'Absent'}
+                                                                    </CBadge>
+                                                                </CTableDataCell>
+                                                            </CTableRow>
+                                                        ))}
                                                 </CTableBody>
                                             </CTable>
                                         ) : (
@@ -764,51 +761,51 @@ const Historique = () => {
 
                                         <h6 className="mt-4">Pointages Imprévus</h6>
                                         {filteredData.imprévus.length > 0 ? (
-                                        <CTable striped>
-                                            <CTableHead>
-                                                <CTableRow>
-                                                    <CTableHeaderCell>Matricule</CTableHeaderCell>
-                                                    <CTableHeaderCell>Voiture</CTableHeaderCell>
-                                                    <CTableHeaderCell>Heure</CTableHeaderCell>
-                                                    <CTableHeaderCell>Type</CTableHeaderCell> {/* Nouvelle colonne */}
-                                                </CTableRow>
-                                            </CTableHead>
-                                            <CTableBody>
-                                                {filteredData.imprévus
-                                                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                                                    .map((item, index) => {
-                                                        // Conversion correcte de l'heure
-                                                        const [hours, minutes, seconds] = item.heureImprevu.split(':').map(Number);
-                                                        const imprevuTime = new Date(1970, 0, 1, hours, minutes, seconds);
-                                                        const thresholdTime = new Date(1970, 0, 1, 15, 30, 0); // 15:30
+                                           <CTable striped>
 
-                                                        const isBeforeThreshold = imprevuTime < thresholdTime;
+                                                <CTableHead>
+                                                    <CTableRow>
+                                                        <CTableHeaderCell>Matricule</CTableHeaderCell>
+                                                        <CTableHeaderCell>Nom</CTableHeaderCell>
+                                                        <CTableHeaderCell>Voiture</CTableHeaderCell>
+                                                        <CTableHeaderCell>Heure</CTableHeaderCell>
+                                                        <CTableHeaderCell>Type</CTableHeaderCell>
+                                                    </CTableRow>
+                                                </CTableHead>
+                                                <CTableBody>
+                                        {filteredData.imprévus
+                                            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                                            .map((item, index) => {
+                                                return (
+                                                    <CTableRow key={`${item.id}-${index}`}>
+                                                        <CTableDataCell>{item.matricule}</CTableDataCell>
+                                                        <CTableDataCell>{item.nom}</CTableDataCell>
+                                                        <CTableDataCell>{item.nomVoiture}</CTableDataCell>
+                                                        <CTableDataCell>
+                                                            {item.heureImprevu} {/* Afficher l'heure formatée */}
+                                                        </CTableDataCell>
+                                                        <CTableDataCell>
+                                                            <CBadge color={item.typeImprevu === 'Ramassage' ? 'info' : 'primary'}>
+                                                                {item.typeImprevu}
+                                                            </CBadge>
+                                                        </CTableDataCell>
+                                                    </CTableRow>
+                                                );
+                                            })}
+                                    </CTableBody>
 
-                                                        return (
-                                                            <CTableRow key={`${item.id}-${index}`}>
-                                                                <CTableDataCell>{item.matricule}</CTableDataCell>
-                                                                <CTableDataCell>{item.nomVoiture}</CTableDataCell>
-                                                                <CTableDataCell>{item.heureImprevu}</CTableDataCell>
-                                                                <CTableDataCell>
-                                                                    <CBadge color={isBeforeThreshold ? 'info' : 'primary'}>
-                                                                        {isBeforeThreshold ? 'Ramassage' : 'Dépôt'}
-                                                                    </CBadge>
-                                                                </CTableDataCell>
-                                                            </CTableRow>
-                                                        );
-                                                    })}
-                                            </CTableBody>
-                                        </CTable>
-                                    ) : (
-                                        <p>Aucun pointage imprévu correspondant aux filtres.</p>
-                                    )}
+
+                                            </CTable>
+                                        ) : (
+                                            <p>Aucun pointage imprévu correspondant aux filtres.</p>
+                                        )}
                                     </CCol>
                                 </CRow>
 
                                 {/* Pagination */}
                                 <CRow className="mt-4">
                                     <CCol className="d-flex justify-content-center">
-                                        <CPagination aria-label="Pagination">
+                                        <CPagination aria-label="Pagination" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
                                             <CPaginationItem
                                                 disabled={currentPage === 1}
                                                 onClick={() => setCurrentPage(currentPage - 1)}
