@@ -267,9 +267,9 @@ const AppHeader = () => {
 
           {/* archive des prestataire */}
           <Link
-              to="/facture"
+              to="/facture_list"
               style={{ textDecoration: 'none', color: '#45B48E' }}
-              onClick={() => navigate('/facture')}
+              onClick={() => navigate('/facture_list')}
             >
               <CIcon
                 icon={cilStorage}

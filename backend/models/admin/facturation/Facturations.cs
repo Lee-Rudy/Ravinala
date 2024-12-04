@@ -68,7 +68,7 @@ namespace package_facturations
         public decimal carburants { get; set; }
 
         [Column("import_pdf")]
-        public byte[] ImportPdf { get; set; }
+        public byte[]? ImportPdf { get; set; }
 
     }
 }

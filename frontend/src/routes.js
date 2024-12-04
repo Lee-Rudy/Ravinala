@@ -99,6 +99,12 @@ const Cars_list = React.lazy(()=> import('src/admin/cars/Cars_list'))
 const Prestataire = React.lazy(()=> import('src/admin/prestataire/Prestataire'))
 //facture des prestataires
 const Facture = React.lazy(()=> import('src/admin/prestataire/facture/Facture'))
+//liste des factures 
+const Facture_list = React.lazy(()=> import('src/admin/prestataire/facture/Facture_list'))
+//facture pdf
+const Facture_pdf = React.lazy(()=> import('src/admin/prestataire/facture/Facture_pdf'))
+
+
 
 
 //Map======================================================================
@@ -200,6 +206,10 @@ const routes = [
   //prestataire=============================================
   { path: '/prestataire', name: 'cars', element: Prestataire, isProtected: true },
   { path: '/facture', name: 'facture', element: Facture, isProtected: true },
+  { path: '/facture_list', name: 'liste des factures', element: Facture_list, isProtected: true },
+  { path: '/facture_pdf', name: 'liste des factures', element: Facture_pdf, isProtected: true },
+
+
 
 
   //Map

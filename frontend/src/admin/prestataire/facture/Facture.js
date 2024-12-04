@@ -165,7 +165,7 @@ const Facture = () => {
       <CCol xs={12}>
         <CCard>
           <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
-            Ajouter une facture
+          <strong>Ajouter une facture</strong>
           </CCardHeader>
           <CCardBody>
             {error && (
@@ -259,7 +259,7 @@ const Facture = () => {
                     className="float-end"
                     onClick={ajouterPrestation}
                   >
-                    <CIcon icon={cilPlus} /> Ajouter
+                    <CIcon icon={cilPlus} /> Ajouter une ligne
                   </CButton>
                 </CCardHeader>
                 <CCardBody>
