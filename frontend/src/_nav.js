@@ -120,52 +120,52 @@ const _nav = [
     ],
   },
 
+  
+
+
+  {
+    component: CNavTitle,
+    name: 'Plannification',
+  },
+
+  {
+    component: CNavGroup,
+    name: 'Itinéraire - Axe',
+    icon: <CIcon icon={cilMap} customClassName="nav-icon" style={{
+      color: '#45B48E',
+    }} />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Axe de ramassage',
+        to: '/map/ramassage',
+        style: { color: '#45B48E' },
+
+
+      },
+      {
+        component: CNavItem,
+        name: 'Axe de dépôt',
+        to: '/map/depot',
+        style: { color: '#45B48E' },
+
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'PLanning',
+    icon: <CIcon icon={cilPaperPlane} customClassName="nav-icon" style={{
+      color: '#45B48E',
+    }} />,
+    component: CNavItem,
+        name: 'Planning',
+        to: '/planning',
+  },
   {
     component: CNavTitle,
     name: 'Administrations',
   },
-
-  //authentification
-  {
-    component: CNavGroup,
-    name: 'Authentification',
-    icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" style={{
-      color: '#45B48E',
-    }} />,
-    
-    items: [
-      {
-        component: CNavItem,
-        name: 'Login',
-        to: '/login',
-        style: { color: '#45B48E' },
-
-      },
-      {
-        component: CNavItem,
-        name: 'Login cars',
-        to: '/login_cars',
-        style: { color: '#45B48E' },
-      },
-      // {
-      //   component: CNavItem,
-      //   name: 'Register',
-      //   to: '/register',
-      //   style: { color: '#45B48E' },
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Error 404',
-      //   to: '/404',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Error 500',
-      //   to: '/500',
-      // },
-    ],
-  },
-
   //page admin
   {
     component: CNavGroup,
@@ -220,44 +220,45 @@ const _nav = [
     ],
   },
 
-  {
-    component: CNavTitle,
-    name: 'Plannification',
-  },
-
+  //authentification
   {
     component: CNavGroup,
-    name: 'Itinéraire - Axe',
-    icon: <CIcon icon={cilMap} customClassName="nav-icon" style={{
+    name: 'Authentification',
+    icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" style={{
       color: '#45B48E',
     }} />,
+    
     items: [
       {
         component: CNavItem,
-        name: 'Axe de ramassage',
-        to: '/map/ramassage',
+        name: 'Se déconnecter',
+        to: '/login',
         style: { color: '#45B48E' },
-
 
       },
       {
         component: CNavItem,
-        name: 'Axe de dépôt',
-        to: '/map/depot',
+        name: 'Login cars',
+        to: '/login_cars',
         style: { color: '#45B48E' },
-
       },
+      // {
+      //   component: CNavItem,
+      //   name: 'Register',
+      //   to: '/register',
+      //   style: { color: '#45B48E' },
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 404',
+      //   to: '/404',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 500',
+      //   to: '/500',
+      // },
     ],
-  },
-  {
-    component: CNavGroup,
-    name: 'PLanning',
-    icon: <CIcon icon={cilPaperPlane} customClassName="nav-icon" style={{
-      color: '#45B48E',
-    }} />,
-    component: CNavItem,
-        name: 'Planning',
-        to: '/planning',
   },
   // {
   //   component: CNavItem,

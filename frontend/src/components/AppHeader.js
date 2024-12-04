@@ -23,6 +23,7 @@ import {
   cilMenu,
   cilMoon,
   cilSun,
+  cilStorage,
 } from '@coreui/icons';
 
 import { AppBreadcrumb } from './index';
@@ -58,7 +59,7 @@ const AppHeader = () => {
 
     const interval = setInterval(() => {
       fetchNotifications();
-    }, 500); // 60 secondes //aza hadino ny manova an'ito pour intérroger le serveur 
+    }, 30000); // 60 secondes //aza hadino ny manova an'ito pour intérroger le serveur 
     //3000 = 30s
 
     return () => clearInterval(interval);
@@ -139,6 +140,7 @@ const AppHeader = () => {
                     marginRight: '5px',
                   }}
                 />
+                
                 {unreadCount > 0 && (
                   <CBadge
                     color="danger"
@@ -160,6 +162,7 @@ const AppHeader = () => {
                   </CBadge>
                 )}
               </CDropdownToggle>
+
 
               <CDropdownMenu
               className="shadow-lg"
@@ -259,7 +262,27 @@ const AppHeader = () => {
           </CNavItem>
 
           {/* ... (autres éléments de navigation) */}
+          
         </CHeaderNav>
+
+          {/* archive des prestataire */}
+          <Link
+              to="/facture"
+              style={{ textDecoration: 'none', color: '#45B48E' }}
+              onClick={() => navigate('/facture')}
+            >
+              <CIcon
+                icon={cilStorage}
+                size="lg"
+                style={{
+                  color: '#45B48E',
+                  marginRight: '5px',
+                }}
+              />
+          </Link>
+
+
+        
         <CHeaderNav>
           <li className="nav-item py-1">
             <div className="vr h-100 mx-3 text-body text-opacity-75"></div>

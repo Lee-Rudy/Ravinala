@@ -16,6 +16,8 @@ drop table genre;
 drop table poste;
 drop table departement;
 drop table login;
+drop table carte_carburants;
+drop table prestataire_contrat;
 
 
 truncate table save_push;

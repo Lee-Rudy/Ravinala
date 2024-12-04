@@ -35,6 +35,9 @@ using package_axe_usagers_depot;
 using package_pointage_usagers_ramassage;
 using package_pointage_usagers_depot;
 
+//facturation
+using package_facturations;
+
 //push 
 using package_push_data;
 
@@ -91,6 +94,13 @@ namespace package_my_db_context
 
         public DbSet<km_matin_push> Km_matin_push_instance { get; set; }
         public DbSet<km_soir_push> Km_soir_push_instance { get; set; }
+
+        //facturation
+        public DbSet<prestataire_contrat> Prestataire_contrat_instance { get; set; }
+        public DbSet<carte_carburants> Carte_carburants_instance { get; set; }
+
+
+
 
 
 

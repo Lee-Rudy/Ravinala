@@ -141,12 +141,12 @@ const Planning = () => {
       <CCardHeader>
         <CNav variant="tabs" role="tablist">
           <CNavItem>
-            <CNavLink active={activeTab === 'ramassage'} onClick={() => setActiveTab('ramassage')}>
+            <CNavLink active={activeTab === 'ramassage'} onClick={() => setActiveTab('ramassage')} style={{ cursor: currentPageRamassage === 0 ? 'not-allowed' : 'pointer' }}>
               Ramassage
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink active={activeTab === 'depot'} onClick={() => setActiveTab('depot')}>
+            <CNavLink active={activeTab === 'depot'} onClick={() => setActiveTab('depot')} style={{ cursor: currentPageRamassage === 0 ? 'not-allowed' : 'pointer' }}>
               Dépôt
             </CNavLink>
           </CNavItem>

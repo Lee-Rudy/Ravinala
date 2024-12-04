@@ -148,6 +148,144 @@ CREATE TABLE prestataire_archive
     fin_contrat DATE,
     prestataire_id INT FOREIGN KEY REFERENCES prestataire(id) ON DELETE SET NULL
 );
+--new============================================================================
+-- alter table carte_carburants add import_pdf VARBINARY(MAX);
+--carte carburants contrat
+create table carte_carburants
+(
+    id int identity(1,1) primary key not null,
+    nom_prestataire nvarchar(max),
+    contrat_type nvarchar(max), --contractuelle , extra
+    numero_facture nvarchar(max),
+    date_emission datetime,
+    carburants decimal(10,2),
+    import_pdf VARBINARY(MAX) --par exemple import.pdf
+);
+
+
+--contrat uniforme
+create table prestataire_contrat
+(
+    id int identity(1,1) primary key not null,
+    nom_prestataire nvarchar(max),
+    contrat_type nvarchar(255), --contractuelle , extra contractuelle
+    numero_facture nvarchar(max), --référence par numéro facture group by where numéro_facture
+    date_emission datetime,
+    designation nvarchar(max),
+    nbr_vehicule int,
+    nbr_jour int,
+    prix_unitaire decimal(10,2)
+);
+
+
+--formule contractuelle boucle: 
+-- (prix_unitaire * nbre_vehicule * nbre_jour) = montant_total
+-- montant_total - carburants => net à payer
+
+--formule extra boucle: 
+-- (prix_unitaire * nbre_vehicule * nbre_jour) = montant_total
+-- montant_total - carburants => net à payer
+
+
+--exemple insert :
+insert into carte_carburants (nom_prestataire, contrat_type, numero_facture, date_emission, carburants) values ('P1','contractuelle', 'N-001','2024-12-03',45000.00);
+insert into carte_carburants (nom_prestataire, contrat_type, numero_facture, date_emission, carburants) values ('P1','extra', 'N-001','2024-12-03',0);
+
+insert into carte_carburants (nom_prestataire, contrat_type, numero_facture, date_emission, carburants) values ('P3','contractuelle', 'N-005','2024-12-07',320000);
+
+insert into prestataire_contrat (nom_prestataire, contrat_type, numero_facture, date_emission, designation, nbr_vehicule, nbr_jour, prix_unitaire) values
+
+('P3', 'contractuelle', 'N-005', '2024-12-07','fret', 2, 22, 175000),
+('P3', 'contractuelle', 'N-005', '2024-12-07','decale', 2, 22, 175000),
+('P3', 'contractuelle', 'N-005', '2024-12-07','support', 2, 22, 175000);
+
+('P1', 'contractuelle', 'N-001', '2024-12-03', 'fret', 2, 22, 175000),
+('P1', 'contractuelle', 'N-001', '2024-12-03', 'decale', 2, 22, 175000),
+('P1', 'contractuelle', 'N-001', '2024-12-03', 'support', 2, 22, 175000),
+
+('P1', 'extra', 'N-001', '2024-12-03','fête', 2, 1, 175000),
+('P1', 'extra', 'N-002', '2024-12-04','fête 2', 4, 2, 175000),
+
+('P1', 'contractuelle', 'N-002', '2024-02-04','fret', 2, 22, 175000),
+('P1', 'contractuelle', 'N-002', '2024-02-04','decale', 2, 22, 175000),
+('P1', 'contractuelle', 'N-002', '2024-02-04','support', 2, 22, 175000);
+
+
+
+
+
+
+
+
+
+--table virtuel @ soutenance
+
+-- create table contrat_type
+-- (
+--     id int identity(1,1) primary key not null,
+--     contrat_type nvarchar(max)
+-- );
+-- insert into contrat_type (contrat_type) values ('prestation contractuelle'), ('prestation extra contractuelle');
+-- --type de contrat contractuelle , extra
+
+-- --extra , contractuelle
+-- create table designation
+-- (
+--     id int identity(1,1) primary key not null,
+--     designation nvarchar(max),
+--     nbr_vehicule int,
+--     nbr_jour int,
+--     contrat_type_id int foreign key references contrat_type(id)
+-- );
+
+-- CREATE TABLE prestataire_historique
+-- (
+--     id int identity (1,1) primary key not null,
+--     nom_prestataire nvarchar(max),
+--     numero_facture nvarchar(max),
+--     date_emission datetime,
+--     carburants decimal(10,2),
+--     import_pdf VARBINARY(MAX), --par exemple import.pdf
+--     designation_id int foreign key references designation(id)
+-- );
+
+
+----------------------------------
+--uniforme 
+-- create table contratctuelle
+-- (
+--     id int identity (1,1) primary key not null, 
+--     nom_prestataire nvarchar(max),
+--     numero_facture nvarchar(max),
+--     date_emission datetime,
+--     carburants decimal(10,2),
+--     nb_vehicule_support int,
+--     nb_jour_support int,
+--     nb_vehicule_decale int,
+--     nb_jour_decale int,
+--     nb_vehicule_fret int,
+--     nb_jour_fret int,
+--     import_pdf varbinary(max)
+-- );
+
+-- create table extra 
+-- (
+--     id int identity (1,1) primary key not null,
+--     nom_prestataire nvarchar(max),
+--     numero_facture nvarchar(max),
+--     date_emission datetime,
+--     carburants decimal(10,2),
+--     ligne_1 nvarchar(max),
+--     nb_vehicule_1 int,
+--     nb_jour_1 int,
+--     ligne_2 nvarchar(max),
+--     nb_vehicule_2 int,
+--     nb_jour_2 int,
+--     ligne_3 nvarchar(max),
+--     nb_vehicule_3 int,
+--     nb_jour_3 int,
+--     import_pdf varbinary(max)
+-- );
 
 
 CREATE TABLE cars
@@ -475,6 +613,3 @@ create table push_duree_trajet_cars
     heure_debut time, --btn debut
     heure_fin time --btn fin
 );
-
-
-

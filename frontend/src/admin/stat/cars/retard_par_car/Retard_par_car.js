@@ -35,7 +35,7 @@ const RetardParCar = () => {
   const [selectedCar, setSelectedCar] = useState(null); // Voiture sélectionnée
   const [year, setYear] = useState(new Date().getFullYear()); // Année sélectionnée
   const [delaysByMonth, setDelaysByMonth] = useState([]); // Données pour le graphique des retards
-  const [passengerGeneralStats, setPassengerGeneralStats] = useState(null); // Statistiques générales des passagers
+  const [passengerGeneralStats, setPassengerGeneralStats] = useState(null); // Statistiques générales des usagers
   const [passengerAverageStats, setPassengerAverageStats] = useState(null); // Statistiques moyennes ramassage-dépot
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
@@ -89,7 +89,7 @@ const RetardParCar = () => {
     }
   };
 
-  // Récupérer les statistiques générales des passagers
+  // Récupérer les statistiques générales des usagers
   const fetchPassengerGeneralStats = async (carName) => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     setPassengerLoading(true);
@@ -103,13 +103,13 @@ const RetardParCar = () => {
       setPassengerGeneralStats(response.data);
     } catch (error) {
       console.error(error);
-      setPassengerError('Erreur lors de la récupération des statistiques des passagers.');
+      setPassengerError('Erreur lors de la récupération des statistiques des usagers.');
     } finally {
       setPassengerLoading(false);
     }
   };
 
-  // Récupérer les statistiques moyennes ramassage-dépot des passagers
+  // Récupérer les statistiques moyennes ramassage-dépot des usagers
   const fetchPassengerAverageStats = async (carName) => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     setAverageLoading(true);
@@ -141,7 +141,7 @@ const RetardParCar = () => {
   const handleCarClick = (car) => {
     setSelectedCar(car);
     fetchDelaysByCar(car.nom_car); // Récupérer les données pour le graphique des retards
-    fetchPassengerGeneralStats(car.nom_car); // Récupérer les statistiques générales des passagers
+    fetchPassengerGeneralStats(car.nom_car); // Récupérer les statistiques générales des usagers
     fetchPassengerAverageStats(car.nom_car); // Récupérer les statistiques moyennes ramassage-dépot
   };
 
@@ -234,7 +234,7 @@ const RetardParCar = () => {
       },
       title: {
         display: true,
-        text: 'Moyenne Ramassage et Dépot des Passagers par Mois',
+        text: 'Moyenne Ramassage et Dépot des usagers par Mois',
       },
     },
     scales: {
@@ -250,7 +250,7 @@ const RetardParCar = () => {
         ticks: { font: { size: 12 }, beginAtZero: true },
         title: {
           display: true,
-          text: 'Nombre de Passagers',
+          text: 'Nombre de usagers',
           font: { size: 14 },
         },
       },
@@ -392,7 +392,7 @@ const RetardParCar = () => {
           {/* Histogramme Combiné Ramassage-Dépot */}
           <CCard className="mb-4">
           <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
-              <h5>Moyenne Ramassage et Dépot des Passagers</h5>
+              <h5>Moyenne Ramassage et Dépot des usagers</h5>
             </CCardHeader>
             <CCardBody>
               {averageLoading ? (
@@ -407,19 +407,19 @@ const RetardParCar = () => {
             </CCardBody>
           </CCard>
 
-          {/* Tableau des Statistiques Générales des Passagers */}
+          {/* Tableau des Statistiques Générales des usagers */}
           <CCard className="shadow-sm mb-4">
   <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
     <h5>
       <CIcon icon={cilChartLine} className="me-2" />
-      Statistiques Générales des Passagers
+      Statistiques Générales des usagers
     </h5>
   </CCardHeader>
   <CCardBody>
     {passengerLoading ? (
       <p style={{ fontSize: '1rem', color: '#6c757d' }}>
         <CIcon icon={cilSync} className="me-2" spin />
-        Chargement des données des passagers...
+        Chargement des données des usagers...
       </p>
     ) : passengerError ? (
       <p style={{ color: 'red', fontSize: '1rem' }}>
@@ -442,11 +442,11 @@ const RetardParCar = () => {
               </CTableHeaderCell>
               <CTableHeaderCell className="text-center">
                 <CIcon icon={cilPeople} className="me-2" />
-                Passagers Totaux
+                Effectifs totaux des usagers
               </CTableHeaderCell>
               <CTableHeaderCell className="text-center">
                 <CIcon icon={cilUserFollow} className="me-2" />
-                Passagers Moyens
+                Effectifs moyens des usagers
               </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
@@ -468,16 +468,16 @@ const RetardParCar = () => {
           </CTableBody>
         </CTable>
 
-        {/* Tableau Passagers par Mois */}
+        {/* Tableau usagers par Mois */}
         <h6 style={{ color: '#45B48E', fontWeight: 'bold' }} className="mt-4">
           <CIcon icon={cilCalendar} className="me-2" />
-          Passagers par Mois
+          usagers par Mois
         </h6>
         <CTable bordered hover responsive>
           <CTableHead style={{ backgroundColor: '#e3f2fd', color: '#212529' }}>
             <CTableRow>
               <CTableHeaderCell className="text-center">Mois</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Passagers</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">usagers</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>

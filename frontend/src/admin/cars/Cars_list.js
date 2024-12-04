@@ -457,7 +457,7 @@ const Cars_list = () => {
 
                       <CRow className="mb-3">
                         <CCol md={6}>
-                          <CFormLabel htmlFor="type_cars_id">Type de car</CFormLabel>
+                          <CFormLabel htmlFor="type_cars_id">Personnel</CFormLabel>
                           <CFormSelect
                             id="type_cars_id"
                             value={editCarsData.type_cars_id}
