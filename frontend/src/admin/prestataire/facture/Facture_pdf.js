@@ -1,6 +1,6 @@
 // src/components/Facture_pdf.js
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {
   CCard,
@@ -156,14 +156,16 @@ const Facture_pdf = () => {
   };
 
   // Filtrer les factures en fonction de la recherche
-  const filteredFactures = factures
-    .filter((facture) =>
-      facture.numero_facture.toLowerCase().includes(searchName.toLowerCase())
-    )
-    .filter((facture) =>
-      searchDate ? new Date(facture.date_emission).toLocaleDateString() === new Date(searchDate).toLocaleDateString() : true
-    )
-    .sort((a, b) => new Date(b.date_emission) - new Date(a.date_emission)); // Tri par date décroissante
+  const filteredFactures = useMemo(() => {
+    return factures
+      .filter((facture) =>
+        facture.numero_facture.toLowerCase().includes(searchName.toLowerCase())
+      )
+      .filter((facture) =>
+        searchDate ? new Date(facture.date_emission).toLocaleDateString() === new Date(searchDate).toLocaleDateString() : true
+      )
+      .sort((a, b) => new Date(b.date_emission) - new Date(a.date_emission)); // Tri par date décroissante
+  }, [factures, searchName, searchDate]);
 
   // Calculer les factures à afficher pour la pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -183,8 +185,8 @@ const Facture_pdf = () => {
           <CCardHeader className="d-flex justify-content-between align-items-center" style={{ backgroundColor: '#45B48E', color: 'white' }}>
             <h4>Liste des Factures PDF</h4>
             <div>
-              <CButton color="danger" disabled={selectedFactures.length === 0} onClick={() => setShowDeleteConfirm(true)} style={{color:'white'}}>
-                <CIcon icon={cilTrash} className="me-2"  style={{color:'white'}}/>
+              <CButton color="danger" disabled={selectedFactures.length === 0} onClick={() => setShowDeleteConfirm(true)} style={{ color: 'white' }}>
+                <CIcon icon={cilTrash} className="me-2" style={{ color: 'white' }} />
                 Supprimer
               </CButton>
               <Link to="/facture">
@@ -200,11 +202,11 @@ const Facture_pdf = () => {
             <CForm onSubmit={handleSearch} className="mb-3">
               <CRow className="g-3">
                 <CCol md={4}>
-                  <CFormLabel htmlFor="searchName">Nom du facture</CFormLabel>
+                  <CFormLabel htmlFor="searchName">Numéro de Facture</CFormLabel>
                   <CFormInput
                     type="text"
                     id="searchName"
-                    placeholder="Rechercher par nom..."
+                    placeholder="Rechercher par numéro..."
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
                   />
@@ -288,7 +290,7 @@ const Facture_pdf = () => {
                             disabled={!facture.importPdf}
                             title="Visionner le PDF"
                           >
-                            <CIcon icon={cilEnvelopeOpen} style={{color:'white'}} />
+                            <CIcon icon={cilEnvelopeOpen} style={{ color: 'white' }} />
                           </CButton>
                           <CButton
                             color="success"
@@ -297,7 +299,7 @@ const Facture_pdf = () => {
                             disabled={!facture.importPdf}
                             title="Télécharger le PDF"
                           >
-                            <CIcon icon={cilCloudDownload} style={{color:'white'}} />
+                            <CIcon icon={cilCloudDownload} style={{ color: 'white' }} />
                           </CButton>
                         </CTableDataCell>
                       </CTableRow>
@@ -307,12 +309,12 @@ const Facture_pdf = () => {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <CPagination aria-label="Pagination" className="mt-3">
+                  <CPagination align="center" className="mt-3" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
                     <CPaginationItem
                       disabled={currentPage === 1}
                       onClick={() => handlePageChange(currentPage - 1)}
                     >
-                      <CIcon icon={cilArrowLeft} />
+                      Précédent
                     </CPaginationItem>
                     {Array.from({ length: totalPages }, (_, index) => (
                       <CPaginationItem
@@ -327,7 +329,7 @@ const Facture_pdf = () => {
                       disabled={currentPage === totalPages}
                       onClick={() => handlePageChange(currentPage + 1)}
                     >
-                      <CIcon icon={cilArrowRight} />
+                      Suivant
                     </CPaginationItem>
                   </CPagination>
                 )}

@@ -97,8 +97,8 @@ const Facture_list = () => {
   const [contratType, setContratType] = useState('tous');
 
   // États pour la pagination
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(20); // Vous pouvez rendre cela dynamique si nécessaire
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20; // Vous pouvez ajuster ce nombre selon vos besoins
 
   // États pour les données
   const [facturations, setFacturations] = useState([]);
@@ -112,15 +112,13 @@ const Facture_list = () => {
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // Fonction pour récupérer les données
+  // Fonction pour récupérer toutes les données (pagination côté client)
   const fetchFacturations = async () => {
     setLoading(true);
     setError('');
 
     try {
       const params = {
-        pageNumber,
-        pageSize,
         contratType,
       };
 
@@ -142,10 +140,8 @@ const Facture_list = () => {
       setMontantFinal(data.montantFinal);
       setNetPayerFinal(data.netPayerFinal);
 
-      // Estimation du nombre total de pages
-      // Vous devriez ajuster cela en fonction de votre API pour obtenir le nombre total d'éléments
-      const totalItems = data.totalItems || 100; // Remplacez ceci par la valeur réelle si disponible
-      setTotalPages(Math.ceil(totalItems / pageSize));
+      // Calcul du nombre total de pages côté client
+      setTotalPages(Math.ceil(sortedFacturations.length / itemsPerPage));
     } catch (err) {
       console.error(err);
       setError('Erreur lors de la récupération des facturations.');
@@ -154,16 +150,17 @@ const Facture_list = () => {
     }
   };
 
-  // useEffect pour récupérer les données au chargement et lors des changements de filtres/pagination
+  // useEffect pour récupérer les données au chargement et lors des changements de filtres
   useEffect(() => {
     fetchFacturations();
+    // Réinitialiser la page actuelle lors de l'application des filtres
+    setCurrentPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, contratType, dateDebut, dateFin]);
+  }, [contratType, dateDebut, dateFin]);
 
   // Handler pour soumettre les filtres
   const handleFilterSubmit = (e) => {
     e.preventDefault();
-    setPageNumber(1); // Réinitialiser à la première page lors de l'application des filtres
     fetchFacturations();
   };
 
@@ -172,13 +169,18 @@ const Facture_list = () => {
     setDateDebut('');
     setDateFin('');
     setContratType('tous');
-    setPageNumber(1);
+    setCurrentPage(1);
     fetchFacturations();
   };
 
-  // Handler pour changer la page
+  // Calcul des éléments à afficher sur la page actuelle
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = facturations.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Fonction pour changer la page
   const handlePageChange = (page) => {
-    setPageNumber(page);
+    setCurrentPage(page);
   };
 
   // Fonction pour obtenir la couleur du badge en fonction du type de contrat
@@ -264,14 +266,14 @@ const Facture_list = () => {
   } = useTable(
     {
       columns,
-      data: facturations,
-      defaultColumn: { minWidth: 150, width: 200, maxWidth: 400 },
+      data: currentItems, // Utiliser les éléments de la page actuelle
+      defaultColumn: { minWidth: 10, width: 200, maxWidth: 400 },
     },
     useFlexLayout,
     useResizeColumns
   );
 
-  // Fonction pour exporter les données en CSV
+  // Fonction pour exporter les données en CSV (exporter uniquement les éléments de la page actuelle ou toutes les données)
   const exportToCSV = () => {
     if (!facturations.length) {
       alert('Aucune donnée à exporter.');
@@ -310,7 +312,7 @@ const Facture_list = () => {
       <CCol xs={12}>
         <CCard>
           <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
-          <strong>Liste des Facturations</strong>
+            <strong>Liste des Facturations</strong>
           </CCardHeader>
           <CCardBody>
             {/* Affichage des messages d'erreur */}
@@ -380,19 +382,19 @@ const Facture_list = () => {
                 </CButton>
 
                 <Link to="/facture">
-                <CButton color="primary">
-                  <CIcon icon={cilPlus} className="me-2" />
-                  Ajouter une facture
-                </CButton>
+                  <CButton color="primary">
+                    <CIcon icon={cilPlus} className="me-2" />
+                    Ajouter une facture
+                  </CButton>
                 </Link>
 
                 <CTooltip content="Archive PDF" placement="top">
-                <Link to="/facture_pdf">
-                  <CButton color="dark" className="ms-2">
-                    <CIcon icon={cilFolderOpen} className="me-1" />
-                  </CButton>
-                </Link>
-              </CTooltip>
+                  <Link to="/facture_pdf">
+                    <CButton color="dark" className="ms-2">
+                      <CIcon icon={cilFolderOpen} className="me-1" />
+                    </CButton>
+                  </Link>
+                </CTooltip>
               </CCol>
             </CRow>
 
@@ -426,7 +428,7 @@ const Facture_list = () => {
                           <CSpinner color="primary" />
                         </div>
                       </div>
-                    ) : rows.length > 0 ? (
+                    ) : currentItems.length > 0 ? (
                       rows.map(row => {
                         prepareRow(row);
                         return (
@@ -474,30 +476,27 @@ const Facture_list = () => {
             {/* Pagination */}
             <CRow className="mt-3">
               <CCol className="d-flex justify-content-center">
-                <CPagination aria-label="Page navigation example" style={{ cursor: pageNumber === 0 ? 'not-allowed' : 'pointer' }}>
+                <CPagination align="center" className="mt-3" style={{ cursor: currentPage === 0 ? 'not-allowed' : 'pointer' }}>
                   <CPaginationItem
-                    disabled={pageNumber === 1}
-                    onClick={() => handlePageChange(pageNumber - 1)}
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
                   >
-                    {/* <CIcon icon={cilArrowLeft} />  */}
                     Précédent
                   </CPaginationItem>
-                  {/* Afficher quelques pages autour de la page actuelle */}
-                  {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                  {Array.from({ length: totalPages }, (_, index) => (
                     <CPaginationItem
-                      key={page}
-                      active={page === pageNumber}
-                      onClick={() => handlePageChange(page)}
+                      key={index + 1}
+                      active={index + 1 === currentPage}
+                      onClick={() => handlePageChange(index + 1)}
                     >
-                      {page}
+                      {index + 1}
                     </CPaginationItem>
                   ))}
                   <CPaginationItem
-                    disabled={pageNumber === totalPages}
-                    onClick={() => handlePageChange(pageNumber + 1)}
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
                   >
-                    Suivant 
-                    {/* <CIcon icon={cilArrowRight} /> */}
+                    Suivant
                   </CPaginationItem>
                 </CPagination>
               </CCol>

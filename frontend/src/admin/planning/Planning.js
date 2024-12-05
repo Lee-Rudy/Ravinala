@@ -102,7 +102,7 @@ const Planning = () => {
 
   // Filter and paginate Ramassage Data
   const filteredRamassageData = ramassageData.filter(item => {
-    const matchesSearch = `${item.nomUsager} ${item.matricule}`.toLowerCase().includes(searchTermRamassage.toLowerCase());
+    const matchesSearch = `${item.prenomUsager} ${item.matricule}`.toLowerCase().includes(searchTermRamassage.toLowerCase());
     const matchesCar = selectedCarRamassage ? item.nomVoiture === selectedCarRamassage : true;
     const matchesAxe = selectedAxeRamassage ? item.nomAxe === selectedAxeRamassage : true;
     return matchesSearch && matchesCar && matchesAxe;
@@ -115,7 +115,7 @@ const Planning = () => {
 
   // Filter and paginate Depot Data
   const filteredDepotData = depotData.filter(item => {
-    const matchesSearch = `${item.nomUsager} ${item.matricule}`.toLowerCase().includes(searchTermDepot.toLowerCase());
+    const matchesSearch = `${item.prenomUsager} ${item.matricule}`.toLowerCase().includes(searchTermDepot.toLowerCase());
     const matchesCar = selectedCarDepot ? item.nomVoiture === selectedCarDepot : true;
     const matchesAxe = selectedAxeDepot ? item.nomAxe === selectedAxeDepot : true;
     return matchesSearch && matchesCar && matchesAxe;
@@ -208,7 +208,7 @@ const Planning = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CIcon icon={cilUser} className="me-2 text-info" />
-                    {item.nomUsager}
+                    {item.prenomUsager}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CIcon icon={cilMap} className="me-2 text-warning" />
@@ -315,7 +315,7 @@ const Planning = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CIcon icon={cilUser} className="me-2 text-info" />
-                    {item.nomUsager}
+                    {item.prenomUsager}
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <CIcon icon={cilMap} className="me-2 text-warning" />

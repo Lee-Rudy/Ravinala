@@ -65,7 +65,7 @@ const UsagersList = () => {
   // Filtrage par recherche
   const filteredUsagers = usagersList.filter((usager) => {
     const searchFilter = 
-      (usager.matricule && usager.matricule.includes(searchTerm)) ||
+      (usager.matricule && usager.matricule.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (usager.nom && usager.nom.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (usager.prenom && usager.prenom.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (usager.axeRamassage && usager.axeRamassage.toLowerCase().includes(searchTerm.toLowerCase()));

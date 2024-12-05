@@ -32,6 +32,8 @@ namespace package_planning_controller
 
             public string Matricule { get; set; }
             public string NomUsager { get; set; }
+            public string PrenomUsager { get; set; }
+
             public string NomAxe { get; set; }
             // public string PrenomUsager { get; set; }            
             public string NomVoiture { get; set; }
@@ -49,6 +51,8 @@ namespace package_planning_controller
             public int IdUsagers {get; set;}
             public string Matricule { get; set; }
             public string NomUsager { get; set; }
+            public string PrenomUsager { get; set; }
+
             public string NomAxe { get; set; }
             // public string PrenomUsager { get; set; }            
 
@@ -86,6 +90,7 @@ namespace package_planning_controller
                         IdUsagers = combined.u.id,
                         Matricule = combined.u.matricule,
                         NomUsager = combined.u.nom,
+                        PrenomUsager = combined.u.prenom,
                         NomAxe = combined.a.axe,
                         NomVoiture = c.nom_car,
                         // Immatriculation = c.immatriculation,
@@ -127,6 +132,7 @@ namespace package_planning_controller
                         IdUsagers = combined.u.id,
                         Matricule = combined.u.matricule,
                         NomUsager = combined.u.nom,
+                        PrenomUsager = combined.u.prenom,
                         NomAxe = combined.a.axe,
                         NomVoiture = c.nom_car,
                         // Immatriculation = c.immatriculation,
