@@ -54,6 +54,7 @@ namespace package_push_controller.Controllers
                 {
                     Id = p.Id,
                     NomVoiture = p.NomVoiture,
+                    motif = p.motif,
                     DatetimeDepart = isDateDepartParsed ? datetimeDepart.Date : DateTime.MinValue,
                     HeureDepart = isDateDepartParsed ? datetimeDepart.TimeOfDay : TimeSpan.Zero,
                     DatetimeArrivee = isDateArriveeParsed ? datetimeArrivee.Date : DateTime.MinValue,

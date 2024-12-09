@@ -72,6 +72,9 @@ namespace package_push_controller.DTOs
 
         [JsonProperty("datetime_arrivee")]
         public string? DatetimeArrivee { get; set; } // Date en String peut être null
+        
+        [JsonProperty("motif")]
+        public string? motif { get; set; } 
     }
 
     public class PointageImprevuDTO

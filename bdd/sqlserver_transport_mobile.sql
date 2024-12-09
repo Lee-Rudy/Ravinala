@@ -26,8 +26,17 @@ CREATE TABLE btn_push
     datetime_depart NVARCHAR(MAX),     -- DateTime en ISO 8601
     datetime_arrivee NVARCHAR(MAX),    -- DateTime en ISO 8601
     nomVoiture NVARCHAR(MAX),
+    motif NVARCHAR(MAX),
     recu_le DATETIME DEFAULT GETDATE()  -- Date actuelle par défaut
 );
+
+-- UPDATE btn_push
+-- SET motif = 'rien à signaler'
+-- WHERE motif IS NULL;
+
+
+-- alter table btn_push add motif nvarchar(max);
+
 
 CREATE TABLE pointage_usagers_imprevu_push
 (

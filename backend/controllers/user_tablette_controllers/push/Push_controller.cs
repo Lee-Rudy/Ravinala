@@ -76,6 +76,7 @@ namespace package_push_controller
                     NomVoiture = b.NomVoiture,
                     DatetimeDepart = b.DatetimeDepart == null ? null : b.DatetimeDepart.ToString(),
                     DatetimeArrivee = b.DatetimeArrivee == null ? null : b.DatetimeArrivee.ToString(),
+                    motif = b.motif,
                     RecuLe = DateTime.Now
                                 // Format standard pour stocker en string
                 }).ToList();

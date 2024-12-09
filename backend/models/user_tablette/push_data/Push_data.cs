@@ -79,16 +79,19 @@ namespace package_push_data
         public int Id { get; set; }
 
         [Column("datetime_depart")]
-        public string DatetimeDepart { get; set; }
+        public string? DatetimeDepart { get; set; }
 
         [Column("datetime_arrivee")]
-        public string DatetimeArrivee { get; set; }
+        public string? DatetimeArrivee { get; set; }
 
         [Column("nomVoiture")]
         public string NomVoiture { get; set; }
 
         [Column("recu_le")]
         public DateTime RecuLe { get; set; } = DateTime.Now;
+
+        [Column("motif")]
+        public string? motif { get; set; }
 
     }
 

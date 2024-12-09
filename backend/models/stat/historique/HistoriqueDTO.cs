@@ -77,6 +77,8 @@ public class PointageImprevuResponseDTO
 
         public string NomVoiture {get;set;}
 
+        public string? motif {get; set;}
+
         public DateTime RecuLeDate { get; set; }
 
 
