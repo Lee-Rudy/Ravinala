@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using package_push_controller.DTOs; // Importer les DTOs
+using package_push_controller.DTOs;
 using package_push_data;
 using package_my_db_context;
 using Microsoft.Extensions.Logging;
@@ -23,6 +23,7 @@ namespace package_push_controller
             _logger = logger;
         }
 
+        //controller pour recevoir les données enregistrés et envoyés depuis le mobile
         [HttpPost("sendAll")]
         public async Task<IActionResult> SendAllPushData([FromBody] PushDataRequestDTO request)
         {

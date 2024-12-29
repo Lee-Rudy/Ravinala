@@ -13,9 +13,9 @@ import { cilCheck } from '@coreui/icons';
 const TotalTauxPonctualite = ({ year }) => {
   const [punctualityRate, setPunctualityRate] = useState(0); // Stocke le taux de ponctualité
   const [loading, setLoading] = useState(false); // Indique si les données sont en cours de chargement
-  const [error, setError] = useState(''); // Gestion des erreurs
+  const [error, setError] = useState(''); 
 
-  // Fonction pour récupérer les données de l'API
+
   const fetchPunctualityRate = async () => {
     setLoading(true);
     setError('');
@@ -32,7 +32,7 @@ const TotalTauxPonctualite = ({ year }) => {
 
     try {
       const response = await axios.get(`${baseURL}/api/stat/cars/ponctualityrate`, {
-        params: { year }, // Passe l'année comme paramètre
+        params: { year },
       });
 
       console.log('API Response:', response.data);

@@ -80,13 +80,13 @@ const Axe_list = () => {
           <CNav variant="tabs" className="mb-3">
             <CNavItem>
                 <Link to="/axe" style={{ textDecoration: 'none' }}>
-                <CNavLink active>Listes des cars</CNavLink>
+                <CNavLink active>Liste des cars</CNavLink>
                 </Link>
             </CNavItem>
             
             <CNavItem>
                 <Link to="/axe_conducteurs" style={{ textDecoration: 'none' }}>
-                <CNavLink>Listes des attributions des cars pour un axe</CNavLink>
+                <CNavLink>Liste des assignations des cars pour un axe</CNavLink>
                 </Link>
             </CNavItem>
         </CNav>

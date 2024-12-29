@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.Runtime.InteropServices;
 
-using package_axe_usagers_depot;  // Assurez-vous que ce namespace est correct
+using package_axe_usagers_depot; 
 
 namespace package_pointage_usagers_depot
 {

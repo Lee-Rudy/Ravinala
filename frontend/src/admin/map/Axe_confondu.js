@@ -115,7 +115,7 @@ const Axe_confondu = () => {
                         <div key={axe.value} className="color-picker">
                             <h4>{axe.label}</h4>
                             <SketchPicker
-                                color={axesColors[axe.value] || '#000000'} // Couleur par défaut noire
+                                color={axesColors[axe.value] || '#000000'} // Couleur par défaut black
                                 onChange={(color) => handleColorChange(axe.value, color)}
                             />
                         </div>

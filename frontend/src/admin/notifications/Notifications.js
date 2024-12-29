@@ -17,7 +17,7 @@ const NotificationCard = ({ notification, type }) => {
     if (type === 'axes') {
       navigate(`/axe/update/${notification.id}`);
     } else if (type === 'pointageRamassage') {
-      navigate('/notifications'); // Ou une route spécifique si nécessaire
+      navigate('/notifications'); 
     }
   };
 
@@ -66,7 +66,7 @@ const Notifications = () => {
     const fetchPointageRamassage = async () => {
       try {
         const baseURL = import.meta.env.VITE_API_BASE_URL;
-        const lastChecked = new Date(); // Ajustez selon vos besoins
+        const lastChecked = new Date(); 
         const response = await axios.get(`${baseURL}/api/notifications/pointageRamassage`, {
           params: { lastChecked: lastChecked.toISOString() }
         });
@@ -117,7 +117,7 @@ const Notifications = () => {
               <CCol xs={12} md={4}>
                 <h5>Rappel fin de contrat</h5>
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  {/* Implémentez de manière similaire si vous avez des notifications pour cela */}
+                  {/* encore en cours, possibilité de mis à jour */}
                   <p className="text-center">Aucune notification</p>
                 </div>
               </CCol>

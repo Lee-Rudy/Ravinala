@@ -26,7 +26,6 @@ namespace package_prestataire_controller
             return await _context.Prestataire_instance.ToListAsync();
         }
 
-        // Get a single prestataire by ID
         [HttpGet("liste/{id}")]
         public async Task<ActionResult<Prestataire>> GetPrestataireById(int id)
         {

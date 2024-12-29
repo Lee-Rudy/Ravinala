@@ -40,7 +40,7 @@ namespace package_push_controller.DTOs
         public string? DatetimeRamassage { get; set; }
 
         [JsonProperty("est_present")]
-        public string EstPresent { get; set; }  // Changer en bool pour correspondre aux données JSON
+        public string EstPresent { get; set; }
     }
 
 
@@ -59,7 +59,7 @@ namespace package_push_controller.DTOs
         public string? DatetimeDepot { get; set; }
 
         [JsonProperty("est_present")]
-        public string EstPresent { get; set; }  // Changer en bool pour correspondre aux données JSON
+        public string EstPresent { get; set; }
     }
 
     public class BoutonDTO
@@ -68,10 +68,10 @@ namespace package_push_controller.DTOs
         public string NomVoiture { get; set; }
 
         [JsonProperty("datetime_depart")]
-        public string? DatetimeDepart { get; set; } // Date en String peut être null
+        public string? DatetimeDepart { get; set; }
 
         [JsonProperty("datetime_arrivee")]
-        public string? DatetimeArrivee { get; set; } // Date en String peut être null
+        public string? DatetimeArrivee { get; set; }
         
         [JsonProperty("motif")]
         public string? motif { get; set; } 
@@ -89,7 +89,7 @@ namespace package_push_controller.DTOs
         public string NomVoiture { get; set; }
 
         [JsonProperty("datetime_imprevu")]
-        public string? DatetimeImprevu { get; set; } // Date en String
+        public string? DatetimeImprevu { get; set; }
     }
 
      public class KmMatinDTO
@@ -104,7 +104,7 @@ namespace package_push_controller.DTOs
         public string DatetimeMatin { get; set; }
 
         [JsonProperty("nomVoiture")]
-        public string? NomVoiture { get; set; } // Date en String
+        public string? NomVoiture { get; set; }
     }
 
     public class KmSoirDTO
@@ -119,6 +119,6 @@ namespace package_push_controller.DTOs
         public string DatetimeSoir { get; set; }
 
         [JsonProperty("nomVoiture")]
-        public string? NomVoiture { get; set; } // Date en String
+        public string? NomVoiture { get; set; }
     }
 }

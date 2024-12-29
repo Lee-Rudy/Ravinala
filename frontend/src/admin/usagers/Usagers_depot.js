@@ -62,15 +62,6 @@ const Usagers_depot = () => {
             />
             </div>
 
-              {/* <div className="mb-3">
-                <CFormLabel htmlFor="statut">statut</CFormLabel>
-                <CFormSelect id="statut">
-                  <option value="">Sélectionner le statut</option>
-                  <option value="est_actif">actif</option>
-                  <option value="non_actif">non actif</option>
-                </CFormSelect>
-              </div> */}
-
               {/* Bouton Ajouter */}
               <CButton type="submit" color="success">Ajouter</CButton>
             </form>
@@ -79,7 +70,6 @@ const Usagers_depot = () => {
       </CCol>
     </CRow>
 
-    //liste des usagers
   )
 }
 

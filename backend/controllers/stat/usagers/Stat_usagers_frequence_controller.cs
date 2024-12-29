@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using package_push_frequence.DTOs;
-using package_my_db_context; // Assurez-vous que ce namespace correspond à votre projet
+using package_my_db_context;
 
 namespace package_push_frequence.Controllers
 {
@@ -23,16 +23,17 @@ namespace package_push_frequence.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// pour avoir sa fréquence de taux d'utilisation le plus répétitifs d'un usager
         [HttpGet("usagers/frequence")]
         public async Task<IActionResult> GetParcoursStatistics(string matricule, int annee)
         {
-            // Validation des paramètres
             if (string.IsNullOrEmpty(matricule))
             {
                 return BadRequest("Le matricule est requis.");
             }
 
-            // Vérifier si l'usager existe (optionnel mais recommandé)
+
             var usagerExiste = await _context.PointageRamassagePushes_instance.AnyAsync(r => r.Matricule == matricule) ||
                                await _context.PointageDepotPushes_instance.AnyAsync(d => d.Matricule == matricule) ||
                                await _context.PointageUsagersImprevuPushes_instance.AnyAsync(i => i.Matricule == matricule);
@@ -43,7 +44,6 @@ namespace package_push_frequence.Controllers
             }
 
             // Récupérer les données de ramassage, dépôt et imprévus pour l'usager et l'année spécifiés
-            // Utiliser StartsWith pour filtrer par année, en supposant que le format commence par l'année
             var ramassageData = await _context.PointageRamassagePushes_instance
                 .Where(r => r.Matricule == matricule && r.DatetimeRamassage.StartsWith(annee.ToString()))
                 .ToListAsync();
@@ -102,7 +102,6 @@ namespace package_push_frequence.Controllers
                 // Conversion du numéro du mois en nom du mois en français
                 var monthName = CultureInfo.CreateSpecificCulture("fr-FR").DateTimeFormat.GetMonthName(month);
 
-                // Filtrer les données de ramassage, dépôt et imprévus pour le mois en cours en mémoire
                 var ramassageMonth = ramassageData
                     .Where(r =>
                     {

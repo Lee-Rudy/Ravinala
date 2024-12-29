@@ -31,9 +31,9 @@ import Select from 'react-select';
 
 const RetardParCar = () => {
   const [carsList, setCarsList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Terme de recherche
-  const [selectedCar, setSelectedCar] = useState(null); // Voiture sélectionnée
-  const [year, setYear] = useState(new Date().getFullYear()); // Année sélectionnée
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [year, setYear] = useState(new Date().getFullYear()); 
   const [delaysByMonth, setDelaysByMonth] = useState([]); // Données pour le graphique des retards
   const [passengerGeneralStats, setPassengerGeneralStats] = useState(null); // Statistiques générales des usagers
   const [passengerAverageStats, setPassengerAverageStats] = useState(null); // Statistiques moyennes ramassage-dépot
@@ -57,7 +57,7 @@ const RetardParCar = () => {
     fetchCars();
   }, []);
 
-  // Récupérer la liste des voitures
+  
   const fetchCars = async () => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     try {
@@ -129,7 +129,7 @@ const RetardParCar = () => {
     }
   };
 
-  // Gestion de la pagination
+  // pagination
   const paginatedCars = carsList
     .filter((car) =>
       car.nom_car.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -283,33 +283,33 @@ const RetardParCar = () => {
       </label>
       <Select
         id="yearSelect"
-        value={{ value: year, label: year }} // Format attendu par react-select
+        value={{ value: year, label: year }}
         onChange={(selectedOption) => setYear(selectedOption.value)} // Met à jour la valeur de l'année
         options={[...Array(30)].map((_, i) => {
           const yearOption = new Date().getFullYear() - i;
-          return { value: yearOption, label: yearOption }; // Format des options attendu par react-select
+          return { value: yearOption, label: yearOption };
         })}
         placeholder="Rechercher ou sélectionner une année"
         styles={{
           control: (base) => ({
             ...base,
-            borderColor: '#45B48E', // Couleur de la bordure
-            boxShadow: 'none', // Supprimer les ombres par défaut
-            '&:hover': { borderColor: '#45B48E' }, // Bordure au survol
+            borderColor: '#45B48E', 
+            boxShadow: 'none',
+            '&:hover': { borderColor: '#45B48E' }, 
           }),
           option: (base, { isFocused, isSelected }) => ({
             ...base,
-            backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', // Couleur de fond
-            color: isSelected ? 'white' : 'black', // Couleur du texte
-            '&:hover': { backgroundColor: '#45B48E', color: 'white' }, // Survol
+            backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', 
+            color: isSelected ? 'white' : 'black', 
+            '&:hover': { backgroundColor: '#45B48E', color: 'white' },
           }),
           placeholder: (base) => ({
             ...base,
-            color: '#45B48E', // Couleur du placeholder
+            color: '#45B48E', 
           }),
           singleValue: (base) => ({
             ...base,
-            color: '#45B48E', // Couleur de la valeur sélectionnée
+            color: '#45B48E', 
           }),
         }}
       />

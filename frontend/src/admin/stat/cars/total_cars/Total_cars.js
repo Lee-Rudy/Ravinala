@@ -14,9 +14,9 @@ import { cilCheck } from '@coreui/icons';
 const TotalCars = ({ year }) => {
   const [totalDelays, setTotalDelays] = useState(0); // Stocke le total des retards
   const [loading, setLoading] = useState(false); // Indique si les données sont en cours de chargement
-  const [error, setError] = useState(''); // Gestion des erreurs
+  const [error, setError] = useState('');
 
-  // Fonction pour récupérer les données de l'API
+
   const fetchTotalDelays = async () => {
     setLoading(true);
     setError('');
@@ -33,7 +33,7 @@ const TotalCars = ({ year }) => {
 
     try {
       const response = await axios.get(`${baseURL}/api/stat/cars/total`, {
-        params: { year }, // Passe l'année comme paramètre
+        params: { year }, 
       });
 
       console.log('API Response:', response.data);
@@ -53,14 +53,14 @@ const TotalCars = ({ year }) => {
     }
   };
 
-  // Récupère les données lorsque `year` change
+
   useEffect(() => {
     fetchTotalDelays();
   }, [year]);
 
   return (
     <CRow>
-      {/* Résumé */}
+
       <CCol xs={12}>
         <CRow className="mb-4">
           <CCol xs={12} sm={6} className="mb-3 mb-sm-0">
@@ -81,11 +81,6 @@ const TotalCars = ({ year }) => {
             </CCard>
           </CCol>
         </CRow>
-
-        {/* Bouton pour recharger */}
-        {/* <CButton color="primary" onClick={fetchTotalDelays}>
-          Recharger
-        </CButton> */}
       </CCol>
     </CRow>
   );

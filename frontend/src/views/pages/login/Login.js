@@ -1,5 +1,5 @@
-import React, { useState } from 'react'; // Correction ici
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   CButton,
   CCard,
@@ -12,53 +12,100 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CFormLabel,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
-
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  // Authentification 
+  // États pour les champs de formulaire
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // État pour les erreurs de formulaire
+  const [formErrors, setFormErrors] = useState({});
+
+  // État pour les erreurs générales
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
-  // Fonction de gestion de l'envoi du formulaire
-  // Fonction de gestion de l'envoi du formulaire
-    const Envoi_data = async (event) => {
-      event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
+  // Fonction de validation des champs
+  const validateForm = () => {
+    const errors = {};
 
-      try {
-          const baseURL = import.meta.env.VITE_API_BASE_URL;
-          
-          const response = await axios.post(`${baseURL}/api/login/identification`, {
-              mail: email,
-              mot_de_passe: password
-          }, {
-              withCredentials: true
-          });
-
-          // si la vérification / réponse sont correcte
-          if (response.status === 200) {
-              localStorage.setItem('user', JSON.stringify(response.data));
-              // alert("Connexion réussie !");
-              navigate(response.data.redirectUrl); // Redirection en fonction de l'URL reçue du serveur
-          }
-      } catch (error) {
-          if (error.response) {
-              console.error("Erreur de réponse : ", error.response.data);
-              setError(error.response.data.message || 'Erreur de connexion');
-          } else {
-              console.error("Erreur : ", error);
-              setError('Une erreur est survenue. Veuillez réessayer.');
-          }
+    // Validation de l'email
+    if (!email) {
+      errors.email = 'L\'e-mail est obligatoire.';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errors.email = 'Veuillez entrer un e-mail valide.';
       }
-    };
+    }
 
+    // Validation du mot de passe
+    if (!password) {
+      errors.password = 'Le mot de passe est obligatoire.';
+    } else if (password.length < 6) {
+      errors.password = 'Le mot de passe doit contenir au moins 6 caractères.';
+    }
+
+    return errors;
+  };
+
+  // Fonction de gestion de l'envoi du formulaire
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
+
+    // Valider les champs du formulaire
+    const errors = validateForm();
+    setFormErrors(errors);
+    setError(''); // Réinitialiser l'erreur générale
+
+    // Si des erreurs existent, ne pas procéder à l'envoi
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+      const response = await axios.post(`${baseURL}/api/login/identification`, {
+        mail: email,
+        mot_de_passe: password
+      }, {
+        withCredentials: true
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        // Rediriger vers l'URL fournie par le serveur
+        navigate(response.data.redirectUrl); 
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error("Erreur de réponse : ", error.response.data);
+        const serverErrors = error.response.data.errors || {};
+        const newFormErrors = {};
+
+        // Mappez les erreurs du serveur aux champs de formulaire
+        if (serverErrors.mail) {
+          newFormErrors.email = serverErrors.mail;
+        }
+        if (serverErrors.mot_de_passe) {
+          newFormErrors.password = serverErrors.mot_de_passe;
+        }
+
+        setFormErrors(newFormErrors);
+        setError(error.response.data.message || 'Erreur de connexion');
+      } else {
+        console.error("Erreur : ", error);
+        setError('Une erreur est survenue. Veuillez réessayer.');
+      }
+    }
+  };
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -66,6 +113,7 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
+              {/* Carte de présentation */}
               <CCard className="text-white py-5" style={{ width: '44%', backgroundColor: '#2fab53' }}>
                 <CCardBody className="text-center">
                   <div>
@@ -86,51 +134,76 @@ const Login = () => {
                   </div>
                 </CCardBody>
               </CCard>
+
+              {/* Carte de connexion */}
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm onSubmit={Envoi_data}>
+                  <CForm onSubmit={handleSubmit} noValidate>
                     <h1 className="text-center">Login</h1>
-                    <p>Votre e-mail</p>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
-                      <CFormInput 
-                        type="email" 
-                        placeholder="email" 
-                        autoComplete="E-mail" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)}
-                        required  
-                      />
-                    </CInputGroup>
-                    <p>Votre mot de passe</p>
-                    <CInputGroup className="mb-4">
-                      <CInputGroupText>
-                        <CIcon icon={cilLockLocked} />
-                      </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Mot de passe"
-                        autoComplete="current-password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)}
-                        required 
-                      />
-                    </CInputGroup>
+
+                    {/* Champ e-mail */}
+                    <CRow className="mb-3">
+                      <CCol md={12}>
+                        <CFormLabel htmlFor="email">Votre e-mail</CFormLabel>
+                        <CInputGroup>
+                          <CInputGroupText>
+                            <CIcon icon={cilUser} />
+                          </CInputGroupText>
+                          <CFormInput 
+                            type="email" 
+                            id="email"
+                            placeholder="Entrer l'e-mail" 
+                            autoComplete="email" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)}
+                            invalid={!!formErrors.email}
+                            required
+                          />
+                          {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
+                        </CInputGroup>
+                      </CCol>
+                    </CRow>
+
+                    {/* Champ mot de passe */}
+                    <CRow className="mb-4">
+                      <CCol md={12}>
+                        <CFormLabel htmlFor="password">Votre mot de passe</CFormLabel>
+                        <CInputGroup>
+                          <CInputGroupText>
+                            <CIcon icon={cilLockLocked} />
+                          </CInputGroupText>
+                          <CFormInput
+                            type="password"
+                            id="password"
+                            placeholder="Entrer le mot de passe"
+                            autoComplete="current-password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
+                            invalid={!!formErrors.password}
+                            required 
+                          />
+                          {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
+                        </CInputGroup>
+                      </CCol>
+                    </CRow>
+
+                    {/* Bouton de soumission */}
                     <CRow>
-                      <CCol xs={6}>
+                      <CCol xs={12}>
                         <CButton 
                           color="success" 
                           className="px-3 rounded-0 custom-button-text" 
                           style={{ color: 'white' }} 
-                          type="submit" // Assurez-vous que le bouton soumet le formulaire
+                          type="submit"
+                          block
                         >
                           Se connecter
                         </CButton>
                       </CCol>
                     </CRow>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+
+                    {/* Message d'erreur général */}
+                    {error && <p className="mt-3 text-danger text-center">{error}</p>}
                   </CForm>
                 </CCardBody>
               </CCard>

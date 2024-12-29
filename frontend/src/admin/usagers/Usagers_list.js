@@ -46,7 +46,6 @@ const UsagersList = () => {
   // Limite de la pagination
   const itemsPerPage = 5;
 
-  // Fetch data from API
   useEffect(() => {
     fetchUsagers();
   }, []);
@@ -62,7 +61,7 @@ const UsagersList = () => {
     }
   };
 
-  // Filtrage par recherche
+ 
   const filteredUsagers = usagersList.filter((usager) => {
     const searchFilter = 
       (usager.matricule && usager.matricule.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -73,7 +72,7 @@ const UsagersList = () => {
     return searchFilter;
   });
   
-  // Appliquer les filtres de statut sur la liste déjà filtrée
+  
   const finalFilteredUsagers = filteredUsagers.filter((usager) => {
     const ramassageFilter = filterRamassage ? usager.estActifRamassage === (filterRamassage === 'Actif') : true;
     const depotFilter = filterDepot ? usager.estActifDepot === (filterDepot === 'Actif') : true;
@@ -83,7 +82,6 @@ const UsagersList = () => {
 
   // Pagination
   const paginatedUsagers = finalFilteredUsagers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
 
   const handleUsagerClick = (usager) => {
     setSelectedUsager(usager);
@@ -436,10 +434,6 @@ const UsagersList = () => {
                 </CButton>
               </CModalFooter>
             </CModal>
-
-
-              
-
             </CCardBody>
           </CCard>
         </CCol>

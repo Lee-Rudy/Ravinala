@@ -168,8 +168,8 @@ const AppHeader = () => {
               className="shadow-lg"
               style={{
                 width: '320px',
-                maxHeight: '400px', // Limite la hauteur
-                overflowY: 'auto',  // Active la barre de défilement verticale
+                maxHeight: '400px',
+                overflowY: 'auto',  
                 borderRadius: '8px',
                 border: '1px solid #ddd',
                 padding: '0',
@@ -254,14 +254,13 @@ const AppHeader = () => {
                     style={{ textDecoration: 'none', color: '#45B48E' }}
                     onClick={() => navigate('/notifications')}
                   >
-                    Voir toutes les notifications
+                    {/* Voir toutes les notifications */}
                   </Link>
                 </CDropdownItem>
               </CDropdownMenu>
             </CDropdown>
           </CNavItem>
 
-          {/* ... (autres éléments de navigation) */}
           
         </CHeaderNav>
 
@@ -327,7 +326,7 @@ const AppHeader = () => {
               </CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
-          {/* ... */}
+
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>

@@ -23,6 +23,7 @@ namespace package_stat_cars_controller
 
         /// <summary>
         /// Statistique flexible pour une liste de voitures et une plage de dates.
+        /// c'est à dire avec possibilité de choisir un date début et date fin
         /// </summary>
         /// http://localhost:5218/api/stat/conso/ranking/totalcost?cars=car1&cars=car2&startDate=2024-11-18&endDate=2024-11-19
         /// http://localhost:5218/api/stat/conso/ranking/totalcost?cars=car1&cars=car2&cars=car3&startDate=2024-11-19&endDate=2024-11-19
@@ -34,14 +35,14 @@ namespace package_stat_cars_controller
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate)
         {
-            // Validation des dates
+            // check date condition
             if (startDate > endDate)
             {
                 return BadRequest("La date de début doit être antérieure ou égale à la date de fin.");
             }
 
             string startStr = startDate.ToString("yyyy-MM-dd");
-            string endStr = endDate.AddDays(1).ToString("yyyy-MM-dd"); // Inclure la date de fin entière
+            string endStr = endDate.AddDays(1).ToString("yyyy-MM-dd");
 
             // Normaliser les noms des voitures en minuscules pour la comparaison
             List<string> normalizedCars = cars?.Select(c => c.ToLower()).ToList();
@@ -58,7 +59,7 @@ namespace package_stat_cars_controller
                 startStr,
                 endStr,
                 isMatin: true,
-                selectedCars: normalizedCars); // Voitures sélectionnées ou toutes
+                selectedCars: normalizedCars); // checkBox de choix d'une ou des voitures
 
             // Récupérer les trajets du soir
             var kmSoir = GetKmData(
@@ -72,7 +73,7 @@ namespace package_stat_cars_controller
                 startStr,
                 endStr,
                 isMatin: false,
-                selectedCars: normalizedCars); // Voitures sélectionnées ou toutes
+                selectedCars: normalizedCars);// checkBox de choix d'une ou des voitures
 
             // Calculer les coûts
             var result = await CalculateTotalCost(kmMatin, kmSoir, $"{startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}");
@@ -80,15 +81,7 @@ namespace package_stat_cars_controller
             return result;
         }
 
-        /// <summary>
-        /// Méthode utilitaire pour récupérer et agréger les données des trajets.
-        /// </summary>
-        /// <param name="query">La requête de données Km.</param>
-        /// <param name="start">Date de début au format "yyyy-MM-dd".</param>
-        /// <param name="end">Date de fin au format "yyyy-MM-dd".</param>
-        /// <param name="isMatin">Indique si les données concernent les trajets du matin.</param>
-        /// <param name="selectedCars">Liste des voitures sélectionnées (en minuscules). Si null, toutes les voitures sont incluses.</param>
-        /// <returns>Liste agrégée des données de trajets par voiture.</returns>
+
         private List<TripData> GetKmData(
             IQueryable<KmData> query,
             string start,
@@ -121,7 +114,7 @@ namespace package_stat_cars_controller
                         distance = finKm - departKm;
                         if (distance < 0)
                         {
-                            distance = 0.0; // Éviter les distances négatives
+                            distance = 0.0; // valeur par défaut si il y a une distance négatives
                         }
                     }
 
@@ -152,7 +145,7 @@ namespace package_stat_cars_controller
         {
             var cars = await _context.Cars_instance.ToListAsync();
 
-            // Créer un dictionnaire pour les trajets du soir
+            //dictionnaire pour les trajets du soir
             var soirDict = kmSoir.ToDictionary(km => km.NomVoiture, km => km.TotalKmSoir);
 
             // Grouper les trajets du matin et du soir
@@ -164,7 +157,6 @@ namespace package_stat_cars_controller
                 TotalKm = matin.TotalKmMatin + (soirDict.ContainsKey(matin.NomVoiture) ? soirDict[matin.NomVoiture] : 0.0)
             }).ToList();
 
-            // Inclure les trajets du soir qui n'ont pas de correspondance dans les trajets du matin
             var matinCars = new HashSet<string>(kmMatin.Select(km => km.NomVoiture));
             var additionalSoirTrips = kmSoir.Where(km => !matinCars.Contains(km.NomVoiture)).Select(km => new
             {
@@ -212,7 +204,7 @@ namespace package_stat_cars_controller
                         NomVoiture = car.NomVoiture,
                         TotalKm = (double)totalKm,
                         TotalPrix = prix_despense,
-                        TotalLitres = litres_despenses // Stocker les litres consommés
+                        TotalLitres = litres_despenses // save les litres consommés
                     };
                 }
                 else
@@ -249,19 +241,19 @@ namespace package_stat_cars_controller
                     c.NomVoiture,
                     c.TotalPrix,
                     c.TotalKm,
-                    c.TotalLitres // Inclure les litres consommés dans la réponse
+                    c.TotalLitres // Inclure les litres consommés
                 })
             });
         }
 
         /// <summary>
-        /// Classes utilitaires
+        /// Classes pour des valeurss de résultats
         /// </summary>
         public class KmData
         {
             public string NomVoiture { get; set; }
-            public string DatetimeMatin { get; set; } // Utilisé pour les trajets du matin ou du soir selon le contexte
-            public string DatetimeSoir { get; set; } // Ajouté pour clarifier les trajets du soir
+            public string DatetimeMatin { get; set; }
+            public string DatetimeSoir { get; set; } 
             public string Fin { get; set; }
             public string Depart { get; set; }
         }

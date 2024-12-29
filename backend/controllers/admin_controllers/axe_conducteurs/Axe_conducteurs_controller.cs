@@ -77,57 +77,57 @@ namespace package_axe_conducteurs_controller
                 return NoContent();
             }
 
-        [HttpGet("details")]
-        public async Task<ActionResult<IEnumerable<object>>> GetAxeConducteursCarsDetails()
-        {
-            var result = await _context.Axe_conducteurs_instance
-                .Include(ac => ac.Axe) 
-                .Include(ac => ac.Conducteurs)
-                .Include(ac => ac.Cars)
-                .Select(ac => new 
-                {
-                    axe_id = ac.Axe.id,
-                    nom_axe = ac.Axe.axe,
-                    conducteur_id = ac.Conducteurs.id,
-                    nom_conducteur = ac.Conducteurs.nom,
-                    car_id = ac.Cars.id,
-                    nom_car = ac.Cars.nom_car,
-                    id = ac.id //id de ace_conducteurs
-                })
-                .OrderBy(ac => ac.nom_axe)
-                .ThenBy(ac => ac.nom_conducteur)
-                .ToListAsync();
-
-            return Ok(result);
-        }
-
-        [HttpGet("details/{id}")]
-    public async Task<ActionResult<object>> GetAxeConducteursCarsDetailsById(int id)
-    {
-        var result = await _context.Axe_conducteurs_instance
-            .Include(ac => ac.Axe)
-            .Include(ac => ac.Conducteurs)
-            .Include(ac => ac.Cars)
-            .Where(ac => ac.id == id) // Filtre par ID
-            .Select(ac => new 
+            [HttpGet("details")]
+            public async Task<ActionResult<IEnumerable<object>>> GetAxeConducteursCarsDetails()
             {
-                axe_id = ac.Axe.id,
-                nom_axe = ac.Axe.axe,
-                conducteur_id = ac.Conducteurs.id,
-                nom_conducteur = ac.Conducteurs.nom,
-                car_id = ac.Cars.id,
-                nom_car = ac.Cars.nom_car,
-                id = ac.id
-            })
-            .FirstOrDefaultAsync();
+                var result = await _context.Axe_conducteurs_instance
+                    .Include(ac => ac.Axe) 
+                    .Include(ac => ac.Conducteurs)
+                    .Include(ac => ac.Cars)
+                    .Select(ac => new 
+                    {
+                        axe_id = ac.Axe.id,
+                        nom_axe = ac.Axe.axe,
+                        conducteur_id = ac.Conducteurs.id,
+                        nom_conducteur = ac.Conducteurs.nom,
+                        car_id = ac.Cars.id,
+                        nom_car = ac.Cars.nom_car,
+                        id = ac.id //id de axe_conducteurs
+                    })
+                    .OrderBy(ac => ac.nom_axe)
+                    .ThenBy(ac => ac.nom_conducteur)
+                    .ToListAsync();
 
-        if (result == null)
-        {
-            return NotFound("Assignation non trouvée.");
-        }
+                return Ok(result);
+            }
 
-        return Ok(result);
-    }
+            [HttpGet("details/{id}")]
+            public async Task<ActionResult<object>> GetAxeConducteursCarsDetailsById(int id)
+            {
+                var result = await _context.Axe_conducteurs_instance
+                    .Include(ac => ac.Axe)
+                    .Include(ac => ac.Conducteurs)
+                    .Include(ac => ac.Cars)
+                    .Where(ac => ac.id == id) 
+                    .Select(ac => new 
+                    {
+                        axe_id = ac.Axe.id,
+                        nom_axe = ac.Axe.axe,
+                        conducteur_id = ac.Conducteurs.id,
+                        nom_conducteur = ac.Conducteurs.nom,
+                        car_id = ac.Cars.id,
+                        nom_car = ac.Cars.nom_car,
+                        id = ac.id
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return NotFound("Assignation non trouvée.");
+                }
+
+                return Ok(result);
+            }
 
 
 

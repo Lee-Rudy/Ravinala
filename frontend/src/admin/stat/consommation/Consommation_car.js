@@ -31,43 +31,38 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const ConsommationCar = () => {
-  // États pour la liste des voitures
-  const [allCars, setAllCars] = useState([]); // Tous les véhicules récupérés de l'API
-  const [filteredCars, setFilteredCars] = useState([]); // Voitures filtrées selon le terme de recherche
+ 
+  const [allCars, setAllCars] = useState([]); 
+  const [filteredCars, setFilteredCars] = useState([]); 
   const [carsLoading, setCarsLoading] = useState(false);
   const [carsError, setCarsError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 5; // Nombre de voitures par page
+  const pageSize = 5; 
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  // États pour la sélection des voitures
   const [selectedCars, setSelectedCars] = useState([]);
 
-  // États pour les dates
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  // États pour les résultats de consommation
   const [consumptionData, setConsumptionData] = useState(null);
   const [consumptionLoading, setConsumptionLoading] = useState(false);
   const [consumptionError, setConsumptionError] = useState(null);
 
 
-  // Fonction pour récupérer la liste des voitures
   const fetchCars = async () => {
     setCarsLoading(true);
     setCarsError(null);
 
-    // Définir la baseURL directement si les variables d'environnement posent problème
+    
     const baseURL = import.meta.env.VITE_API_BASE_URL;
-
 
     try {
       const response = await axios.get(`${baseURL}/api/cars/liste`);
 
-      // Vérifiez si la réponse est un tableau
+      
       if (Array.isArray(response.data)) {
         setAllCars(response.data);
         setFilteredCars(response.data);
@@ -84,13 +79,11 @@ const ConsommationCar = () => {
   };
 
   
-
-  // Effet pour charger les voitures au démarrage
   useEffect(() => {
     fetchCars();
   }, []);
 
-  // Effet pour filtrer les voitures lorsque le terme de recherche change
+  
   useEffect(() => {
     const filtered = allCars.filter(car =>
       car.nom_car.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -98,10 +91,10 @@ const ConsommationCar = () => {
     );
     setFilteredCars(filtered);
     setTotalPages(Math.ceil(filtered.length / pageSize));
-    setCurrentPage(1); // Réinitialiser la page lors d'un nouveau filtre
+    setCurrentPage(1); 
   }, [searchTerm, allCars]);
 
-  // Calcul des voitures à afficher sur la page actuelle
+  // Calcul des cars à afficher sur la page actuelle
   const displayedCars = filteredCars.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
@@ -112,7 +105,7 @@ const ConsommationCar = () => {
     setCurrentPage(page);
   };
 
-  // Gestion de la sélection des voitures
+  // Gestion de la sélection des cars
   const handleSelectCar = (carId) => {
     setSelectedCars((prevSelected) => {
       if (prevSelected.includes(carId)) {
@@ -161,7 +154,7 @@ const ConsommationCar = () => {
       // Effectuer la requête
       const response = await axios.get(`${baseURL}/api/stat/conso/ranking/totalcost?${params.toString()}`);
   
-      console.log('Response from /totalcost:', response.data); // Log pour débogage
+      console.log('Response from /totalcost:', response.data); 
       setConsumptionData(response.data);
     } catch (error) {
       setConsumptionError('Erreur lors du chargement des données de consommation.');
@@ -254,10 +247,10 @@ const ConsommationCar = () => {
     doc.save('ConsommationVoitures.pdf');
   };
 
-  // Gestion de la recherche
+  
   const handleSearch = (e) => {
     e.preventDefault();
-    // Le filtrage est déjà géré par l'effet useEffect
+    
   };
 
   return (

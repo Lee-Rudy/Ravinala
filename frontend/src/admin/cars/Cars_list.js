@@ -37,7 +37,7 @@ import { Link } from 'react-router-dom';
 // import { color } from 'html2canvas/dist/types/css/types/color';
 
 const Cars_list = () => {
-  // Variables d'état
+
   const [carsList, setCarsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('');
@@ -58,7 +58,7 @@ const Cars_list = () => {
     km_consommation: 0,
     prix_consommation: 0,
     type_carburant: '',
-    est_actif: false // Nouveau champ
+    est_actif: false 
   });
   const [formErrors, setFormErrors] = useState({});
   const [error, setError] = useState('');
@@ -73,19 +73,19 @@ const Cars_list = () => {
     fetchPrestataires();
   }, []);
 
-  // Récupérer la liste des voitures
+  // Récupérer la liste des cars
   const fetchCars = async () => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     try {
       const response = await axios.get(`${baseURL}/api/cars/liste_type_cars_prestataire`);
-      console.log('Cars List:', response.data); // Pour débogage
+      console.log('Cars List:', response.data); // rehefa débogage
       setCarsList(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des données des voitures.', error);
     }
   };
 
-  // Récupérer la liste des types de voitures
+  // Récupérer la liste des types de cars
   const fetchTypes = async () => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     try {
@@ -111,7 +111,7 @@ const Cars_list = () => {
   const sortedFilteredCars = useMemo(() => {
     let filtered = [...carsList];
 
-    // Filtrer par nom ou immatriculation
+    // Filtre par nom ou immatriculation
     if (searchTerm) {
       filtered = filtered.filter((car) =>
         car.nomCar.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,7 +119,7 @@ const Cars_list = () => {
       );
     }
 
-    // Filtrer par type de voiture
+    // Filtre par type de carrs
     if (selectedType) {
       filtered = filtered.filter((car) => car.typeCar === selectedType);
     }
@@ -127,7 +127,7 @@ const Cars_list = () => {
     // Trier par nombre de places avec un critère secondaire (id)
     filtered.sort((a, b) => {
       if (a.nombrePlace === b.nombrePlace) {
-        return a.id - b.id; // Tri secondaire par ID croissant
+        return a.id - b.id; // Tri secondaire par id croissant
       }
       if (sortOrder === 'asc') {
         return a.nombrePlace - b.nombrePlace;
@@ -139,19 +139,19 @@ const Cars_list = () => {
     return filtered;
   }, [carsList, searchTerm, selectedType, sortOrder]);
 
-  // Pagination basée sur sortedFilteredCars
+  // Pagination 
   const paginatedCars = useMemo(() => {
     return sortedFilteredCars.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   }, [sortedFilteredCars, currentPage, itemsPerPage]);
 
-  // Handle click on a car to view details
+  // click voir détails
   const handleUsagerClick = (car) => {
     setSelectedCar(car);
     setIsEditMode(false);
     setModalVisible(true);
   };
 
-  // Handle click on edit button
+  // edit button
   const handleEditClick = (car) => {
     setSelectedCar(car);
     setIsEditMode(true);
@@ -172,7 +172,7 @@ const Cars_list = () => {
     setModalVisible(true);
   };
 
-  // Helper functions to get IDs from names
+  // get id pour le modification
   const getTypeCarsId = (typeCarName) => {
     const typeCar = types.find(t => t.type_cars === typeCarName);
     return typeCar ? typeCar.id : '';
@@ -183,7 +183,7 @@ const Cars_list = () => {
     return prest ? prest.id : '';
   };
 
-  // Handle input change in the edit form
+  // handleEditInputChange pour formulaire de update
   const handleEditInputChange = (event) => {
     const { id, value, checked, type } = event.target;
     if (id === 'est_actif') {
@@ -199,7 +199,7 @@ const Cars_list = () => {
     }
   };
 
-  // Handle form submission for update
+  //validation update
   const handleUpdateSubmit = async (event) => {
     event.preventDefault();
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -217,12 +217,12 @@ const Cars_list = () => {
             km_consommation: editCarsData.km_consommation,
             prix_consommation: editCarsData.prix_consommation,
             type_carburant: editCarsData.type_carburant,
-            est_actif: editCarsData.est_actif, // Inclure le statut
+            est_actif: editCarsData.est_actif, 
           },
           Type_carsDto: {
             id: editCarsData.type_cars_id
           },
-          Prestaitairedto: { // Assurez-vous que le nom correspond au back-end
+          Prestaitairedto: {
             id: editCarsData.prestataire_id
           }
         };
@@ -236,7 +236,7 @@ const Cars_list = () => {
     }
   };
 
-  // Form validation for edit
+  // Form validation pour edit update
   const validateEditForm = () => {
     const errors = {};
     if (!editCarsData.nom_car) errors.nom_car = 'Le nom du car est obligatoire.*';
@@ -333,7 +333,7 @@ const Cars_list = () => {
                     <CTableHeaderCell className="text-center">Km de consommation</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Prix consommation</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Statuts</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Actions</CTableHeaderCell> {/* Nouvelle colonne */}
+                    <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -551,7 +551,7 @@ const Cars_list = () => {
                         </CCol>
                       </CRow>
 
-                      {/* Messages d'erreur */}
+                      {/* Messages d'erreur  err.message*/}
                       {error && <div className="alert alert-danger">{error}</div>}
 
                       <CButton type="submit" color="primary">Mettre à jour</CButton>
@@ -619,7 +619,7 @@ const Cars_list = () => {
                             <i className="bi bi-person-fill"></i>
                             <strong>Carburant :</strong> {selectedCar.type_carburant ? selectedCar.type_carburant.slice(0, 10) : ''}
                           </li>
-                          {/* Ajoutez d'autres détails si nécessaire */}
+                          {/* ici pour ajouter d'autres détails d'informations */}
                         </ul>
                       </div>
                     ) : (

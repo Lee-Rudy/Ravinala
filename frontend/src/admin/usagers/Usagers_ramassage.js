@@ -18,7 +18,7 @@ const Usagers_ramassage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [fokontany, setFokontany] = useState([]);
 
-  // Function Fetch district and fokontany data
+  
   const fetchRegionData = async () => {
     try {
       const response = await fetch('./src/admin/usagers/region.json');

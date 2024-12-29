@@ -24,7 +24,7 @@ import { cilSearch, cilArrowLeft, cilArrowRight, cilCloudDownload, cilPlus, cilF
 import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
 
-// Styles personnalisés pour le tableau
+// Styles personnalisés pour le tableau comme excel avec possibilté d'étirrement
 const Styles = styled.div`
   padding: 1rem;
 
@@ -91,28 +91,28 @@ const Styles = styled.div`
 `;
 
 const Facture_list = () => {
-  // États pour les filtres
+  
   const [dateDebut, setDateDebut] = useState('');
   const [dateFin, setDateFin] = useState('');
   const [contratType, setContratType] = useState('tous');
 
-  // États pour la pagination
+  // la pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20; // Vous pouvez ajuster ce nombre selon vos besoins
+  const itemsPerPage = 20; 
 
-  // États pour les données
+  // les données
   const [facturations, setFacturations] = useState([]);
   const [montantFinal, setMontantFinal] = useState(0);
   const [netPayerFinal, setNetPayerFinal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
-  // États pour le statut
+  // le statut
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // Fonction pour récupérer toutes les données (pagination côté client)
+  
   const fetchFacturations = async () => {
     setLoading(true);
     setError('');
@@ -150,12 +150,11 @@ const Facture_list = () => {
     }
   };
 
-  // useEffect pour récupérer les données au chargement et lors des changements de filtres
+  
   useEffect(() => {
     fetchFacturations();
-    // Réinitialiser la page actuelle lors de l'application des filtres
+   
     setCurrentPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contratType, dateDebut, dateFin]);
 
   // Handler pour soumettre les filtres
@@ -301,7 +300,7 @@ const Facture_list = () => {
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', 'facturations.csv');
-    document.body.appendChild(link); // Required for FF
+    document.body.appendChild(link);
 
     link.click();
     document.body.removeChild(link);

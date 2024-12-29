@@ -54,17 +54,17 @@ const Axe_conducteurs_cars_list = () => {
   return (
     <CCard>
       <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>
-      <strong>Liste des Axes et Conducteurs Associés aux Cars</strong>
+      <strong>Liste des Axes et Conducteurs Associés aux Cars (Assignation)</strong>
           </CCardHeader>
         <CNav variant="tabs" className="mb-3">
           <CNavItem>
             <Link to="/axe" style={{ textDecoration: 'none' }}>
-              <CNavLink>Listes des cars</CNavLink>
+              <CNavLink>Liste des cars</CNavLink>
             </Link>
           </CNavItem>
           <CNavItem>
             <Link to="/axe_conducteurs" style={{ textDecoration: 'none' }}>
-              <CNavLink active>Listes des attributions des cars pour un axe</CNavLink>
+              <CNavLink active>Listes des assignations des cars pour un axe</CNavLink>
             </Link>
           </CNavItem>
         </CNav>

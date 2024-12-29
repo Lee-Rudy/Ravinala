@@ -33,7 +33,7 @@ const Usagers_affecter_ramassage = () => {
   const [usager, setUsager] = useState(null);
   const [error, setError] = useState('');
 
-  // Fetch region data for districts and fokontany
+ 
   const fetchRegionData = async () => {
     try {
       const response = await fetch('./src/admin/usagers/region.json');
@@ -73,8 +73,7 @@ const Usagers_affecter_ramassage = () => {
     setFokontany(fokontanyList);
   };
 
-  // Fetch Usager Details
-  // Fetch Usager Details
+  
 const fetchUsagerDetails = async () => {
   const baseURL = import.meta.env.VITE_API_BASE_URL;
   
@@ -101,7 +100,7 @@ const fetchUsagerDetails = async () => {
 };
 
 
-  // Fetch Axes data
+  
   const fetchAxes = async () => {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
     try {
@@ -118,7 +117,7 @@ const fetchUsagerDetails = async () => {
     fetchUsagerDetails();
   }, [usagerId]);
 
-  // Handle changes in Ramassage
+ 
   const handleRamassageChange = (event) => {
     const { id, value } = event.target;
     setAxeRamassageData((prevData) => ({
@@ -127,7 +126,7 @@ const fetchUsagerDetails = async () => {
     }));
   };
 
-  // Handle switch change for activating ramassage
+  
   const handleSwitchChange = () => {
     setAxeRamassageData((prevData) => ({
       ...prevData,
@@ -135,7 +134,7 @@ const fetchUsagerDetails = async () => {
     }));
   };
 
-  // Form submission handler
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -154,7 +153,7 @@ const fetchUsagerDetails = async () => {
     try {
       const response = await axios.put(`${baseURL}/api/axe_usagers_ramassage_depot/update_usager_ramassage/${usagerId}`, usagerPayload);
       alert('Usager affecté avec succès !');
-      //resetForm();
+      
     } catch (err) {
       handleError(err);
     }

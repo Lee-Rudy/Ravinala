@@ -59,7 +59,7 @@ const Conducteurs = () => {
     }
   };
 
-  // Handle form submission for add/edit
+  // validation add/edit
   const handleSubmit = async (event) => {
     event.preventDefault();
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -215,7 +215,6 @@ const Conducteurs = () => {
               Précédent
             </CPaginationItem>
 
-            {/* Pages Numérotées */}
             {[...Array(Math.ceil(filteredConducteurs.length / itemsPerPage)).keys()].map((number) => (
               <CPaginationItem
                 key={number + 1}
@@ -226,7 +225,6 @@ const Conducteurs = () => {
               </CPaginationItem>
             ))}
 
-            {/* Bouton Suivant */}
             <CPaginationItem
               disabled={currentPage === Math.ceil(filteredConducteurs.length / itemsPerPage)}
               onClick={() => setCurrentPage(currentPage + 1)}

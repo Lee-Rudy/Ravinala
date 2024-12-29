@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 
 const Dashboard_admin =() =>{
-    return(<><p>dashboard admin</p></>);
+    return(<><p>dashboard admin test</p></>);
 
 };
 

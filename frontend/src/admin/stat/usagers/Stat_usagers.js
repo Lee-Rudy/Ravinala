@@ -78,13 +78,6 @@ const Stat_usagers = () => {
     setStatsTrafics([]);
   };
 
-  // useEffect(() => {
-  //   if (paginatedUsagers.length > 0) {
-  //     setSelectedUsager(paginatedUsagers[0]); // Sélectionne automatiquement le premier usager
-  //     setStatsFrequentation(null);
-  //     setStatsTrafics([]);
-  //   }
-  // }, [paginatedUsagers]);
 
   const handleFetchTraficsStats = async () => {
     if (!selectedUsager || !selectedYear) return;
@@ -358,33 +351,33 @@ const Stat_usagers = () => {
                 </label>
                 <Select
                   id="selectYearTrafics"
-                  value={{ value: selectedYear, label: selectedYear }} // Formater la valeur sélectionnée
-                  onChange={(selectedOption) => setSelectedYear(selectedOption.value)} // Mettre à jour selectedYear
+                  value={{ value: selectedYear, label: selectedYear }} 
+                  onChange={(selectedOption) => setSelectedYear(selectedOption.value)} 
                   options={[...Array(10)].map((_, idx) => {
                     const year = new Date().getFullYear() - idx;
-                    return { value: year, label: year }; // Format attendu par react-select
+                    return { value: year, label: year };
                   })}
                   placeholder="Rechercher ou sélectionner une année"
                   styles={{
                     control: (base) => ({
                       ...base,
-                      borderColor: '#45B48E', // Couleur de la bordure
-                      boxShadow: 'none', // Supprimer les ombres par défaut
-                      '&:hover': { borderColor: '#45B48E' }, // Bordure au survol
+                      borderColor: '#45B48E', 
+                      boxShadow: 'none', 
+                      '&:hover': { borderColor: '#45B48E' }, 
                     }),
                     option: (base, { isFocused, isSelected }) => ({
                       ...base,
-                      backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', // Couleur de fond
-                      color: isSelected ? 'white' : 'black', // Couleur du texte
-                      '&:hover': { backgroundColor: '#45B48E', color: 'white' }, // Survol
+                      backgroundColor: isSelected ? '#45B48E' : isFocused ? '#a8e6d0' : 'white', 
+                      color: isSelected ? 'white' : 'black', 
+                      '&:hover': { backgroundColor: '#45B48E', color: 'white' }, 
                     }),
                     placeholder: (base) => ({
                       ...base,
-                      color: '#45B48E', // Couleur du placeholder
+                      color: '#45B48E',
                     }),
                     singleValue: (base) => ({
                       ...base,
-                      color: '#45B48E', // Couleur de la valeur sélectionnée
+                      color: '#45B48E', 
                     }),
                   }}
                 />
@@ -459,33 +452,6 @@ const Stat_usagers = () => {
               <div className="mt-4">
                 {statsFrequentation && statsFrequentation.monthlyComparison ? (
                   <>
-                    {/* Graphique Bar pour les Comparaisons Mensuelles Fréquentation */}
-                    {/* <Bar
-                      key={`${selectedUsager?.matricule}-${selectedYear}-frequentation`}
-                      data={generateBarChartDataFrequentation()}
-                      options={{
-                        responsive: true,
-                        plugins: {
-                          legend: { position: 'top' },
-                          title: {
-                            display: true,
-                            text: `Comparaison Mensuelle de Fréquentation en ${selectedYear}`,
-                          },
-                        },
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                          },
-                          x: {
-                            title: {
-                              display: true,
-                              text: 'Mois',
-                            },
-                          },
-                        },
-                      }}
-                    /> */}
-
                     {/* Tableau des Comparaisons Mensuelles Fréquentation */}
                     <CCard className="mt-4">
                 <CCardHeader style={{ backgroundColor: '#45B48E', color: 'white' }}>

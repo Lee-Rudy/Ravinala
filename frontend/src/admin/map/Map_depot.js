@@ -123,7 +123,7 @@ const Map_depot = () => {
 
 
     const adjustMarkerPosition = (point, index) => {
-        const offset = 0.1 * index; // Un décalage très léger pour les lei identiques
+        const offset = 0.1 * index; // Un décalage très léger pour les point identiques, pour mieux voir les distinctions
         return {
             latitude: parseFloat(point.latitude) + offset,
             longitude: parseFloat(point.longitude) + offset,
@@ -199,18 +199,6 @@ const Map_depot = () => {
                 </Link>
 
                 </CNavItem>
-                {/* <CNavItem>
-                <Link to="/map/correction" style={{ textDecoration: 'none' }}>
-                    <CNavLink>
-                   correcteur de parcours
-                    </CNavLink>
-                </Link>
-                </CNavItem> */}
-                {/* <CNavItem>
-                    <CNavLink href="#" disabled>
-                        Navigation
-                    </CNavLink>
-                </CNavItem> */}
             </CNav>
 
             <div className="mb-3">

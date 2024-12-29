@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\ravinala_transport\\backend\\backend.csproj": {}
+    "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\livrable\\ravinala_transport\\backend\\backend.csproj": {}
   },
   "projects": {
-    "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\ravinala_transport\\backend\\backend.csproj": {
+    "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\livrable\\ravinala_transport\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\ravinala_transport\\backend\\backend.csproj",
+        "projectUniqueName": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\livrable\\ravinala_transport\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\ravinala_transport\\backend\\backend.csproj",
+        "projectPath": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\livrable\\ravinala_transport\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\Bruner Lee Rudy\\.nuget\\packages\\",
-        "outputPath": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\ravinala_transport\\backend\\obj\\",
+        "outputPath": "D:\\ITU\\Stage\\RAVINALA AIRPORT\\informatique\\gestion de transport\\code\\livrable\\ravinala_transport\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Bruner Lee Rudy\\AppData\\Roaming\\NuGet\\NuGet.Config"

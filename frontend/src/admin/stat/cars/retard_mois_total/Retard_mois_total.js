@@ -7,7 +7,7 @@ import {
   CCol,
   CRow,
 } from '@coreui/react';
-import { Line } from 'react-chartjs-2'; // Import du graphique linéaire
+import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import CIcon from '@coreui/icons-react';
 import { cilChartLine } from '@coreui/icons';

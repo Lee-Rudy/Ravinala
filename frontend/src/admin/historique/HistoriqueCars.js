@@ -65,7 +65,7 @@ const HistoriqueCars = () => {
   };
 
   useEffect(() => {
-    // Charger les données des différents endpoints
+    
     axios
       .get(`${baseURL}/api/historique/btn`)
       .then((response) => setHistoriqueCars(response.data))
@@ -134,7 +134,7 @@ const HistoriqueCars = () => {
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', 'PonctualiteVoitures.csv');
-    document.body.appendChild(link); // Requis pour Firefox
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
@@ -185,7 +185,7 @@ const HistoriqueCars = () => {
       alternateRowStyles: { fillColor: [240, 240, 240] },
       theme: 'striped',
       didDrawCell: (data) => {
-        if (data.section === 'body' && data.column.index === 4) { // Heure Arrivée
+        if (data.section === 'body' && data.column.index === 4) {
           const heureArrivee = data.cell.text[0];
           if (heureArrivee && isRedTime(heureArrivee)) {
             doc.setTextColor(255, 0, 0);
@@ -289,9 +289,17 @@ const HistoriqueCars = () => {
                             content={item.motif ? item.motif : 'Motif non spécifié'}
                             placement="top"
                           >
-                            <CBadge color={item.motif === 'rien à signaler' || item.motif === 'Aucun' ? 'success' : 'danger'}>
-                              {item.motif ? item.motif : 'N/A'}
-                            </CBadge>
+                            <CBadge 
+                            color={
+                              item.motif === 'rien à signaler' || item.motif === 'Aucun' 
+                                ? 'success' 
+                                : item.motif === null || item.motif === 'N/A' 
+                                ? 'warning' 
+                                : 'danger'
+                            }
+                          >
+                            {item.motif ? item.motif : 'motif oublié'}
+                          </CBadge>
                           </CTooltip>
                         </CTableDataCell>
 

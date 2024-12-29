@@ -43,10 +43,10 @@ public class PointageImprevuResponseDTO
     public string NomVoiture { get; set; }
     public DateTime DateImprevu { get; set; }
     [JsonPropertyName("heureImprevu")]
-    public string HeureImprevu { get; set; } // Changer de TimeSpan à string
+    public string HeureImprevu { get; set; }
     public DateTime RecuLeDate { get; set; }
     public TimeSpan RecuLeTime { get; set; }
-    public string TypeImprevu { get; set; } // Nouveau champ
+    public string TypeImprevu { get; set; }
 }
 
 // public class PointageImprevuResponseDTO

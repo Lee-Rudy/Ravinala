@@ -46,7 +46,7 @@ namespace package_push_controller
             return await _context.PointageRamassagePushes_instance
                 .Where(p => p.RecuLe > lastChecked) // Filtre sur la date
                 .OrderByDescending(p => p.RecuLe)   // Tri par date la plus récente
-                .Take(15)                           // Limit by aux 30 dernières entrées
+                .Take(15)                           // Limit by aux 15 dernières entrées
                 .ToListAsync();
         }
 

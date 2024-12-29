@@ -19,7 +19,6 @@ namespace package_login_controller
             _context = context;
         }
 
-        // Endpoint pour la connexion
         [HttpPost("identification")]
         public async Task<IActionResult> Authenticate([FromBody] Login loginRequest)
         {
@@ -44,7 +43,6 @@ namespace package_login_controller
                 return Unauthorized(new { message = "Mot de passe incorrect." });
             }
 
-            // Si tout est correct, retourner les informations de l'utilisateur avec l'URL de redirection
             return Ok(new
             {
                 id = user.id,

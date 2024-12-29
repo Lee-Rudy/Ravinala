@@ -1,0 +1,1 @@
+dans le fichier .env se trouve le localhost du backend

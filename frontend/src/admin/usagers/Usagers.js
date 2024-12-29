@@ -16,9 +16,6 @@ import {
 
 import Select from 'react-select';
 
-
-
-
 const Usagers = () => {
 
   //district, fokontany ramassage
@@ -759,4 +756,3 @@ const handleError = (err) => {
   };
   
   export default Usagers;
-  

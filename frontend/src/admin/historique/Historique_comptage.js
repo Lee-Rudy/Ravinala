@@ -1,5 +1,3 @@
-// src/pages/Historique_comptage.jsx
-
 import React, { useState } from 'react';
 import {
   CCard,
@@ -22,20 +20,20 @@ import CIcon from '@coreui/icons-react';
 import { cilSearch, cilFile, cilCloudUpload } from '@coreui/icons';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'; // Correction de l'import
+import autoTable from 'jspdf-autotable';
 
 const Historique_comptage = () => {
-  // États pour les dates de recherche
+  //variables recherche date
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  // État pour les données de comptage
+  // variables comptage
   const [comptageData, setComptageData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // Fonction pour rechercher les données de comptage
+  // Fonction  rechercher de comptage
   const fetchComptage = async () => {
     if (!startDate) {
       alert('Veuillez sélectionner une date de début.');
@@ -50,7 +48,7 @@ const Historique_comptage = () => {
           endDate,
         },
       });
-      console.log('Données de comptage reçues:', response.data); // Ajouté pour débogage
+      console.log('Données de comptage reçues:', response.data);
       setComptageData(
         Array.isArray(response.data)
           ? response.data.map(comptage => ({
@@ -121,7 +119,7 @@ const Historique_comptage = () => {
     doc.setFontSize(12);
     doc.text(`Période : ${startDate} au ${endDate}`, 14, 30);
 
-    // Préparer les données pour le tableau
+    // set data pour le tableau : c'est à dire préparer les données pour le tableau
     const tableColumn = [
       "Matricule",
       "Total Ramassages Présents",
@@ -208,7 +206,7 @@ const Historique_comptage = () => {
               </CRow>
             </CForm>
 
-            <CRow className="mt-4">
+            {/* <CRow className="mt-4">
               <CCol>
                 <CCard color="info" className="text-white">
                   <CCardHeader className="d-flex align-items-center">
@@ -237,7 +235,7 @@ const Historique_comptage = () => {
                   </CCardBody>
                 </CCard>
               </CCol>
-            </CRow>
+            </CRow> */}
 
             <CTable bordered borderColor='primary' hover className="mt-4">
               <CTableHead color="primary">

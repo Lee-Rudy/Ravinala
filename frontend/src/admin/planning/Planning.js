@@ -56,7 +56,7 @@ const Planning = () => {
   const [currentPageRamassage, setCurrentPageRamassage] = useState(1);
   const [currentPageDepot, setCurrentPageDepot] = useState(1);
 
-  // Fetch options for cars and axes
+
   useEffect(() => {
     const fetchOptions = async () => {
       const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -72,7 +72,7 @@ const Planning = () => {
     fetchOptions();
   }, []);
 
-  // Fetch Ramassage Data
+  //fetch ramassage 
   useEffect(() => {
     const fetchRamassage = async () => {
       const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -86,7 +86,7 @@ const Planning = () => {
     fetchRamassage();
   }, []);
 
-  // Fetch Depot Data
+  // Fetch Depot
   useEffect(() => {
     const fetchDepot = async () => {
       const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -100,7 +100,7 @@ const Planning = () => {
     fetchDepot();
   }, []);
 
-  // Filter and paginate Ramassage Data
+  // Filtre et paginate Ramassage Data
   const filteredRamassageData = ramassageData.filter(item => {
     const matchesSearch = `${item.prenomUsager} ${item.matricule}`.toLowerCase().includes(searchTermRamassage.toLowerCase());
     const matchesCar = selectedCarRamassage ? item.nomVoiture === selectedCarRamassage : true;
@@ -113,7 +113,7 @@ const Planning = () => {
     currentPageRamassage * ITEMS_PER_PAGE
   );
 
-  // Filter and paginate Depot Data
+  // Filtre et paginate Depot Data
   const filteredDepotData = depotData.filter(item => {
     const matchesSearch = `${item.prenomUsager} ${item.matricule}`.toLowerCase().includes(searchTermDepot.toLowerCase());
     const matchesCar = selectedCarDepot ? item.nomVoiture === selectedCarDepot : true;
@@ -126,7 +126,7 @@ const Planning = () => {
     currentPageDepot * ITEMS_PER_PAGE
   );
 
-  // Handle page change for ramassage and depot
+
   const handlePageChangeRamassage = (page) => setCurrentPageRamassage(page);
   const handlePageChangeDepot = (page) => setCurrentPageDepot(page);
 

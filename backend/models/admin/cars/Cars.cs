@@ -53,8 +53,6 @@ namespace package_cars
         [Column("type_carburant")]
         public string? type_carburant { get; set; }
 
-        
-
     }
 
 }

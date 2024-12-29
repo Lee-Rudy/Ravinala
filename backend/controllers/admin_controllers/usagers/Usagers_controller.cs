@@ -51,9 +51,9 @@ namespace package_usagers_controller
         {
             var ramassageDepotList = await _context.Axe_usagers_ramassage_instance
                 .Join(
-                    _context.Axe_usagers_depot_instance, // Table de dépôt
-                    ramassage => ramassage.usagers_id, // Clé pour la table de ramassage
-                    depot => depot.usagers_id, // Clé pour la table de dépôt
+                    _context.Axe_usagers_depot_instance,
+                    ramassage => ramassage.usagers_id,
+                    depot => depot.usagers_id,
                     (ramassage, depot) => new { 
                         UsagerId = ramassage.Usagers.id,
                         Matricule = ramassage.Usagers.matricule,
@@ -98,9 +98,9 @@ namespace package_usagers_controller
             var ramassageDepot = await _context.Axe_usagers_ramassage_instance
                 .Where(ramassage => ramassage.Usagers.id == id)
                 .Join(
-                    _context.Axe_usagers_depot_instance, // Table de dépôt
-                    ramassage => ramassage.usagers_id, // Clé pour la table de ramassage
-                    depot => depot.usagers_id, // Clé pour la table de dépôt
+                    _context.Axe_usagers_depot_instance, 
+                    ramassage => ramassage.usagers_id, 
+                    depot => depot.usagers_id, 
                     //!!! tsy azo hatao Majiscule ny début ana variable fa sensible à la casse b ny backend sy frontend
                     (ramassage, depot) => new { 
                         usagerId = ramassage.Usagers.id,

@@ -20,15 +20,14 @@ namespace package_stat_cars_controller
             _context = context;
         }
 
-        // ===============================
-        // 1. Nombre de retards et taux de ponctualité
+         // ===============================
+        // 2. Ponctualite
         // ===============================
 
         /// <summary>
         /// Obtient le nombre total de retards pour toutes les cars sur une année donnée (ramassage seulement).
         /// Exemple d'URL : /api/stat/cars/total?year=2024
         /// </summary>
-        /// check
         [HttpGet("cars/total")]
         public async Task<IActionResult> GetTotalDelays(int year)
         {
@@ -39,9 +38,9 @@ namespace package_stat_cars_controller
 
             var totalDelays = await _context.BtnPushes_instance
                 .Where(pr =>
-                    pr.DatetimeArrivee.Length >= 19 && // Vérifier la longueur pour éviter les erreurs
+                    pr.DatetimeArrivee.Length >= 19 &&
                     pr.DatetimeArrivee.Substring(0, 4) == yearStr && // Extraire l'année
-                    pr.DatetimeArrivee.Substring(11, 8).CompareTo(delayedTimeStr) > 0 || pr.DatetimeArrivee.Substring(11, 8).CompareTo(delayedTimeStr2) > 0) // Vérifier si l'heure est après 07:30:00
+                    pr.DatetimeArrivee.Substring(11, 8).CompareTo(delayedTimeStr) > 0 || pr.DatetimeArrivee.Substring(11, 8).CompareTo(delayedTimeStr2) > 0) // Vérifier si l'heure est après entre 07:30:00 et 15:30:00
                 .CountAsync();
 
             return Ok(new { Year = year, TotalDelays = totalDelays });
@@ -61,7 +60,7 @@ namespace package_stat_cars_controller
             var delaysByMonth = await _context.BtnPushes_instance
                 .Where(pr =>
                     pr.DatetimeArrivee.Length >= 19 &&
-                    EF.Functions.Like(pr.DatetimeArrivee, $"{year}-%") && // Vérifie que l'année correspond
+                    EF.Functions.Like(pr.DatetimeArrivee, $"{year}-%") &&
                     (string.Compare(pr.DatetimeArrivee.Substring(11, 8), delayedTimeMorning) > 0 || 
                     string.Compare(pr.DatetimeArrivee.Substring(11, 8), delayedTimeAfternoon) > 0))
                 .GroupBy(pr => pr.DatetimeArrivee.Substring(5, 2)) // Extraire le mois
@@ -75,7 +74,7 @@ namespace package_stat_cars_controller
 
             var result = delaysByMonth.Select(x => new 
             { 
-                Month = int.Parse(x.Month), // Conversion en entier après la récupération
+                Month = int.Parse(x.Month),
                 Delays = x.Delays 
             }).OrderBy(x => x.Month);
 
@@ -88,7 +87,6 @@ namespace package_stat_cars_controller
         /// Exemple d'URL : /api/stat/cars/delaysbycarandmonth?carName=CarA&year=2024
         /// </summary>
         /// http://localhost:5218/api/stat/cars/delaysbycarandmonth?carName=car3&year=2024
-        /// vita
         [HttpGet("cars/delaysbycarandmonth")]
         public async Task<IActionResult> GetDelaysByCarAndMonth(string carName, int year)
         {
@@ -126,8 +124,6 @@ namespace package_stat_cars_controller
         /// Exemple d'URL : /api/stat/cars/ponctualityrate?year=2024
         /// </summary>
         /// Le taux de ponctualité retourné par ce contrôleur représente le pourcentage des cars confondues qui arrivent avant 07:30:00 (c'est-à-dire, ponctuels).
-        /// vita
-        /// eto zao
         [HttpGet("cars/ponctualityrate")]
         public async Task<IActionResult> GetPunctualityRate(int year)
         {
@@ -160,7 +156,6 @@ namespace package_stat_cars_controller
         /// Obtient la moyenne de passagers pour un car spécifique sur une année donnée, avec détail par mois.
         /// Exemple d'URL : /api/stat/passengers/average?carName=CarA&year=2024
         /// </summary>
-        /// eto ndray zao 
         [HttpGet("cars/passengers/average")]
             public async Task<IActionResult> GetAveragePassengers(string carName, int year)
             {
@@ -250,57 +245,57 @@ namespace package_stat_cars_controller
 
 
             [HttpGet("cars/passengers/average/ramassage-depot")]
-public async Task<IActionResult> GetAveragePassengersByRamassageAndDepot(string carName, int year)
-{
-    string yearStr = year.ToString();
+            public async Task<IActionResult> GetAveragePassengersByRamassageAndDepot(string carName, int year)
+            {
+                string yearStr = year.ToString();
 
-    // Ramassage
-    var passengersByMonthRamassage = await _context.PointageRamassagePushes_instance
-        .Where(pr =>
-            pr.NomVoiture.ToLower() == carName.ToLower() &&
-            pr.DatetimeRamassage.StartsWith(yearStr) &&
-            pr.EstPresent == "1")
-        .GroupBy(pr => new { Month = pr.DatetimeRamassage.Substring(5, 2) })
-        .Select(g => new { g.Key.Month, Passengers = g.Count() })
-        .ToListAsync();
+                // Ramassage
+                var passengersByMonthRamassage = await _context.PointageRamassagePushes_instance
+                    .Where(pr =>
+                        pr.NomVoiture.ToLower() == carName.ToLower() &&
+                        pr.DatetimeRamassage.StartsWith(yearStr) &&
+                        pr.EstPresent == "1")
+                    .GroupBy(pr => new { Month = pr.DatetimeRamassage.Substring(5, 2) })
+                    .Select(g => new { g.Key.Month, Passengers = g.Count() })
+                    .ToListAsync();
 
-    // Dépôt
-    var passengersByMonthDepot = await _context.PointageDepotPushes_instance
-        .Where(pd =>
-            pd.NomVoiture.ToLower() == carName.ToLower() &&
-            pd.DatetimeDepot.StartsWith(yearStr) &&
-            pd.EstPresent == "1")
-        .GroupBy(pd => new { Month = pd.DatetimeDepot.Substring(5, 2) })
-        .Select(g => new { g.Key.Month, Passengers = g.Count() })
-        .ToListAsync();
+                // Dépôt
+                var passengersByMonthDepot = await _context.PointageDepotPushes_instance
+                    .Where(pd =>
+                        pd.NomVoiture.ToLower() == carName.ToLower() &&
+                        pd.DatetimeDepot.StartsWith(yearStr) &&
+                        pd.EstPresent == "1")
+                    .GroupBy(pd => new { Month = pd.DatetimeDepot.Substring(5, 2) })
+                    .Select(g => new { g.Key.Month, Passengers = g.Count() })
+                    .ToListAsync();
 
-    // Calcul des moyennes
-    int totalRamassagePassengers = passengersByMonthRamassage.Sum(p => p.Passengers);
-    int totalDepotPassengers = passengersByMonthDepot.Sum(p => p.Passengers);
+                // Calcul des moyennes
+                int totalRamassagePassengers = passengersByMonthRamassage.Sum(p => p.Passengers);
+                int totalDepotPassengers = passengersByMonthDepot.Sum(p => p.Passengers);
 
-    int activeRamassageMonths = passengersByMonthRamassage.Count(p => p.Passengers > 0);
-    int activeDepotMonths = passengersByMonthDepot.Count(p => p.Passengers > 0);
+                int activeRamassageMonths = passengersByMonthRamassage.Count(p => p.Passengers > 0);
+                int activeDepotMonths = passengersByMonthDepot.Count(p => p.Passengers > 0);
 
-    double averageRamassagePassengers = activeRamassageMonths > 0 
-        ? (double)totalRamassagePassengers / activeRamassageMonths 
-        : 0;
+                double averageRamassagePassengers = activeRamassageMonths > 0 
+                    ? (double)totalRamassagePassengers / activeRamassageMonths 
+                    : 0;
 
-    double averageDepotPassengers = activeDepotMonths > 0 
-        ? (double)totalDepotPassengers / activeDepotMonths 
-        : 0;
+                double averageDepotPassengers = activeDepotMonths > 0 
+                    ? (double)totalDepotPassengers / activeDepotMonths 
+                    : 0;
 
-    // Résultat final
-    return Ok(new
-    {
-        Car = carName,
-        Year = year,
-        TotalRamassagePassengers = totalRamassagePassengers,
-        AverageRamassagePassengers = averageRamassagePassengers,
-        TotalDepotPassengers = totalDepotPassengers,
-        AverageDepotPassengers = averageDepotPassengers,
-        PassengersByMonthRamassage = passengersByMonthRamassage,
-        PassengersByMonthDepot = passengersByMonthDepot
-    });
+                // Résultat final
+                return Ok(new
+                {
+                    Car = carName,
+                    Year = year,
+                    TotalRamassagePassengers = totalRamassagePassengers,
+                    AverageRamassagePassengers = averageRamassagePassengers,
+                    TotalDepotPassengers = totalDepotPassengers,
+                    AverageDepotPassengers = averageDepotPassengers,
+                    PassengersByMonthRamassage = passengersByMonthRamassage,
+                    PassengersByMonthDepot = passengersByMonthDepot
+                });
 }
 
 

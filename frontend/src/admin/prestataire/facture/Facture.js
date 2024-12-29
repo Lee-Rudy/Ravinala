@@ -39,7 +39,7 @@ const Facture = () => {
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // Handler pour ajouter une nouvelle ligne de prestation
+ //add, ajouter
   const ajouterPrestation = () => {
     setPrestations([
       ...prestations,
@@ -47,13 +47,13 @@ const Facture = () => {
     ]);
   };
 
-  // Handler pour supprimer une ligne de prestation
+  //delete
   const supprimerPrestation = (index) => {
     const newPrestations = prestations.filter((_, i) => i !== index);
     setPrestations(newPrestations);
   };
 
-  // Handler pour modifier une ligne de prestation
+  //edit update
   const modifierPrestation = (index, field, value) => {
     const newPrestations = prestations.map((prestation, i) =>
       i === index ? { ...prestation, [field]: value } : prestation
@@ -86,7 +86,6 @@ const Facture = () => {
       return;
     }
 
-    // Préparer les données du contrat
     const contratData = {
       NomPrestataire: nomPrestataire,
       ContratType: contratType,
@@ -101,7 +100,6 @@ const Facture = () => {
       })),
     };
 
-    // Créer un FormData pour envoyer les fichiers et les données
     const formData = new FormData();
     formData.append('NomPrestataire', contratData.NomPrestataire);
     formData.append('ContratType', contratData.ContratType);
@@ -137,7 +135,7 @@ const Facture = () => {
 
       if (response.status === 201) {
         setSuccess('Contrat et carburant ajoutés avec succès!');
-        // Réinitialiser le formulaire
+        // Réinitialiser le formulaire, reeset form
         setNomPrestataire('');
         setContratType('');
         setNumeroFacture('');

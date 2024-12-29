@@ -104,9 +104,6 @@ const Facture_list = React.lazy(()=> import('src/admin/prestataire/facture/Factu
 //facture pdf
 const Facture_pdf = React.lazy(()=> import('src/admin/prestataire/facture/Facture_pdf'))
 
-
-
-
 //Map======================================================================
 //ramassage map
 const Map_ramassage = React.lazy(()=> import('src/admin/map/Map_ramassage'))
@@ -116,8 +113,7 @@ const Map_depot = React.lazy(()=> import('src/admin/map/Map_depot'))
 //plannification itinéraire
 const Axe_confondu = React.lazy(()=> import('src/admin/map/Axe_confondu'))
 
-//correction map
-const Correction_map = React.lazy(()=> import('src/admin/map/Correction'))
+
 
 //axe 
 const Axe_list = React.lazy(()=> import('src/admin/axe/Axe_list'))
@@ -125,8 +121,6 @@ const Axe = React.lazy(()=> import('src/admin/axe/Axe'))
 const Axe_conducteurs_cars_list = React.lazy(()=> import('src/admin/axe/Axe_conducteurs_cars_list'))
 
 //assignation des chauffeurs et cars et axe , axe_conducteurs
-
-
 
 //Notifications
 const Notifications = React.lazy(()=> import('src/admin/notifications/Notifications'))
@@ -217,8 +211,7 @@ const routes = [
   { path: '/map/depot', name: 'map de depot', element: Map_depot, isProtected: true },
   //planning itinéraire
   {path:'map/confondu', name: 'tout axe', element:Axe_confondu, isProtected: true},
-  //map correction 
-  {path:'map/correction', name: 'correcteur de parcours', element:Correction_map, isProtected: true},
+ 
   //axe 
   {path:'axe', name: 'liste des axes', element:Axe_list, isProtected: true},
   {path:'axe/add', name: 'ajouter un axe', element:Axe, isProtected: true},
@@ -260,15 +253,6 @@ const routes = [
   //axe notifications
   // {path:'axe', name: 'notifications', element:NotificationsSlice},
   // {path:'axe', name: 'notifications page', element:NotificationsPage},
-
-
-  
-
-
-
-
-
-
     
 //====================================================================
   { path: '/admin', exact: true, name: 'Home' },

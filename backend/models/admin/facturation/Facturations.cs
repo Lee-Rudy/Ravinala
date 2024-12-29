@@ -3,9 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.Runtime.InteropServices;
 
-//   public DbSet<prestataire_contrat> Prestataire_contrat_instance { get; set; }
-//         public DbSet<carte_carburants> Carte_carburants_instance { get; set; }
-
 namespace package_facturations
 {
     public class prestataire_contrat

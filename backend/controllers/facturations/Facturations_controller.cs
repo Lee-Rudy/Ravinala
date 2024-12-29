@@ -24,7 +24,7 @@ namespace package_facturations_controller
         }
 
         /// <summary>
-        /// DTO pour structurer les données de facturation.
+        /// DTO  facturation.
         /// </summary>
         public class FacturationDTO
         {
@@ -43,7 +43,7 @@ namespace package_facturations_controller
         }
 
         /// <summary>
-        /// DTO combiné pour structurer les données de facturation et de carburant.
+        /// DTO  de facturation et de carburant.
         /// </summary>
         public class ContratCarburantDTO
         {
@@ -104,7 +104,7 @@ namespace package_facturations_controller
         }
 
         /// <summary>
-        /// Récupère la liste des facturations filtrées par période et type de contrat.
+        /// Récupère la liste des facturations filtrées par période de date et type de contrat.
         /// </summary>
         /// <param name="dateDebut">Date de début de la période (optionnel).</param>
         /// <param name="dateFin">Date de fin de la période (optionnel).</param>
@@ -117,17 +117,16 @@ namespace package_facturations_controller
         public async Task<ActionResult<IEnumerable<FacturationDTO>>> GetFacturations(
             [FromQuery] DateTime? dateDebut,
             [FromQuery] DateTime? dateFin,
-            [FromQuery] string contratType = "tous", // Valeurs possibles : "contractuelle", "extra", "tous"
-            [FromQuery] int pageNumber = 1,          // Pagination
-            [FromQuery] int pageSize = 20)           // Pagination
+            [FromQuery] string contratType = "tous",
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 50)
         {
-            // Validation des dates
+
             if (dateDebut.HasValue && dateFin.HasValue && dateDebut > dateFin)
             {
                 return BadRequest("La date de début ne peut pas être supérieure à la date de fin.");
             }
 
-            // Filtrage par type de contrat
             IQueryable<prestataire_contrat> contratsQuery = _context.Prestataire_contrat_instance;
 
             if (!string.IsNullOrEmpty(contratType) && contratType.ToLower() != "tous")
@@ -135,7 +134,6 @@ namespace package_facturations_controller
                 contratsQuery = contratsQuery.Where(c => c.contrat_type.ToLower() == contratType.ToLower());
             }
 
-            // Filtrage par période
             if (dateDebut.HasValue)
             {
                 contratsQuery = contratsQuery.Where(c => c.date_emission.Date >= dateDebut.Value.Date);
@@ -146,7 +144,6 @@ namespace package_facturations_controller
                 contratsQuery = contratsQuery.Where(c => c.date_emission.Date <= dateFin.Value.Date);
             }
 
-            // Jointure avec la table carburants
             var facturations = await (from contrat in contratsQuery
                                     join carburant in _context.Carte_carburants_instance
                                     on new
@@ -184,7 +181,6 @@ namespace package_facturations_controller
                                     .Take(pageSize)
                                     .ToListAsync();
 
-            // Regrouper par date et somme des carburants par date unique
             var uniqueCarburants = facturations
                 .GroupBy(f => f.DateEmission)
                 .Select(g => g.First().Carburants)
@@ -195,7 +191,7 @@ namespace package_facturations_controller
             decimal montantFinal = facturations.Sum(f => f.MontantTotal);
             decimal netPayerFinal = facturations.Sum(f => f.MontantTotal) - uniqueCarburants;
 
-            // Ajout du MontantFinal dans la réponse si nécessaire
+            // Ajout du MontantFinal dans la réponse
             var result = new
             {
                 Facturations = facturations,
@@ -221,12 +217,11 @@ namespace package_facturations_controller
                 return BadRequest(ModelState);
             }
 
-            // Début de la transaction pour assurer l'intégrité des données
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                // Création de l'entité carburant
+                // Création de l'entité structure carburant
                 var existingCarburant = await _context.Carte_carburants_instance
                     .FirstOrDefaultAsync(c =>
                         c.nom_prestataire == dto.NomPrestataire &&
@@ -345,7 +340,6 @@ namespace package_facturations_controller
             // Supposons que numero_facture est une propriété dans Prestataire_contrat_instance et Carte_carburants_instance
             try
             {
-                // Début d'une transaction pour assurer la cohérence des suppressions
                 using var transaction = await _context.Database.BeginTransactionAsync();
 
                 // Recherche des contrats correspondant aux numéros de facture
@@ -382,9 +376,6 @@ namespace package_facturations_controller
             }
             catch (Exception ex)
             {
-                // Log de l'erreur (à implémenter selon votre configuration de logging)
-                // Exemple : _logger.LogError(ex, "Erreur lors de la suppression des factures.");
-
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Erreur lors de la suppression : {ex.Message}");
             }
         }
@@ -392,7 +383,7 @@ namespace package_facturations_controller
 
 
         /// <summary>
-        /// Récupère un contrat par ID.
+        /// Récupère un contrat par id.
         /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<prestataire_contrat>> GetContratById(int id)
@@ -406,7 +397,7 @@ namespace package_facturations_controller
         }
 
         /// <summary>
-        /// Récupère un carburant par ID.
+        /// Récupère un carburant par id.
         /// </summary>
         /// ================================================
         [HttpGet("carburant/{id}")]
@@ -420,27 +411,12 @@ namespace package_facturations_controller
             return Ok(carburant);
         }
 
-        /// <summary>
-        /// Vérifie si un contrat existe.
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// </summary>
-        /// 
+
         private bool ContratExiste(int id)
         {
             return _context.Prestataire_contrat_instance.Any(e => e.id == id);
         }
 
-        /// <summary>
-        /// Vérifie si un carburant existe.
-        /// </summary>
         private bool CarburantExiste(int id)
         {
             return _context.Carte_carburants_instance.Any(e => e.id == id);

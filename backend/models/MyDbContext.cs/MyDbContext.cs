@@ -43,10 +43,6 @@ using package_push_data;
 
 namespace package_my_db_context
 {
-    // ORM (Object-Relational Mapper)
-    //intermadiaire pour la base de donée (intéragir bdd <--> c#) par liaison d'instance 
-       
-    // exemple :  public DbSet<Classe> Classes { get; set; } --> Classes est l'instance de la classe "Classe" pour faire un CRUD :  Classes.create(), Classes.delete(), etc...
     public class MyDbContext : DbContext
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
@@ -98,9 +94,6 @@ namespace package_my_db_context
         //facturation
         public DbSet<prestataire_contrat> Prestataire_contrat_instance { get; set; }
         public DbSet<carte_carburants> Carte_carburants_instance { get; set; }
-
-
-
 
 
 

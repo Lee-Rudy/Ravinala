@@ -29,7 +29,7 @@ namespace package_push_controller.Controllers
 
             var dtoList = boutons.Select(p =>
             {
-                // Parser DatetimeDepart
+                // parse DatetimeDepart
                 bool isDateDepartParsed = DateTime.TryParseExact(
                     p.DatetimeDepart,
                     "yyyy-MM-ddTHH:mm:ss.ffffffZ",
@@ -37,12 +37,12 @@ namespace package_push_controller.Controllers
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeDepart);
 
-                // Parser RecuLe
+                // parse RecuLe (Reçu le)
                 bool isRecuLeParsed = DateTime.TryParse(
-                    p.RecuLe.ToString("o"), // Assuming RecuLe is already DateTime
+                    p.RecuLe.ToString("o"),
                     out DateTime recuLeParsed);
 
-                // Parser DatetimeArrivee
+                // parse DatetimeArrivee
                 bool isDateArriveeParsed = DateTime.TryParseExact(
                     p.DatetimeArrivee,
                     "yyyy-MM-ddTHH:mm:ss.ffffffZ",
@@ -80,7 +80,7 @@ namespace package_push_controller.Controllers
 
             var dtoList = kmMatinList.Select(p =>
             {
-                // Parsing DatetimeMatin
+                // parse DatetimeMatin
                 bool isDatetimeMatinParsed = DateTime.TryParseExact(
                     p.DatetimeMatin,
                     "yyyy-MM-ddTHH:mm:ss.ffffffZ",
@@ -88,9 +88,9 @@ namespace package_push_controller.Controllers
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out DateTime datetimeMatin);
 
-                // Parsing RecuLe
+                // parse RecuLe
                 bool isRecuLeParsed = DateTime.TryParse(
-                    p.RecuLe.ToString("o"), // Assuming RecuLe is already DateTime
+                    p.RecuLe.ToString("o"), 
                     out DateTime recuLeParsed);
 
                 return new KmMatinResponseDTO
@@ -120,7 +120,7 @@ namespace package_push_controller.Controllers
 
             var dtoList = kmSoirList.Select(p =>
             {
-                // Parsing DatetimeSoir
+               
                 bool isDatetimeSoirParsed = DateTime.TryParseExact(
                     p.DatetimeSoir,
                     "yyyy-MM-ddTHH:mm:ss.ffffffZ",
@@ -130,7 +130,7 @@ namespace package_push_controller.Controllers
 
                 // Parsing RecuLe
                 bool isRecuLeParsed = DateTime.TryParse(
-                    p.RecuLe.ToString("o"), // Assuming RecuLe is already DateTime
+                    p.RecuLe.ToString("o"),
                     out DateTime recuLeParsed);
 
                 return new KmSoirResponseDTO
@@ -151,11 +151,6 @@ namespace package_push_controller.Controllers
 
             return Ok(dtoList);
         }
-
-
-
-
-
 
         
     }

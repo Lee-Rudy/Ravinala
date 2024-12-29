@@ -30,16 +30,16 @@ const Stat_cars = () => {
         </label>
         <Select
           id="yearSelect"
-          value={{ value: year, label: year }} // Format attendu par react-select
-          onChange={(selectedOption) => setYear(selectedOption.value)} // Met à jour la valeur de l'année
+          value={{ value: year, label: year }} 
+          onChange={(selectedOption) => setYear(selectedOption.value)}
           options={yearOptions}
           placeholder="Rechercher ou sélectionner une année"
           styles={{
             control: (base) => ({
               ...base,
-              borderColor: '#45B48E', // Couleur de la bordure
-              boxShadow: 'none', // Supprimer les ombres par défaut
-              '&:hover': { borderColor: '#45B48E' }, // Bordure au survol
+              borderColor: '#45B48E', 
+              boxShadow: 'none', 
+              '&:hover': { borderColor: '#45B48E' }, 
             }),
             option: (base, { isFocused, isSelected }) => ({
               ...base,
@@ -47,17 +47,17 @@ const Stat_cars = () => {
                 ? '#45B48E'
                 : isFocused
                 ? '#a8e6d0'
-                : 'white', // Couleur de fond
-              color: isSelected ? 'white' : 'black', // Couleur du texte
-              '&:hover': { backgroundColor: '#45B48E', color: 'white' }, // Survol
+                : 'white',
+              color: isSelected ? 'white' : 'black', 
+              '&:hover': { backgroundColor: '#45B48E', color: 'white' },
             }),
             placeholder: (base) => ({
               ...base,
-              color: '#45B48E', // Couleur du placeholder
+              color: '#45B48E',
             }),
             singleValue: (base) => ({
               ...base,
-              color: '#45B48E', // Couleur de la valeur sélectionnée
+              color: '#45B48E',
             }),
           }}
         />
@@ -73,7 +73,7 @@ const Stat_cars = () => {
             position: 'absolute',
             top: '20px',
             left: '10px',
-            width: '50%', // Largeur explicite
+            width: '50%', 
           }}
         >
           <TotalCars year={year} />

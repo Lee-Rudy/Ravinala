@@ -1,5 +1,3 @@
-// src/components/Facture_pdf.js
-
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {
@@ -104,12 +102,20 @@ const Facture_pdf = () => {
     try {
       await axios.delete(`${baseURL}/api/facturations/supprimer_par_numero_facture`, {
         params: { numeroFactures: selectedFactures },
+        paramsSerializer: (params) => {
+          return new URLSearchParams(params).toString();
+        },
       });
+      
       setSuccessMessage('Factures supprimées avec succès.');
       setSelectedFactures([]);
       fetchFactures();
+      console.log(selectedFactures);
     } catch (err) {
       setError('Erreur lors de la suppression des factures.');
+      console.log(err.message);
+      console.log(selectedFactures);
+
     } finally {
       setShowDeleteConfirm(false);
     }
@@ -121,7 +127,7 @@ const Facture_pdf = () => {
       setError('PDF non disponible.');
       return;
     }
-    // Supposons que importPdf est une chaîne encodée en base64
+    // Supposons que importPdf est une chaîne encodée en base64 , pouur alléger , image hatao base64
     const byteCharacters = atob(importPdf);
     const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
     const byteArray = new Uint8Array(byteNumbers);
@@ -152,7 +158,7 @@ const Facture_pdf = () => {
   // Fonction pour gérer la recherche
   const handleSearch = (e) => {
     e.preventDefault();
-    setCurrentPage(1); // Réinitialiser à la première page lors de la recherche
+    setCurrentPage(1);
   };
 
   // Filtrer les factures en fonction de la recherche
@@ -339,7 +345,7 @@ const Facture_pdf = () => {
         </CCard>
       </CCol>
 
-      {/* Alert de succès */}
+      {/* Alert de success */}
       {successMessage && (
         <CAlert color="success" className="mt-3" onClose={() => setSuccessMessage('')} dismissible>
           {successMessage}

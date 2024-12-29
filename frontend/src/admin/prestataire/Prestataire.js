@@ -34,7 +34,6 @@ const Prestataire = () => {
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // Fonction pour récupérer les prestataires
   const fetchPrestataires = async () => {
     try {
       const response = await axios.get(`${baseURL}/api/prestataire/liste`);
@@ -52,7 +51,7 @@ const Prestataire = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Construire les données dynamiquement en fonction de selectedPrestataire
+    // Construire les données dynamiquement/dto en fonction de selectedPrestataire
     const data = {
       prestataire: nomPrestataire,
       debut_contrat: debutContrat,
@@ -64,18 +63,18 @@ const Prestataire = () => {
       data.id = selectedPrestataire;
     }
   
-    console.log("Données envoyées :", JSON.stringify(data, null, 2)); // Débogage
+    console.log("Données envoyées :", JSON.stringify(data, null, 2));
   
     try {
       if (selectedPrestataire) {
-        // Requête PUT pour la mise à jour
+        // PUT 
         await axios.put(`${baseURL}/api/prestataire/update/${selectedPrestataire}`, data);
       } else {
-        // Requête POST pour l'ajout
+        // POST
         await axios.post(`${baseURL}/api/prestataire/ajouter`, data);
       }
       resetForm();
-      fetchPrestataires(); // Recharger les données
+      fetchPrestataires();
     } catch (error) {
       console.error("Erreur lors de l'ajout ou de la mise à jour du prestataire :", error.response?.data || error);
     }
@@ -83,9 +82,7 @@ const Prestataire = () => {
   
   
   
-  
-
-  // Fonction pour réinitialiser le formulaire
+  // rest formulaire
   const resetForm = () => {
     setNomPrestataire('');
     setDebutContrat('');

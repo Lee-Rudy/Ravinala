@@ -23,12 +23,14 @@ namespace package_stat_usagers_controller
         }
 
         // Exemple d'URL : http://localhost:5218/api/stat/usagers/trafic?matricule=ST-001&annee=2024
+        /// <summary>
+        /// pour avoir le trafic des usagers , quelle était le plus empruntés
         [HttpGet("usagers/trafic")]
         public async Task<ActionResult<IEnumerable<UsagerMonthlyStatDTO>>> GetStatUsagersByYear([FromQuery] string matricule, [FromQuery] int annee)
         {
             try
             {
-                // Validation des paramètres
+               
                 if (string.IsNullOrEmpty(matricule))
                 {
                     return BadRequest("Le matricule est requis.");
@@ -39,24 +41,19 @@ namespace package_stat_usagers_controller
                     return BadRequest("L'année doit être valide.");
                 }
 
-                // Optionnel : Vérifier l'existence de l'usager
                 var usagerExists = await _context.Usagers_instance.AnyAsync(u => u.matricule == matricule);
                 if (!usagerExists)
                 {
                     return NotFound($"Aucun usager trouvé avec le matricule {matricule}.");
                 }
 
-                // Préparer une liste pour les statistiques mensuelles
                 var stats = new List<UsagerMonthlyStatDTO>();
 
-                // Itérer sur chaque mois de l'année
                 for (int mois = 1; mois <= 12; mois++)
                 {
-                    // Définir les dates de début et de fin du mois
                     var dateDebut = new DateTime(annee, mois, 1);
                     var dateFin = dateDebut.AddMonths(1);
 
-                    // Convertir les dates en chaînes au format sortable
                     string dateDebutStr = dateDebut.ToString("yyyy-MM-ddTHH:mm:ss");
                     string dateFinStr = dateFin.ToString("yyyy-MM-ddTHH:mm:ss");
 
@@ -65,7 +62,7 @@ namespace package_stat_usagers_controller
                         .AsNoTracking()
                         .Where(r => r.Matricule == matricule &&
                                     r.EstPresent == "1" && // Vérifie que l'utilisateur est présent
-                                    !string.IsNullOrEmpty(r.DatetimeRamassage) && // Assure que la date est définie
+                                    !string.IsNullOrEmpty(r.DatetimeRamassage) && 
                                     r.DatetimeRamassage.CompareTo(dateDebutStr) >= 0 &&
                                     r.DatetimeRamassage.CompareTo(dateFinStr) < 0)
                         .CountAsync();

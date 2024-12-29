@@ -3,7 +3,7 @@
 const Admin = () => {
     return (
         <div>
-            <p>bonjour</p>
+            <p>Test Hello World</p>
             {/* Contenu du composant */}
         </div>
     );

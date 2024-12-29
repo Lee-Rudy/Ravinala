@@ -20,7 +20,7 @@ namespace package_usagers
         public int id { get; set; }
 
         [Column("matricule")]
-        //ne pas mettre requierd ou "?" fa manao error
+
         public string? matricule { get; set; }
 
         [Column("nom")]
@@ -28,9 +28,6 @@ namespace package_usagers
 
         [Column("prenom")]
         public string? prenom { get; set; }
-
-        // [Column("date_naissance")]
-        // public DateTime? date_naissance { get; set; }
 
         [Column("contact")]
         public string? contact { get; set; }
@@ -48,15 +45,13 @@ namespace package_usagers
         [Column("departement_id")]
         public int departement_id { get; set; }
 
-        // Propriété de navigation pour Genre
+
         [ForeignKey("genre_id")]
         public virtual Genre? Genre { get; set; }
 
-        // Propriété de navigation pour Poste
         [ForeignKey("poste_id")]
         public virtual Poste? Poste { get; set; }
 
-         // Propriété de navigation pour departement
         [ForeignKey("departement_id")]
         public virtual Departement? Departement { get; set; }
 

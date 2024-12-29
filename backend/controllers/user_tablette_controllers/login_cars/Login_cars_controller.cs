@@ -8,15 +8,8 @@ using package_login_cars;
 using System.Runtime.CompilerServices;
 using package_prestataire;
 
-//method : POST 
-// http://localhost:5218/api/cars/auth
-
-// {
-//   "nom_car_login": "car5",
-//   "mot_de_passe": "car5!"
-// }
-
-// public DbSet<Login_cars> Login_cars_instance { get; set; }
+///<summary>
+///le nom de l'utilisateur pour le login du car doit être strictement pareil et exacte comme le nom du car du véhicule
 
 namespace package_login_cars.Controllers
 {
@@ -31,9 +24,6 @@ namespace package_login_cars.Controllers
             _context = context;
         }
 
-
-        ///<summary>
-        ///get all login cars
         
         [HttpGet("auth/liste")]
         public async Task<ActionResult<IEnumerable<Login_cars>>> GetLogin_cars()
@@ -54,13 +44,6 @@ namespace package_login_cars.Controllers
 
             return car_login;
         }
-
-//http://localhost:5218/api/cars/auth/update/2
-//  {
-//      "Id":2,
-//     "nom_car_login": "car2",
-//     "mot_de_passe": "car2!",
-//  }
 
 
         //update
@@ -97,8 +80,6 @@ namespace package_login_cars.Controllers
         /// </summary>
         /// <param name="nom_car_login">Le nom de l'utilisateur</param>
         /// <param name="mot_de_passe">Le mot de passe de l'utilisateur</param>
-        /// <returns>Statut de l'authentification</returns>
-        /// tsy kitiana intsony
         [HttpPost("auth")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {

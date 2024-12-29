@@ -12,6 +12,10 @@ using package_my_db_context;
 using package_axe_usagers_ramassage;
 using package_axe_usagers_depot;
 
+
+///<summary>
+///le planning_controller est pour envoyer la liste des personnes actifs pour le ramassage et dépôt
+///c'est à dire , un car s'authentifie et peut récupéré la liste ramassage et dépôt via ce controller {nom_car}
 namespace package_planning_controller
 {
     [Route("api/planning")]
@@ -33,13 +37,8 @@ namespace package_planning_controller
             public string Matricule { get; set; }
             public string NomUsager { get; set; }
             public string PrenomUsager { get; set; }
-
-            public string NomAxe { get; set; }
-            // public string PrenomUsager { get; set; }            
+            public string NomAxe { get; set; }           
             public string NomVoiture { get; set; }
-            // public string Immatriculation { get; set; }            
-            // public  int IdCar { get; set; }
-
             public string Fokontany { get; set; }
             public string Lieu { get; set; }
             public TimeSpan Heure { get; set; }
@@ -52,20 +51,14 @@ namespace package_planning_controller
             public string Matricule { get; set; }
             public string NomUsager { get; set; }
             public string PrenomUsager { get; set; }
-
             public string NomAxe { get; set; }
-            // public string PrenomUsager { get; set; }            
-
             public string NomVoiture { get; set; }
-            // public string Immatriculation { get; set; }            
-
-            // public  int IdCar { get; set; }
             public string Fokontany { get; set; }
             public string Lieu { get; set; }
             public TimeSpan Heure { get; set; }
         }
 
-        // Méthode pour obtenir le planning de ramassage
+        // Méthode pour obtenir le planning de ramassage : afficahge sur le web
         [HttpGet("liste_ramassage")]
         public async Task<ActionResult<IEnumerable<PlanningRamassageDto>>> GetPlanningRamassage()
         {
@@ -107,7 +100,7 @@ namespace package_planning_controller
             return Ok(result);
         }
 
-        // Méthode pour obtenir le planning de dépôt
+        // Méthode pour obtenir le planning de dépôt : affichage sur le  web
         [HttpGet("liste_depot")]
         public async Task<ActionResult<IEnumerable<PlanningDepotDto>>> GetPlanningDepot()
         {
@@ -149,11 +142,8 @@ namespace package_planning_controller
             return Ok(result);
         }
 
-
-        //for mobile 
-        //new , mbola tsy miasa 
-        
-        //id_car = id
+//================================================ pour le mobile
+        //liste des ramassage sur l'interface mobile
        [HttpGet("liste_ramassage_mobile/{nom_car}")]
         public async Task<ActionResult<IEnumerable<PlanningRamassageDto>>> GetPlanningRamassageMobile(string nom_car)
         {
@@ -196,7 +186,7 @@ namespace package_planning_controller
             return Ok(result);
         }
 
-        //id_car = id
+        //liste des dépôts sur l'interface mobile
         [HttpGet("liste_depot_mobile/{nom_car}")]
         public async Task<ActionResult<IEnumerable<PlanningDepotDto>>> GetPlanningDepotMobile(string nom_car)
         {
@@ -238,10 +228,6 @@ namespace package_planning_controller
 
             return Ok(result);
         }
-
-
-
-
 
     }
 }
